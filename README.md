@@ -302,11 +302,4 @@ http://127.0.0.1:8000/
 
 ---
 
-### ✅ **Instructions:**  
-1. Copy the above section into your `README.md` file.  
-2. Adjust the API key details according to your setup.  
-3. Commit and push the changes.  
 
----
-
-This section is clean, professional, and follows GitHub best practices! 😎
