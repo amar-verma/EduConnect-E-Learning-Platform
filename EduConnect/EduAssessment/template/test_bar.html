@@ -1,0 +1,60 @@
+{% load static %}{% include 'Test_index.html' %}
+{% block 'Test_main' %}
+<style>
+
+.navbar-custom {
+            background-color: white;
+            border-bottom: 2px solid #ddd;
+            padding: 10px 20px;
+        }
+        .navbar-brand img {
+            height: 30px;
+            margin-right: 8px;
+        }
+        .nav-tabs {
+            border-bottom: none;
+        }
+        .nav-link {
+            color: black;
+            font-weight: 500;
+            border-bottom: none;
+        }
+        .nav-link.active {
+            color: #1a73e8;
+            border-bottom: 3px solid #1a73e8;
+        }
+        .nav-icons {
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+</style>
+<nav class="navbar navbar-custom d-flex align-items-center justify-content-between pb-0 px-3">
+    <div class="d-flex align-items-center">
+        <span class="fw-bold w-auto fs-5 ps-auto ms-auto">Assesments / Event / Tests</span>
+    </div>
+    <div class="d-flex">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                {% url 'view_professor_form' form_id=form.id as test_q %}
+                <a class="nav-link {% if request.path == test_q %} active {% endif %} " href="{% url 'view_professor_form' form_id=form_id %}">Questions</a>
+
+            </li>
+            <li class="nav-item">
+                {% url 'view_student_responses' form_id=form.id as test_q2 %}
+                <a class="nav-link {% if request.path == test_q2 %} active {% endif %}" href="{% url 'view_student_responses' form_id=form_id %}">Response</a>
+            </li>
+            <li class="nav-item ">
+                {% url 'test_setting' form_id=form.id as test_q3 %}
+                <a class="nav-link {% if request.path == test_q3 %} active {% endif %}" href="{% url 'test_setting' form_id=form_id %}">Setting</a>
+            </li>
+        </ul>
+    </div>
+    
+</nav>
+
+    {% block 'form_part' %}
+
+    {% endblock 'form_part' %}
+
+{% endblock 'Test_main' %}

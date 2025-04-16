@@ -1,0 +1,39 @@
+{% extends 'tech_index.html' %} {% load static %} {% load custom_filters %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_mycourse.css' %}">
+<div class="container mt-4">
+    <h2 class="text-center">My Courses</h2>
+    <p>In this u will find all the courses that you have created..</p>
+    
+    {% for course in courses %}
+<a href="{% url 'tech_course_detail' course.id %}" class="text-decoration-none text-dark">
+    <div class="course-card">
+        <img src="{{course.course_img.url}}" alt="Course Image">
+        <div class="course-info">
+            <h3>{{course.title}}</h3>
+            <p class="course-description">{{course.description}}</p>
+            <div class="course-meta">
+                <span><i class="far fa-calendar-alt"></i> Created: {{course.created_at}}</span>
+                <span><i class="fas fa-sync-alt"></i> Updated: {{course.updated_at}}</span>
+            </div>
+            <div>
+                <span>&#8377; {{ course.price }}</span>
+    <span style="text-decoration: line-through; color: gray;">&#8377; {{ course.old_price }}</span>
+            </div>
+            <div class="likes-comments mt-2">
+                <span><i class="bi bi-hand-thumbs-up"></i> {{course.like}}</span>
+                <span><i class="bi bi-hand-thumbs-down"></i> {{course.dislike}}</span>
+                <span><i class="bi bi-chat-dots"></i> {{ comment_counts|get_value:course.id }}</span>
+            </div>
+            <div>
+                <span><i class="bi bi-meeting"></i>webnair code: {{ course.meeting_code }}</span>
+            </div>
+        </div>
+    </div>
+</a>
+    {% endfor %}
+
+    
+    
+</div>
+
+{% endblock 'tech_main' %}

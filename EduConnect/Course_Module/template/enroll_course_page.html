@@ -1,0 +1,81 @@
+{% extends 'enroll_course.html' %}
+
+{% load static %}
+ {% block 'content_main' %}
+
+<!-- <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> -->
+
+<div class="content-header" class="text-center" style=" display: flex; justify-content: center; margin-bottom: 3px;">
+    <h2>{{ content.title }}</h2>
+</div>
+
+{% if content.desc %}
+
+{{content.desc|safe}}
+
+{% endif %}
+
+
+{% if assignments %}
+<div class="assignment-content">
+    <h3>Assignments</h3>
+    <hr>
+    <br>
+    {% for assignment in assignments %}
+    <div class="assignment">
+        <h4 style="margin: 0;">{{ assignment.title }}</h4>
+
+        <div class="file-upload-section">
+            <form action="{% url 'submit_assignment' assignment.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="file">
+                <button type="submit" class="upload-btn">Attach File</button>
+            </form>
+
+            {% for submission in submissions %}
+            {% if submission.assignment.id == assignment.id %}
+            <div class="uploaded-files">
+                <div class="file">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>{{ submission.file.name }}</span>
+                </div>
+            </div>
+            <hr>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Navigation Buttons -->
+<div class="navigation-buttons">
+    {% if prev_content %}
+    <a href="{% url 'enroll_course_content' course.id prev_content.id %}" class="prev-btn" style="padding: 3px; border-radius: 5px; text-decoration: none;">
+        <i class="fas fa-arrow-left"></i> Previous
+    </a>
+    {% endif %}
+
+    {% with progress=content.studentprogress_set.first %}
+        {% if next_content %}
+            {% if progress and progress.is_completed %}
+                <a href="{% url 'enroll_course_content' course.id next_content.id %}" class="next-btn" style="padding: 3px; border-radius: 5px; text-decoration: none;">
+                    Next <i class="fas fa-arrow-right"></i>
+                </a>
+            {% else %}
+                <button class="next-btn" disabled style="padding: 3px; border-radius: 5px; background-color: gray;">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            {% endif %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+
+
+
+
+
+{% endblock 'content_main' %}

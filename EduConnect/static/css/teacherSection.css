@@ -1,0 +1,183 @@
+.card-custom {
+    background-color: #1d2b4f;
+    color: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #0d1733;
+    padding: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.btn-enroll {
+    background-color: #8bc34a;
+    border: none;
+    color: #000;
+}
+
+.btn-enroll:hover {
+    background-color: #7cb342;
+}
+
+.btn-syllabus {
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+}
+
+.btn-syllabus:hover {
+    background-color: #0d6efd;
+    color: #ffffff;
+}
+
+.card-footer {
+    background-color: #141e3c;
+    padding: 15px;
+}
+
+.stars {
+    color: #ffc107;
+}
+
+@media (max-width: 768px) {
+    .card-body img {
+        width: 100%;
+    }
+}
+
+/* section 2 */
+.program-header {
+    background-color: #002366;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.program-header h2 {
+    margin-bottom: 10px;
+}
+
+.program-header p {
+    margin: 0;
+}
+
+.navigation-buttons {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.navigation-buttons button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+    background: transparent;
+}
+
+.navigation-buttons button:hover {
+    background: #ffffff;
+    color: #000;
+}
+
+.lesson-card {
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+}
+
+.lesson-card h5 {
+    margin-bottom: 10px;
+}
+
+.lesson-card p {
+    color: #bbbbbb;
+}
+
+.lesson-card a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.lesson-card a:hover {
+    text-decoration: underline;
+}
+
+.card-container {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* section 4 */
+
+/* special  */
+.taught-by-best {
+    background-color: #18191A;
+    /* Dark background color */
+    padding: 50px 0;
+}
+
+.taught-by-best h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.instructor-card {
+    background-color: #202122;
+    /* Slightly lighter shade for cards */
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.instructor-card img {
+    width: 150px;
+    /* Adjust image size as needed */
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.instructor-name {
+    color: #fff;
+    font-weight: bold;
+}
+
+.instructor-title {
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.instructor-bio {
+    color: #ccc;
+    font-size: 0.8rem;
+    max-height: 100px;
+    /* Limit height of bio for better responsiveness */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments for larger screens */
+@media (min-width: 768px) {
+    .instructor-card {
+        margin-bottom: 40px;
+        /* Increase bottom margin on larger screens */
+    }
+}
+
+@media (min-width: 992px) {
+    .instructor-card {
+        margin-bottom: 50px;
+        /* Further increase margin on larger screens */
+    }
+}

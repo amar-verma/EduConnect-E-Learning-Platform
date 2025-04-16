@@ -1,0 +1,316 @@
+.container {
+    max-width: 960px;
+    /* Adjust as needed */
+    margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-group {
+        flex-basis: 100%;
+        /* Make each group full width on smaller screens */
+    }
+}
+
+.card-text {
+    margin-bottom: 1rem;
+}
+
+.list-group-item {
+    padding: 0.5rem 0.5rem;
+    /* Adjust padding as needed */
+}
+
+.bi-check {
+    margin-right: 0.5rem;
+    /* Add some space between icon and text */
+    color: #1cb23f;
+    /* background-color: #1cb23f; */
+    /* Green color for the checkmark */
+}
+
+/* Custom styles for the card */
+.custom-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.custom-card .card-header {
+    position: relative;
+}
+
+
+
+
+
+.card-content {
+    padding: 1rem;
+}
+
+.enrolled {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.ratings {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.ratings span {
+    font-size: 0.9rem;
+}
+
+.course-includes ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.course-includes ul li {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.course-includes ul li::before {
+    content: '✔';
+    color: green;
+    margin-right: 0.5rem;
+}
+
+.publisher {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+.publisher img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.sticky-card {
+    position: relative;
+    top: 20px;
+}
+
+/* view less  */
+#courseContent.show-less li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* card  */
+
+.card-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 1rem;
+    scrollbar-width: thin;
+}
+
+.card-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.card-container::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+}
+
+.card-container::-webkit-scrollbar-track {
+    background-color: #222;
+}
+
+.cardnew {
+    background-color: #222;
+    border: none;
+    min-width: 300px;
+    color: #ccc;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.cardnew img {
+    height: 150px;
+    object-fit: cover;
+}
+
+.cardnew .btn {
+    background-color: #198754;
+    color: #fff;
+    border: none;
+}
+
+.cardnew .btn:hover {
+    background-color: #157347;
+}
+video::-webkit-media-controls-download-button {
+    display: none !important;
+}
+
+video::-moz-media-controls-download-button {
+    display: none !important;
+}
+
+video::-ms-media-controls-download-button {
+    display: none !important;
+}
+
+.accordion-button {
+    background-color: transparent !important;
+    border: none !important;
+    color: inherit !important;
+}
+
+/* Optional: Make it look flat (if you want a flat button style) */
+.accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+    color: inherit !important;
+}
+
+/* When the accordion button is collapsed */
+.accordion-button.collapsed {
+    background-color: transparent !important;
+    color: inherit !important;
+    border: none !important;
+}
+
+.card-swiper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .swiper-wrapper {
+    display: flex;
+    scroll-behavior: smooth;
+  }
+  
+  .swiper-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #fff;
+  }
+  
+  .swiper-btn-left {
+    left: 0;
+  }
+  
+  .swiper-btn-right {
+    right: 0;
+  }
+  
+  
+  /* Card Container */
+  .edu_c_card {
+    width: 250px; /* Smaller width */
+    border-radius: 12px;
+    background-color: #162447; /* Navy blue background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    color: #ffffff; /* White text */
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin: 10px auto; /* Center alignment */
+    transition: transform 0.3s ease;
+  }
+  
+  .edu_c_card:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+  }
+  
+  /* Image Container */
+  .edu_c_image-container {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .edu_c_image {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #1f4068; /* Accent border */
+    object-fit: cover;
+  }
+  
+  /* Title with 2-Line Limit */
+  .card-title-edu {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+    line-height: 1.4;
+    min-height: calc(1.4em * 2);
+    max-height: calc(1.4em * 2); /* Limit to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+  }
+
+  
+  /* Text with 4-Line Limit */
+  .card-text-edu {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #dcdcdc; /* Softer white */
+    line-height: 1.4;
+    max-height: calc(1.4em * 4); /* Limit to 4 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    white-space: normal;
+  }
+  
+  /* Button */
+  .edu_c_button {
+    background-color: #e43f5a; /* Vibrant red */
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edu_c_button:hover {
+    background-color: #ff5964; /* Slightly lighter red */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .edu_c_card {
+      width: 200px; /* Adjust for smaller screens */
+    }
+  
+    .card-title-edu {
+      font-size: 14px; /* Smaller title size */
+    }
+  
+    .card-text-edu {
+      font-size: 12px; /* Smaller text */
+    }
+  
+    .edu_c_button {
+      font-size: 12px; /* Adjust button size */
+    }
+  }
+  

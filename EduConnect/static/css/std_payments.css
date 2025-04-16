@@ -1,0 +1,26 @@
+.payment-table{
+    max-height: 22rem;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+
+.custom-pagination .page-item .page-link {
+  background: none;
+  color: #555;
+  border: none;
+  font-size: 18px;
+  padding: 0;
+}
+
+/* .custom-pagination .page-item .page-link:hover {
+  color: #cddc39;
+} */
+
+.payment-header{
+background: linear-gradient(135deg, rgba(50, 205, 50, 0.8), rgba(34, 193, 195, 0.8));
+}
+.payment-header:hover{
+    background: linear-gradient(135deg, rgba(34, 193, 195, 0.8), rgba(50, 205, 50, 0.8));
+
+}

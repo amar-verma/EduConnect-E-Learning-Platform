@@ -1,0 +1,221 @@
+{% load static %}{% include 'Test_index.html' %}
+{% block 'Test_main' %}
+
+<style>
+    input[type="text"], 
+input[type="number"], 
+select {
+    width: 100%;
+    padding: 8px;
+    border: transparent;
+    border-left: blue 3px solid;
+    border-radius: 8px;
+    border-bottom: 1px solid blue;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    background-color: #fff;
+    margin-bottom: 2px;
+}
+
+/* Hover Effect */
+input[type="text"]:hover, 
+input[type="number"]:hover, 
+select:hover {
+    border-color: #6200ea;
+}
+
+/* Focus Effect */
+input[type="text"]:focus, 
+input[type="number"]:focus, 
+select:focus {
+    border-color: #6200ea;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(98, 0, 234, 0.3);
+}
+
+/* Select Dropdown */
+select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 30px;
+    
+}
+
+/* Number Input Styling */
+input[type="number"] {
+    max-width: 100px;
+    text-align: center;
+}
+
+/* Remove Arrows from Number Input (Chrome, Edge, Safari) */
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Required Checkbox */
+.form-check-input {
+    transform: scale(1.3);
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+/* Checkbox Checked Style */
+.form-check-input:checked {
+    background-color: #6200ea;
+    border-color: #6200ea;
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
+}
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Edit Questions - {{ form.title }}</h2>
+    <form method="POST" action="{% url 'update_questions' %}">
+        {% csrf_token %}
+        <div class="row">
+            {% for question in questions %}
+            <div class="col-md-12 p-2 px-4 rounded shadow border question-box">
+                <div class="row mb-2">
+                    <div class="col-md-8">
+                        <input type="hidden" name="question_id[]" value="{{ question.id }}">
+                        <input type="text" name="question_text[]" class="form-control question-text" 
+                            placeholder="Untitled Question" value="{{ question.question_text }}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select question-type" name="question_type[]" onchange="toggleQuestionType(this)">
+                            <option value="text" {% if question.question_type == "text" %}selected{% endif %}>Text</option>
+                            <option value="multiple" {% if question.question_type == "multiple" %}selected{% endif %}>Multiple Choice</option>
+                            <option value="single" {% if question.question_type == "single" %}selected{% endif %}>Single Choice</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Options Container (Will be hidden for text type) -->
+                <div class="row mb-2 options-container" {% if question.question_type == "text" %}style="display:none;"{% endif %}>
+                    <div class="col-md-12">
+                        {% for option in question.options %}
+                        <div class="option-item d-flex align-items-center mb-2">
+                            <input type="{% if question.question_type == 'multiple' %}checkbox{% else %}radio{% endif %}" 
+                                name="answer_key_{{ question.id }}[]" 
+                                value="{{ option }}" {% if option in question.answer_key %}checked{% endif %}>
+                            <input type="text" name="options_{{ question.id }}[]" class="form-control mx-2" 
+                                value="{{ option }}" required>
+                            <button type="button" class="btn btn-danger btn-sm remove-option">✖</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-primary btn-sm add-option" 
+                            {% if question.question_type == "text" %}style="display:none;"{% endif %}>+ Add Option</button>
+                    </div>
+                </div>
+
+                <div class="row mb-2 text-end">
+                    <div class="col-md-12 d-flex justify-content-end align-items-center">
+                        <label class="form-label me-2">Marks:</label>
+                        <input type="number" name="marks[]" class="form-control w-auto question-marks" 
+                            value="{{ question.marks }}" min="1" required>
+                    </div>
+                </div>
+
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <input type="checkbox" class="form-check-input" checked disabled> Required
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button type="button" class="btn btn-danger delete-question">🗑 Delete</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">💾 Save Changes</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function toggleQuestionType(select) {
+        let questionBox = select.closest(".question-box");
+        let container = questionBox.querySelector(".options-container");
+        let addOptionBtn = questionBox.querySelector(".add-option");
+
+        if (select.value === "text") {
+            container.style.display = "none";
+            addOptionBtn.style.display = "none";
+        } else {
+            container.style.display = "block";
+            addOptionBtn.style.display = "inline-block";
+        }
+
+        // Update existing input types
+        let inputType = select.value === "multiple" ? "checkbox" : "radio";
+        container.querySelectorAll("input[type='radio'], input[type='checkbox']").forEach(input => {
+            input.type = inputType;
+        });
+    }
+
+    document.querySelectorAll(".question-type").forEach(select => {
+        toggleQuestionType(select);
+        select.addEventListener("change", function () {
+            toggleQuestionType(this);
+        });
+    });
+
+    document.querySelectorAll(".add-option").forEach(button => {
+        button.addEventListener("click", function () {
+            let questionBox = this.closest(".question-box");
+            let container = questionBox.querySelector(".options-container .col-md-12");
+            let questionType = questionBox.querySelector(".question-type").value;
+            let inputType = questionType === "multiple" ? "checkbox" : "radio";
+
+            let newOption = document.createElement("div");
+            newOption.classList.add("option-item", "d-flex", "align-items-center", "mb-2");
+
+            let questionId = questionBox.querySelector("input[name='question_id[]']").value;
+
+            newOption.innerHTML = `
+                <input type="${inputType}" name="answer_key_${questionId}[]" value="">
+                <input type="text" name="options_${questionId}[]" class="form-control mx-2" placeholder="New Option" required>
+                <button type="button" class="btn btn-danger btn-sm remove-option">✖</button>
+            `;
+
+            container.appendChild(newOption);
+            attachRemoveEvent(newOption.querySelector(".remove-option"));
+        });
+    });
+
+    function attachRemoveEvent(button) {
+        button.addEventListener("click", function () {
+            this.closest(".option-item").remove();
+        });
+    }
+
+    document.querySelectorAll(".remove-option").forEach(button => attachRemoveEvent(button));
+});
+</script>
+
+
+
+{% endblock 'Test_main' %}

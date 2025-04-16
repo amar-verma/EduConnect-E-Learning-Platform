@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=developer_guide"
+      />
+    <link rel="icon" href="{% static 'img/clogo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/std_notify.css' %}">
+</head>
+<body>
+    <div class="notif-container">
+        {% csrf_token %}
+        <div class="notif-icon" onclick="toggleNotif()"><i class="fa fa-bell"></i></div>
+        <div class="notif-box" id="notifBox">
+            <ul class="notif-list" id="notifList">
+                {% for notification in student_notifications %}
+                <li class="notif-list-item"><span class="notif-icon-symbol">🔔</span> {{notification.message}}</li>
+                {% endfor %}
+                {% if not student_notifications %}
+                <p class="notif-empty" id="notifEmpty">No messages are there</p>
+                {% endif %}
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        function toggleNotif() {
+            var box = document.getElementById("notifBox");
+            box.classList.toggle("show");
+        }
+        
+        function removeNotif(button) {
+            var notif = button.parentElement;
+            notif.style.animation = "fadeOut 0.3s ease";
+            notif.addEventListener("animationend", () => {
+                notif.remove();
+                checkNotif();
+            });
+        }
+        
+        function checkNotif() {
+            var list = document.getElementById("notifList");
+            var emptyNotif = document.getElementById("notifEmpty");
+            if (list.children.length === 0) {
+                emptyNotif.style.display = "block";
+            } else {
+                emptyNotif.style.display = "none";
+            }
+        }
+
+        checkNotif();
+    </script>
+
+    <style>
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+
+</body>
+</html>

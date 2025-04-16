@@ -1,0 +1,211 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+<link rel="stylesheet" href="{% static 'css/std_dashboard.css' %}" />
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="row">
+    
+  <div class="col-md-12">
+      <div class="dashboard">
+          <!-- Header Section -->
+          <div class="header">
+              <h1 class="mb-0">Student Learning Analytics</h1>
+              <p class="hint">Track your progress across courses, tests, and webinars</p>
+          </div>
+
+          <!-- Top Stats Cards -->
+          <div class="row">
+              <div class="col-xl-4 col-lg-4 mb-1">
+                  <div class="card l-bg-cherry">
+                      <div class="card-body d-flex">
+                          <div class="card-icon card-icon-large me-3">
+                              <i class="fas fa-graduation-cap"></i>
+                          </div>
+                          <div>
+                              <h5 class="card-title">Course Progress</h5>
+                              <div class="d-flex align-items-center">
+                                  <h2 class="me-3">{{ stats.active_courses }}/{{ stats.total_courses }}</h2>
+                                  <span>{{ stats.completion_rate }}% <i class="fa fa-arrow-up"></i></span>
+                              </div>
+                              <div class="progress mt-3" style="height: 8px">
+                                  <div class="progress-bar bg-cyan" id="progressBar1"></div>
+                              </div>
+                              <script>
+                                var completionRate = "{{ stats.completion_rate|default:0 }}"; 
+                                document.getElementById('progressBar1').style.width = completionRate + '%';
+                                </script>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-xl-4 col-lg-4 mb-1">
+                  <div class="card l-bg-green-dark">
+                      <div class="card-body d-flex">
+                          <div class="card-icon card-icon-large me-3">
+                              <i class="fas fa-tasks"></i>
+                          </div>
+                          <div>
+                              <h5 class="card-title">Test Performance</h5>
+                              <div class="d-flex align-items-center">
+                                  <h2 class="me-3">{{ stats.avg_score }}%</h2>
+                                  <span>{{ stats.total_tests }} Tests</span>
+                              </div>
+                              <div class="progress mt-3" style="height: 8px">
+                                  <div class="progress-bar bg-success" id="progressBar2"></div>
+                              </div>
+                              <script>
+                                var completionRate = "{{ stats.avg_score|default:0 }}"; 
+                                document.getElementById('progressBar2').style.width = completionRate + '%';
+                                </script>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-xl-4 col-lg-4 mb-1">
+                  <div class="card l-bg-orange-dark">
+                      <div class="card-body d-flex">
+                          <div class="card-icon card-icon-large me-3">
+                              <i class="fas fa-video"></i>
+                          </div>
+                          <div>
+                              <h5 class="card-title">Webinar Attendance</h5>
+                              <div class="d-flex align-items-center">
+                                  <h2 class="me-3">{{ stats.attended_webinars }}/{{ stats.total_webinars }}</h2>
+                                  <span>{{ stats.webinar_attendance_rate }}%</span>
+                              </div>
+                              <div class="progress mt-3" style="height: 8px">
+                                  <div class="progress-bar bg-info" id="progressBar3"></div>
+                              </div>
+                              <script>
+                                var completionRate = "{{ stats.webinar_attendance_rate|default:0 }}"; 
+                                document.getElementById('progressBar3').style.width = completionRate + '%';
+                                </script>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Charts Section -->
+          <div class="row mt-4">
+              <div class="col-md-6 mb-2">
+                  <div class="chart h-auto w-auto">
+                      <h3 class="mb-0">Weekly Learning Activity</h3>
+                      <p class="hint">Your daily engagement with course content</p>
+                      <canvas id="studentsChart"></canvas>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="chart1 small-chart h-auto">
+                      <h3>Course Distribution</h3>
+                      <canvas id="coursesChart"></canvas>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Course Progress Table -->
+          <div class="data-tables mt-4 table-responsive">
+              <h3 class="mb-0">Course Progress Details</h3>
+              <p class="hint">Detailed view of your progress in each course</p>
+              <table class="table table-bordered">
+                  <thead class="table-light">
+                      <tr>
+                          <th>Course Name</th>
+                          <th>Progress</th>
+                          <th>Last Activity</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for course in course_progress %}
+                      <tr>
+                          <td>{{ course.course }}</td>
+                          <td>{{ course.progress }}%</td>
+                          <td>{{ course.last_active }}</td>
+                      </tr>
+                      {% endfor %}
+                      {% if not course_progress %}
+                      <tr class="text-center">
+                        <td colspan="3">no data available</td>
+                      </tr>
+                      {% endif %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  // Set fixed height for charts
+  const chartHeight = '300px';
+  document.querySelector('.chart').style.height = chartHeight;
+  document.querySelector('.chart1').style.height = chartHeight;
+
+  // Parse the JSON data
+  const weeklyLabels = JSON.parse('{{ chart_data.weekly_activity.labels|safe }}');
+  const weeklyData = JSON.parse('{{ chart_data.weekly_activity.data|safe }}');
+  const categoryLabels = JSON.parse('{{ chart_data.course_categories.labels|safe }}');
+  const categoryData = JSON.parse('{{ chart_data.course_categories.data|safe }}');
+
+  // Weekly Activity Chart
+  const weeklyCtx = document.getElementById('studentsChart').getContext('2d');
+  new Chart(weeklyCtx, {
+      type: 'line',
+      data: {
+          labels: weeklyLabels,
+          datasets: [{
+              label: 'Daily Activities',
+              data: weeklyData,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1,
+              fill: false
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  ticks: {
+                      stepSize: 1
+                  }
+              }
+          }
+      }
+  });
+  
+  // Course Categories Chart
+  const coursesCtx = document.getElementById('coursesChart').getContext('2d');
+  new Chart(coursesCtx, {
+      type: 'doughnut',
+      data: {
+          labels: categoryLabels,
+          datasets: [{
+              data: categoryData,
+              backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: true
+      }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+{% endblock %}

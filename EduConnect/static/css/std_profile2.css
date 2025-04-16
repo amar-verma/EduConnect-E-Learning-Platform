@@ -1,0 +1,22 @@
+.edit-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333333;
+}
+
+.btn-primary {
+    width: 150px;
+}

@@ -1,0 +1,121 @@
+
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.notif-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+.notif-icon {
+    background-color: #007bff;
+    color: white;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.notif-icon:hover {
+    transform: scale(1.1);
+    background-color: #0056b3;
+}
+.notif-box {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 60px;
+    width: 300px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.notif-box.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+.notif-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.notif-list::-webkit-scrollbar {
+    width: 8px;
+}
+.notif-list::-webkit-scrollbar-thumb {
+    background-color: #007bff;
+    border-radius: 10px;
+    border: 2px solid white;
+}
+.notif-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.notif-list-item {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+.notif-list-item:hover {
+    background-color: #f9f9f9;
+}
+.notif-list-item:last-child {
+    border-bottom: none;
+}
+.notif-icon-symbol {
+    font-size: 18px;
+    color: #007bff;
+}
+.notif-close-btn {
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+    border: none;
+    background: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+.notif-close-btn:hover {
+    color: darkred;
+}
+.notif-empty {
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    color: gray;
+    display: none;
+}
+@media (max-width: 600px) {
+    .notif-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        padding: 8px;
+    }
+    .notif-box {
+        width: 250px;
+    }
+}

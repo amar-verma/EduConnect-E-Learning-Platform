@@ -1,0 +1,142 @@
+.ag-bg-overlay {
+    width: 128px;
+    height: 128px;
+    top: -75px;
+    right: -75px;
+    transition: transform 0.5s ease, background-color 0.5s ease;
+    transform: scale(1);
+}
+
+
+.calendar-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+/* Left Sidebar */
+.calendar-sidebar {
+    background-color: #28a745;
+    color: white;
+    width: 30%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.current-date {
+    font-size: 4em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.current-day {
+    font-size: 1.5em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.event-list {
+    text-align: left;
+    margin: 20px 0;
+}
+
+.event-list h5 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.event-list ul {
+    padding: 0;
+    list-style: none;
+}
+
+.event-list ul li {
+    margin-bottom: 5px;
+}
+
+.add-event-btn {
+    background-color: white;
+    color: #28a745;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.add-event-btn:hover {
+    background-color: #ffffffcc;
+}
+
+/* Calendar */
+.calendar-main {
+    flex: 1;
+    padding: 20px;
+}
+
+.month-year-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.month-year-header h3 {
+    margin: 0;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.calendar-days div {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.calendar-date {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.calendar-date.today {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-date.event {
+    border: 2px solid #007bff;
+}
+
+.calendar-date:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.hint {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+}

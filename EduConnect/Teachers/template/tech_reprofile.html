@@ -1,0 +1,688 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduConnect</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+  rel="stylesheet"
+/>
+<link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=developer_guide"
+  />
+<link rel="icon" href="{% static 'img/clogo.png' %}" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+        font-family: "Poppins", sans-serif;
+        color: #333333;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .edu-heading {
+        font-size: 28px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .edu-subheading {
+        font-size: 22px;
+        font-weight: 500;
+        color: #34495e;
+        margin-bottom: 15px;
+      }
+
+    .progress-container {
+      width: 100%;
+      height: 5px;
+      background-color: #e0e0e0;
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background-color: #6a5acd;
+      transition: width 0.3s ease;
+    }
+
+    .content {
+      /* padding: 100px 20px; */
+      display: none;
+    }
+
+    .content.hidden {
+      display: none;
+    }
+
+    .content:not(.hidden) {
+      display: block;
+    }
+
+    .btn {
+      background-color: #6a5acd;
+      color: white;
+      padding: 15px 25px;
+      margin: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #5a4dbd;
+    }
+
+    .input-container {
+      text-align: center;
+    }
+
+    .large-input {
+      height: 60px; /* Large height */
+      padding: 10px 15px;
+      font-size: 18px; /* Font size for better readability */
+      border: 2px solid #6a5acd;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .large-input:focus {
+      outline: none;
+      border-color: #483d8b; /* Darker border on focus */
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .input-label {
+      font-size: 16px;
+      margin-bottom: 10px;
+      display: block;
+      color: #333;
+    }
+    .requirement .text {
+      margin-left: 5px;
+    }
+
+    .requirement i {
+      color: gray; /* Default icon color */
+    }
+
+    .requirement i.valid {
+      color: green; /* Valid condition color */
+    }
+    .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 5px;
+        }
+
+        .form-group button {
+            padding: 15px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .row .form-group {
+            width: 48%;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+
+  </style>
+</head>
+<body>
+  {% if messages %}
+                  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      {% for message in messages %}
+                      {{ message }}
+                      {% endfor %}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+  {% endif %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+   
+    <div class="row m-0">
+        <div class="col-md-12 text-center m-0 p-0">
+            <img src="{% static 'img/edu.png' %}" alt="EduConnect" height="56px">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Step 1 -->
+  <div class="content" id="content-1" >
+    <div class="container">
+        <div class="row text-end m-0">
+            <div class="col-md-12 d-flex justify-content-end">
+                <button class="btn" id="next-1" disabled>Continue</button>
+            </div>
+        </div>
+        <h2 class="edu-heading">Enter Your New Password</h2>
+        <div class="input-container mb-4">
+            <input type="password" id="new-password" class="large-input mb-3" placeholder="New Password" name="password" required>
+            <input type="password" id="confirm-password" class="large-input" placeholder="Confirm New Password" name="cpassword" required>
+        </div>
+        <div class="password-cat text-start">
+            <p class="fw-bold">Password must meet the following requirements:</p>
+            <div id="requirements">
+                <div class="requirement">
+                    <i class="bi bi-circle"></i>
+                    <span class="text">At least 8 characters</span>
+                </div>
+                <div class="requirement">
+                    <i class="bi bi-circle"></i>
+                    <span class="text">At least one uppercase letter</span>
+                </div>
+                <div class="requirement">
+                    <i class="bi bi-circle"></i>
+                    <span class="text">At least one lowercase letter</span>
+                </div>
+                <div class="requirement">
+                    <i class="bi bi-circle"></i>
+                    <span class="text">At least one number</span>
+                </div>
+                <div class="requirement">
+                    <i class="bi bi-circle"></i>
+                    <span class="text">At least one special character (!@#$%^&*)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const passwordInput = document.getElementById("new-password");
+            const confirmPasswordInput = document.getElementById("confirm-password");
+            const requirements = document.querySelectorAll("#requirements .requirement");
+            const nextButton = document.getElementById("next-1");
+    
+            const conditions = [
+                { regex: /.{8,}/, message: "At least 8 characters" },
+                { regex: /[A-Z]/, message: "At least one uppercase letter" },
+                { regex: /[a-z]/, message: "At least one lowercase letter" },
+                { regex: /\d/, message: "At least one number" },
+                { regex: /[!@#$%^&*]/, message: "At least one special character (!@#$%^&*)" },
+            ];
+    
+            const checkRequirements = () => {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                let isValid = true;
+    
+                // Check password requirements
+                conditions.forEach((condition, index) => {
+                    const icon = requirements[index].querySelector("i");
+                    if (condition.regex.test(password)) {
+                        icon.classList.remove("bi-circle");
+                        icon.classList.add("bi-check-circle", "valid");
+                    } else {
+                        icon.classList.add("bi-circle");
+                        icon.classList.remove("bi-check-circle", "valid");
+                        isValid = false;
+                    }
+                });
+    
+                // Check if the confirm password matches
+                if (password !== confirmPassword) {
+                    isValid = false;
+                }
+    
+                // Enable or disable the "Next" button
+                nextButton.disabled = !isValid;
+            };
+    
+            passwordInput.addEventListener("input", checkRequirements);
+            confirmPasswordInput.addEventListener("input", checkRequirements);
+        });
+    </script>
+    
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+  </div>
+
+  <!-- Step 2 -->
+  <div class="content hidden" id="content-2">
+    <div class="container">
+        <div class="row m-0">
+            <div class="col-md-12 d-flex justify-content-between">
+                <button class="btn" id="back-2">Back</button>
+                <button class="btn" id="next-2" disabled>Continue</button>
+            </div>
+        </div>
+        
+        <div class="container">
+          <h2>Teacher Profile Form</h2>
+      
+          <!-- <form method="POST" enctype="multipart/form-data" action="/submit_teacher_form/"> -->
+             
+      
+              <!-- First and Last Name -->
+              
+              <div class="row">
+                  <div class="form-group">
+                      <label for="first_name">First Name</label>
+                      <input type="text" id="first_name" name="first_name" required placeholder="Enter your first name" value="{{user.first_name}}" disabled>
+                  </div>
+                  <div class="form-group">
+                      <label for="last_name">Last Name</label>
+                      <input type="text" id="last_name" name="last_name" required placeholder="Enter your last name" value="{{user.last_name}}" disabled>
+                  </div>
+              </div>
+      
+              <!-- Profile Picture -->
+              <div class="form-group">
+                  <label for="profile_picture">Profile Picture</label>
+                  <input type="file" id="profile_picture" name="profile_picture" onchange="checkFormCompletion();" accept="image/*" required>
+              </div>
+      
+              <!-- Phone Number -->
+              <div class="form-group">
+                  <label for="phone_number">Phone Number</label>
+                  <input type="number" id="phone_number" name="phone_number" placeholder="Enter phone number" onchange="checkFormCompletion();" required>
+              </div>
+      
+              <!-- Address -->
+              <div class="form-group">
+                  <label for="address">Address</label>
+                  <textarea id="address" name="address" placeholder="Enter address" onchange="checkFormCompletion();" required></textarea>
+              </div>
+      
+              <!-- Country, State, and City -->
+              <div class="row">
+                  <div class="form-group">
+                      <label for="country">Country</label>
+                      <select id="country" name="country" onchange="populateStates();checkFormCompletion(); " required>
+                          <option value="" selected disabled>Select Country</option>
+                          <option value="India">India</option>
+                          <option value="USA">USA</option>
+                          <option value="Other">Other</option>
+                      </select>
+                  </div>
+      
+                  <div class="form-group">
+                      <label for="state">State</label>
+                      <select id="state" name="state" onchange="populateCities(); checkFormCompletion();" required>
+                          <option value="" selected disabled>Select State</option>
+                      </select>
+                  </div>
+      
+                  <div class="form-group">
+                      <label for="city">City</label>
+                      <select id="city" name="city" onchange="checkFormCompletion();" required>
+                          <option value="" selected disabled>Select City</option>
+                      </select>
+                  </div>
+              </div>
+      
+              <!-- Bio -->
+              <div class="form-group">
+                  <label for="bio">Bio</label>
+                  <textarea id="bio" name="bio" placeholder="Write a short bio" onchange="checkFormCompletion();"></textarea>
+              </div>
+      
+              <!-- Social Links -->
+              <div class="form-group">
+                  <label for="social_links">Social Links</label>
+                  <textarea id="social_links" name="social_links" placeholder="Enter social media links (e.g., LinkedIn, Twitter)" onchange="checkFormCompletion();"></textarea>
+              </div>
+      
+          <!-- </form> -->
+      </div>
+      <script>
+        // Function to check if all required fields are filled
+        function checkFormCompletion() {
+            const firstName = document.getElementById('first_name').value;
+            const lastName = document.getElementById('last_name').value;
+            const profilePic = document.getElementById('profile_picture').value;
+            const phoneNo = document.getElementById('phone_number').value;
+            const address = document.getElementById('address').value;
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+            const bio = document.getElementById('bio').value;
+            const socialLinks = document.getElementById('social_links').value;
+    
+           
+            const nextButton = document.getElementById('next-2');
+    
+            if (firstName && lastName && country && state && city && bio && socialLinks && profilePic && phoneNo && address ) {
+                nextButton.disabled = false; 
+            } else {
+                nextButton.disabled = true;  
+            }
+        }
+
+        checkFormCompletion();
+    </script>
+      
+      <script>
+        // Country -> State -> City Data
+        const statesData = {
+            India: {
+                Delhi: ['New Delhi', 'North Delhi', 'South Delhi', 'West Delhi'],
+                Maharashtra: ['Mumbai', 'Pune', 'Nagpur', 'Aurangabad'],
+                Karnataka: ['Bengaluru', 'Mysuru', 'Hubli', 'Mangalore'],
+                'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Trichy']
+            },
+            USA: {
+                California: ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento'],
+                Texas: ['Houston', 'Dallas', 'Austin', 'San Antonio'],
+                'New York': ['New York City', 'Buffalo', 'Rochester', 'Syracuse'],
+                Florida: ['Miami', 'Orlando', 'Tampa', 'Jacksonville']
+            },
+            Canada: {
+                Ontario: ['Toronto', 'Ottawa', 'Hamilton', 'London'],
+                Quebec: ['Montreal', 'Quebec City', 'Laval', 'Gatineau'],
+                'British Columbia': ['Vancouver', 'Victoria', 'Burnaby', 'Kelowna'],
+                Alberta: ['Calgary', 'Edmonton', 'Banff', 'Red Deer']
+            },
+            UK: {
+                England: ['London', 'Manchester', 'Birmingham', 'Leeds'],
+                Scotland: ['Edinburgh', 'Glasgow', 'Aberdeen', 'Dundee'],
+                Wales: ['Cardiff', 'Swansea', 'Newport', 'Bangor'],
+                'Northern Ireland': ['Belfast', 'Derry', 'Lisburn', 'Newtownabbey']
+            },
+            Australia: {
+                'New South Wales': ['Sydney', 'Newcastle', 'Wollongong', 'Central Coast'],
+                Queensland: ['Brisbane', 'Gold Coast', 'Cairns', 'Townsville'],
+                Victoria: ['Melbourne', 'Geelong', 'Ballarat', 'Bendigo'],
+                'Western Australia': ['Perth', 'Fremantle', 'Bunbury', 'Mandurah']
+            },
+            Other: {}
+        };
+    
+        // Populate states based on country selection
+        function populateStates() {
+            const country = document.getElementById("country").value;
+            const stateSelect = document.getElementById("state");
+    
+            // Clear previous states and cities
+            stateSelect.innerHTML = '<option value="">Select State</option>';
+            document.getElementById("city").innerHTML = '<option value="">Select City</option>';
+    
+            if (country && statesData[country]) {
+                // Populate states dropdown
+                Object.keys(statesData[country]).forEach(state => {
+                    const option = document.createElement("option");
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            }
+        }
+    
+        // Populate cities based on state selection
+        function populateCities() {
+            const state = document.getElementById("state").value;
+            const citySelect = document.getElementById("city");
+    
+            // Clear previous cities
+            citySelect.innerHTML = '<option value="">Select City</option>';
+    
+            // Populate cities dropdown based on selected state
+            if (state) {
+                const cities = statesData[document.getElementById("country").value][state];
+                cities.forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+    </script>
+    
+      
+        
+
+    </div>
+    
+  </div>
+
+  <!-- Step 3 -->
+  <div class="content hidden" id="content-3">
+    <div class="container">
+        <div class="row m-0">
+            <div class="col-md-12 d-flex justify-content-between">
+                <button class="btn" id="back-3">Back</button>
+                <button class="btn" id="next-3">Continue</button>
+            </div>
+        </div>
+        
+        <div class="container text-start">
+          <h2>Instructor Guidelines & Regulations</h2>
+          <p>Welcome to EduConnect! As an instructor, you play a crucial role in delivering high-quality education. Please follow the guidelines below to maintain a professional, engaging, and ethical learning environment.</p>
+      
+          <h3>1. Professional Conduct</h3>
+          <ul>
+              <li>Maintain a respectful and inclusive learning environment.</li>
+              <li>Avoid discriminatory, offensive, or inappropriate language.</li>
+              <li>Provide constructive feedback to students and encourage discussions.</li>
+          </ul>
+      
+          <h3>2. Course Content & Delivery</h3>
+          <ul>
+              <li>Ensure course materials are accurate, up-to-date, and relevant.</li>
+              <li>Use engaging teaching methods, including multimedia and quizzes.</li>
+              <li>Do not share copyrighted or unauthorized content.</li>
+          </ul>
+      
+          <h3>3. Assessment & Feedback</h3>
+          <ul>
+              <li>Design fair and meaningful assessments that align with course objectives.</li>
+              <li>Provide timely and constructive feedback on student submissions.</li>
+              <li>Ensure grading is unbiased and transparent.</li>
+          </ul>
+      
+          <h3>4. Student Engagement & Support</h3>
+          <ul>
+              <li>Encourage student participation and critical thinking.</li>
+              <li>Be responsive to student queries and provide support where needed.</li>
+              <li>Respect different learning paces and offer assistance accordingly.</li>
+          </ul>
+      
+          <h3>5. Ethical Guidelines</h3>
+          <ul>
+              <li>Maintain confidentiality of student information.</li>
+              <li>Avoid conflicts of interest and uphold academic integrity.</li>
+              <li>Report any form of misconduct or violations to the admin team.</li>
+          </ul>
+      
+          <h3>6. Platform Usage & Policies</h3>
+          <ul>
+              <li>Use EduConnect tools and features responsibly.</li>
+              <li>Follow the terms of service and privacy policies of the platform.</li>
+              <li>Report technical issues to support for resolution.</li>
+          </ul>
+      
+          <div class="footer">
+              <p>Thank you for being a valued part of EduConnect! Together, we create an enriching learning experience.</p>
+          </div>
+      </div>
+
+
+    </div>
+    
+  </div>
+
+  <!-- Step 4 -->
+  <div class="content hidden" id="content-4">
+    <div class="container">
+        <div class="row m-0">
+            <div class="col-md-12 d-flex justify-content-between">
+                <button class="btn" id="back-4">Back</button>
+                <button class="btn" type="submit" id="finish" disabled>Submit</button>
+            </div>
+        </div>
+        
+        <div class="container text-start">
+          <h2>Instructor Agreement</h2>
+          <p>Before proceeding, you must agree to the **EduConnect Terms & Conditions**, including standard rules, regulations, privacy, and security policies.</p>
+      
+          <div class="terms-box">
+              <h3>EduConnect Terms & Conditions</h3>
+              <p>As an instructor on EduConnect, you must:</p>
+              <ul>
+                  <li>Comply with ethical teaching standards and guidelines.</li>
+                  <li>Protect student data and respect privacy policies.</li>
+                  <li>Ensure content is original and does not violate copyrights.</li>
+                  <li>Follow security measures to prevent unauthorized access.</li>
+                  <li>Uphold fair grading and avoid discrimination.</li>
+              </ul>
+              <p><strong>Failure to comply may result in account suspension or removal.</strong></p>
+          </div>
+      
+          
+              <label>
+                  <input type="checkbox" id="agree" onclick="toggleSubmit()" required> 
+                  I agree to follow EduConnect's Terms & Conditions, Rules, Regulations, Privacy, and Security Policies.
+              </label>
+          
+      </div>
+      <script>
+        function toggleSubmit() {
+            var checkboxfinsh = document.getElementById('agree');
+            var submitButton = document.getElementById('finish');
+            if(checkboxfinsh){
+              submitButton.disabled = false
+            }else{
+              submitButton.disabled = true
+            }
+           
+        }
+    </script>
+
+
+
+    </div>
+    
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const progressBar = document.getElementById("progress-bar");
+      const contents = document.querySelectorAll(".content");
+      const progressSteps = 4; // Total steps (divs)
+      let currentStep = 0;
+
+      function updateProgressBar() {
+        progressBar.style.width = `${((currentStep + 1) / progressSteps) * 100}%`;
+      }
+
+      function showContent(step) {
+        contents.forEach((content, index) => {
+          content.classList.add("hidden");
+          if (index === step) content.classList.remove("hidden");
+        });
+      }
+
+      // Next buttons
+      document.getElementById("next-1").addEventListener("click", () => {
+        currentStep = Math.min(currentStep + 1, progressSteps - 1);
+        updateProgressBar();
+        showContent(currentStep);
+      });
+
+      document.getElementById("next-2").addEventListener("click", () => {
+        currentStep = Math.min(currentStep + 1, progressSteps - 1);
+        updateProgressBar();
+        showContent(currentStep);
+      });
+
+      document.getElementById("next-3").addEventListener("click", () => {
+        currentStep = Math.min(currentStep + 1, progressSteps - 1);
+        updateProgressBar();
+        showContent(currentStep);
+      });
+
+      // Back buttons
+      document.getElementById("back-2").addEventListener("click", () => {
+        currentStep = Math.max(currentStep - 1, 0);
+        updateProgressBar();
+        showContent(currentStep);
+      });
+
+      document.getElementById("back-3").addEventListener("click", () => {
+        currentStep = Math.max(currentStep - 1, 0);
+        updateProgressBar();
+        showContent(currentStep);
+      });
+
+      document.getElementById("back-4").addEventListener("click", () => {
+        currentStep = Math.max(currentStep - 1, 0);
+        updateProgressBar();
+        showContent(currentStep);
+      });
+
+      // Finish button
+      document.getElementById("finish").addEventListener("click", () => {
+        alert("Process Completed!");
+      });
+
+      // Initialize first content
+      showContent(currentStep);
+      updateProgressBar();
+    });
+  </script>
+  
+</form>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{% load static %}{% include 'test_bar.html' %}
+{% block 'form_part' %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+
+
+
+
+<div class="container mt-4">
+    <h2 class="text-center mb-2"> - {{ form.title }} - </h2>
+    <div class="row mb-3">
+        <div class="col-md-12 d-flex justify-content-between">
+            <h4>
+                No. Of Questions: {{total_questions}}
+            </h4>
+            <h4>
+                Total Marks: {{total_marks}}
+            </h4>
+        </div>
+    </div>
+
+    <div class="row ">
+        {% for question in questions %}
+        <div class="col-md-12 p-2 px-4  rounded m-2 border question-box">
+            <div class="row mb-2 mx-3">
+                <div class="col-md-8">
+                    <h5 class="fw-bold">Q{{ forloop.counter }}: {{ question.question_text }}</h5>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span class="badge bg-primary">{{ question.question_type|capfirst }}</span>
+                </div>
+            </div>
+
+            <!-- Display Options -->
+            <div class="row mb-2 options-container mx-3 mb-2">
+                <div class="col-md-12">
+                    {% for option in question.options %}
+                    <div class="option-item d-flex align-items-center mb-2">
+                        <input type="{% if question.question_type == 'checkbox' %}checkbox{% else %}radio{% endif %}" 
+                            value="{{ option }}" {% if option in question.answer_key %}checked{% endif %} disabled>
+                        <label class="form-label mx-2">{{ option }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="row text-end">
+                <div class="col-md-12">
+                    <span class="fw-bold">Marks: {{ question.marks }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock 'form_part' %}

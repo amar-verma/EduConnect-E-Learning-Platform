@@ -1,0 +1,209 @@
+{% extends 'index.html' %}
+
+{% load static %}
+ {% block 'main_home' %}
+ {% load humanize %}
+ <link rel="stylesheet" href="{% static 'css/teacherprofile.css' %}">
+
+ <div class="container mt-3">
+    <div class="row">
+
+      {% if hide_teacher %}
+      <div class="col-md-4">
+        <div class="profile-header text-center">
+          <img src="{{teacher.profile_picture.url}}" alt="EduConnect" class="profile-pic">
+          <h2>{{teacher.first_name}} {{teacher.last_name}}</h2>
+          <p>Professor of EduConnect</p> 
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="section">Profile is not available</div>
+      </div>
+
+      {% else %}
+
+        <!-- Left Column: Profile Header -->
+        <div class="col-md-4">
+            <div class="profile-header text-center">
+                <img src="{{teacher.profile_picture.url}}" alt="EduConnect" class="profile-pic">
+                <h2>{{teacher.first_name}} {{teacher.last_name}}</h2>
+                <p>Professor of EduConnect</p>
+                <p>{% if profile.qualifications %}  {{profile.qualifications}} {% endif %}</p>
+                
+            </div>
+
+            {% if comments %}
+            {% for comment in comments %}
+            <div class="section">
+                <p><i>EduConnect </i> - "{{comment.name}}"</p>
+                <p>"{{comment.comment}}"</p>
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+
+        </div>
+
+        <!-- Right Column: Dashboard Sections -->
+        <div class="col-md-8">
+            <!-- Contact & Availability -->
+            <div class="section">
+                <h4 class="section-title">Contact & Availability</h4>
+                <p><strong>Availability Days:</strong> {% if profile.availability %} {{profile.availability}} {% else %} - {% endif %} </p>
+                <p><strong>Email:</strong> {{teacher.user.email}}</p>
+                <div>
+                    {% if profile.social_links_linkedin %}
+                    <a href="{{profile.social_links_linkedin}}" class="btn btn-primary btn-sm me-2">LinkedIn</a>
+                    {% endif %}
+                    {% if profile.social_links_github %}
+                    <a href="{{profile.social_links_github}}" class="btn btn-secondary btn-sm">GitHub</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Biography -->
+            <div class="section">
+                <h4 class="section-title">Biography</h4>
+                <p>{{teacher.bio}}</p>
+                {% if profile.interest %}
+                <p><strong>Research Interests:</strong> {{profile.interest}}</p>
+                {% endif %}
+            </div>
+
+            <!-- Teaching Philosophy -->
+             {% if profile.philosophy %}
+            <div class="section">
+                <h4 class="section-title">Teaching Philosophy</h4>
+                <p>"{{profile.philosophy}}"</p>
+            </div>
+            {% endif %}
+
+
+            <!-- Achievements & Awards -->
+            {% if awards %}
+            <div class="section">
+                <h4 class="section-title">Achievements & Awards</h4>
+                <ul>
+                    {% for award in awards %}
+                    <li> 🏅 {{award.title}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% if courses %}
+<div class="container mt-4">
+    <h3>Available Courses</h3>
+    <hr>
+    <div class="row">
+      <div class="col-md-8 w-100">
+        <div class="card-swiper position-relative">
+          <button class="btn btn-primary swiper-btn swiper-btn-left" id="btn-left">
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <div class="swiper-wrapper d-flex overflow-hidden">
+            <div class="row justify-content-start card-flow">
+            <!-- Card 1 -->
+             
+            {% for course in courses %}
+            <div class="col-md-3 card-flow-wdth mb-1 ">
+                <div class="card custom-card edu-card1">
+                  <img src="{{course.course_img.url}}" class="card-img-top" alt="EduConnect">
+                  <div class="card-body">
+                    <div class="university-info">
+                      <img src="{{course.teacher.profile_picture.url}}" style="object-fit: cover;" alt="EduConnect">
+                      <div style="height: 30px ;" class="m-0 p-0">
+                        <span class="university-name">{{course.teacher.first_name}} {{course.teacher.last_name}}</span>
+
+                      </div>
+                    </div>
+                    <div style="height: 60px ;">
+                        <h5 class="card-title">{{course.title}}</h5>
+                    </div>
+                    <p class="cohort">Updated Date: <strong>{{course.updated_at|date:"d M Y"}}</strong></p>
+                    <p class="duration"><i class="fa fa-calendar"></i>{{ course.created_at|naturaltime }}</p>
+                    <hr class="edu-hide">
+                   
+                    <a href="{% url 'course_detail' course.id %}"><p class="text-center mb-0 edu-hide">Know More</p></a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            
+            <!-- Card 2 -->
+             
+            <!-- Add more cards as needed -->
+            </div>
+            
+          </div>
+          <button class="btn btn-primary swiper-btn swiper-btn-right" id="btn-right">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+
+{% if courses2 %}
+<div class="container mt-4 mb-4">
+    <h3>Other Courses</h3>
+    <hr>
+    <div class="row">
+      <div class="col-md-8 w-100">
+        <div class="card-swiper position-relative">
+          <button class="btn btn-primary swiper-btn swiper-btn-left" id="btn-left2">
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <div class="swiper-wrapper2 d-flex overflow-hidden">
+            <div class="row justify-content-start card-flow">
+            <!-- Card 1 -->
+             
+            {% for course in courses2 %}
+            <div class="col-md-3 card-flow-wdth mb-1 ">
+                <div class="card custom-card edu-card1">
+                  <img src="{{course.course_img.url}}" class="card-img-top" alt="EduConnect">
+                  <div class="card-body">
+                    <div class="university-info">
+                      <img src="{{course.teacher.profile_picture.url}}" style="object-fit: cover;" alt="EduConnect">
+                      <div style="height: 30px ;" class="m-0 p-0">
+                        <a href="{% url 'teacher_profile' course.teacher.teacher_id %}" class="text-decoration-none text-black"><span class="university-name">{{course.teacher.first_name}} {{course.teacher.last_name}}</span></a>
+
+                      </div>
+                    </div>
+                    <div style="height: 60px ;">
+                        <h5 class="card-title">{{course.title}}</h5>
+                    </div>
+                    <p class="cohort">Updated Date: <strong>{{course.updated_at|date:"d M Y"}}</strong></p>
+                    <p class="duration"><i class="fa fa-calendar"></i>{{ course.created_at|naturaltime }}</p>
+                    <hr class="edu-hide">
+                   
+                    <a href="{% url 'course_detail' course.id %}"><p class="text-center mb-0 edu-hide">Know More</p></a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+            
+            <!-- Card 2 -->
+             
+            <!-- Add more cards as needed -->
+            </div>
+            
+          </div>
+          <button class="btn btn-primary swiper-btn swiper-btn-right" id="btn-right2">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+ <script src="{% static 'js/teacherprofile.js' %}"></script>
+ {% endblock 'main_home' %}

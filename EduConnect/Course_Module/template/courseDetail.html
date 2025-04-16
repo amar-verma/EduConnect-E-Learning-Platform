@@ -1,0 +1,448 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block 'main_home' %}
+<link rel="stylesheet" href="{% static 'css/courseDetail.css' %}">
+<section class=" p-5" id="hire-job-hero-wrapper"
+    style="background-image: url(&quot;https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/hero-bg.png&quot;); max-height: fit-content;">
+
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-lg-5 hire-job-hero-wrap text-white">
+                <h1>{{courses.category}} </h1>
+                <hr>
+                <p><strong>By {{courses.teacher.first_name}}{{courses.teacher.last_name}}</strong></p>
+                
+            </div>
+
+            <div class="col-lg-6 p-2">
+                <div class="text-center">
+                    <img src="{{courses.teacher.profile_picture.url}}" alt="EduConnect" style="height: 140px; object-fit: cover;" class="border shadow rounded">
+                    <p class="card-text text-white mt-1">EduConnect Professors</p>
+                    <p class="text-white" style="color: white;white-space: pre-wrap;">{{courses.teacher.bio|safe}}</p>
+                    {% if courses.teacher.country %}
+                    <p class="text-white"><i class="bi bi-globe-central-south-asia"></i> {{courses.teacher.country}}</p>
+                    {% endif %}
+
+                    {% if courses.teacher.social_links %}
+                    <p class="text-white"><i class="bi bi-link-45deg"></i> <a href="{{courses.teacher.social_links}}" class="text-decoration-none text-white">{{courses.teacher.social_links}}</a></p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+  <div class="container-md my-4">
+    <div class="row">
+      <div class="col-md-4 sticky-card">
+        <div class="custom-card">
+          <div class="card-header">
+            <div class="photo-thumbnails-edu" style="max-height: 200px; overflow: hidden; ">
+              <!-- <div class="play-icon"></div> -->
+               <img class="card-img-top " src="{{courses.course_img.url}}"  alt="EduConnect" style="object-fit: cover;">
+            </div>
+          </div>
+          <div class="card-content">
+            <h5 class="card-title mb-1">{{courses.title}}</h5>
+            <p class="enrolled mb-1">
+              <strong >{{courses.enroll}}+</strong> learners already enrolled
+            </p>
+            <div class="rating-class">
+              <span>
+                {% for i in "12345" %}
+                    {% if i|add:"0" <= courses.rating %}
+                        <i class="bi bi-star-fill text-warning"></i> <!-- Filled Star -->
+                    {% else %}
+                        <i class="bi bi-star text-warning"></i> <!-- Empty Star -->
+                    {% endif %}
+                {% endfor %}
+            </span>
+            </div>
+            
+            <div class="rating mb-1">
+              <span>🧡 {{courses.rating}}</span>
+              <span>👎 Not Interested</span>
+            </div>
+            <div class="course-includes">
+              <h6>This
+                {% if courses.price is 0 %}
+                Free
+                {% else %}
+                Paid
+                {% endif %}
+                
+                Online Course Includes:</h6>
+              <ul>
+                <li>6-10 Hours of Learning</li>
+                {% for fea in features %}
+                <li>{{fea.features}}</li>
+                {% endfor %}
+                
+                <li>Final Assessment</li>
+              </ul>
+            </div>
+            <!-- <a href="{% url 'confirm_enrollment' course_id %}" class="btn btn-success w-100 mt-3">Start Course Now 
+              {% if courses.price is 0 %}
+                [ Free ]
+                {% else %}
+                [{{courses.price}}&#8377;]
+                {% endif %}
+
+            </a> -->
+            {% if not user.is_authenticated %}
+            <a href="{% url 'std_login' %}" class="btn btn-primary w-100 mt-3">Login to Join</a>
+            {% elif user.user_type == 'student'%}
+              {% if login_status %}
+              <a href="{% url 'enroll_course' course_id %}" class="btn btn-primary w-100 mt-3">View Course</a>
+              {% elif course_max %}
+              <a href="" class="btn btn-primary w-100 mt-3">Courese Enrollment Is Full</a>
+              {% elif courses.price is 0 %}
+              <a href="{% url 'confirm_enrollment' course_id %}" class="btn btn-primary w-100 mt-3">Free To Join</a>
+              {% else %}
+              <a href="{% url 'confirm_enrollment' course_id %}" class="btn btn-success w-100 mt-3">Start Course Now  {{courses.price}}&#8377;</a>
+              {% endif %}
+            {% else %}
+            <a href="/" class="btn btn-primary w-100 mt-3" >You can't enroll in this course</a>
+            {% endif %}
+
+            <hr>
+            {% if ads %}
+            {% for ads in ads %}
+            <a href="{{ads.link}}" class="text-decoration-none text-black">
+            <div class="publisher">
+              <img src="{{ads.image.url}}" class="img-fluid" alt="Publisher">
+              <div>
+                <small class="d-block text-muted">{{ads.title}}</small>
+                <strong>{{ads.content}}</strong>
+              </div>
+            </div>
+          </a>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <style>
+        .fade-text {
+      opacity: 0.4;  /* Adjust this value to control how faded the text is */
+    }
+      </style>
+      <div class="col-md-8">
+        <!-- Extra content goes here -->
+
+       <h3 class="fw-bold">{{courses.title}}</h3>
+       <p class="fade-text">The course and all materials provided by the professor are governed by EduConnect's Terms of Service.</p>
+       <p class="fw-medium"> {{courses.description}} </p>
+       <div class="container-fluid p-3 text-dark">
+        {% for ads in ads %}
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <img src="{{ads.image.url}}" alt="Logo" width="50" height="auto"> 
+          </div>
+          <div class="col">
+            <h6 class="mb-0">{{ads.title}}</h6>
+            <p class="mb-0">{{ads.content}}</p>
+          </div>
+          <div class="col-auto">
+            <a href="{{ads.link}}"><button type="button" class="btn btn-success">Visit Now</button></a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% if learning %}
+      <div class="container-fluid p-3 bg-dark text-light">
+        <h4 class="mb-3">In This 
+          {% if courses.price is 0 %}
+            Free
+          {% else %}
+            Paid
+          {% endif %}
+          Course, You Will Learn How To</h4>
+        <div id="courseContent">
+          <div class="row">
+            <div class="col-md-12">
+              <ul class="list-unstyled d-flex flex-wrap">
+                {% for learn in learning %}
+                <li class="col-md-6"><i class="bi bi-check-circle-fill text-success"></i> {{learn.learn}}</li>
+                {% endfor %}
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+      {% endif %}
+      
+      
+      <div class="container py-5">
+        <ul class="nav nav-tabs" id="courseTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="modules-tab" data-bs-toggle="tab" data-bs-target="#modules" type="button" role="tab" aria-controls="modules" aria-selected="true">Course Modules</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="false">Course Description</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="certificates-tab" data-bs-toggle="tab" data-bs-target="#certificates" type="button" role="tab" aria-controls="certificates" aria-selected="false">Certificates</button>
+          </li>
+        </ul>
+        <div class="tab-content mt-4" id="courseTabsContent">
+          <!-- Course Modules Tab -->
+          <div class="tab-pane fade show active" id="modules" role="tabpanel" aria-labelledby="modules-tab">
+            <div class="accordion" id="modulesAccordion">
+              <!-- Module 1 -->
+               
+              {% for title, item in combined_content %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+        <button 
+          class="accordion-button {% if forloop.counter > 3 %}collapsed{% endif %}" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#collapse{{ forloop.counter }}" 
+          aria-expanded="{% if forloop.counter <= 3 %}true{% else %}false{% endif %}" 
+          aria-controls="collapse{{ forloop.counter }}" 
+          {% if forloop.counter > 3 %}disabled{% endif %}>
+          MODULE {{ forloop.counter }}: {{ title }}
+        </button>
+      </h2>
+      <div 
+        id="collapse{{ forloop.counter }}" 
+        class="accordion-collapse collapse {% if forloop.counter <= 3 %}{% endif %}" 
+        aria-labelledby="heading{{ forloop.counter }}">
+        <div class="accordion-body">
+          {% if item %}
+            {% if item.course_head %}
+              <p>{{ item.course_head|linebreaks }}</p>
+            {% endif %}
+            {% if item.course_img %}
+              <p><img src="{{ item.course_img.url }}" alt="Course Image" class="img-fluid" /></p>
+            {% endif %}
+            {% if item.course_video %}
+              <p>
+                <video width="100%" height="300px" controls controlsList="nodownload">
+                  <source src="{{ item.course_video.url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </p>
+            {% endif %}
+            {% if item.description %}
+              <p>{{ item.description|linebreaks }}</p>
+            {% endif %}
+            {% if item.desc %}
+              {{ item.desc|safe }}
+            {% endif %}
+          {% else %}
+            <p>Details not available for this module.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+             
+            </div>
+          </div>
+          <!-- Course Description Tab -->
+          <div class="tab-pane fade" id="description" role="tabpanel" aria-labelledby="description-tab">
+            {{courses.description2|linebreaks}}
+          </div>
+          <!-- Alison Certificates Tab -->
+          <div class="tab-pane fade" id="certificates" role="tabpanel" aria-labelledby="certificates-tab">
+            <div class="container-fluid p-3">
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="educonnect-info">
+                      <h2>Achieve Your Goals with EduConnect Certificates</h2>
+                      <p>
+                          All EduConnect courses are designed to be accessible, engaging, and rewarding. Enrolling, studying, and 
+                          completing courses on EduConnect is simple and straightforward. To successfully complete a course and earn 
+                          an EduConnect Certificate, you need to achieve an 80% or higher score in each course assessment. Once you 
+                          complete your course, you have the option to acquire an official certificate, which is a valuable way to 
+                          showcase your achievements.
+                      </p>
+                      <h3>Your EduConnect Certificate Is:</h3>
+                      <ul>
+                          <li><strong>Ideal for sharing with potential employers</strong> to demonstrate your expertise.</li>
+                          <li><strong>A great addition to your resume</strong>, LinkedIn profile, and job applications.</li>
+                          <li><strong>A reflection of your dedication</strong> to learning, upskilling, and achieving excellence.</li>
+                          <li><strong>A motivation to continue your journey</strong> of lifelong learning and professional growth.</li>
+                      </ul>
+                      <h4>Certificate Options:</h3>
+                      <ol>
+                          <li>
+                              <strong>Digital Certificate:</strong> A downloadable certificate in PDF format, instantly available after completion.
+                          </li>
+                          
+                      </ol>
+                      <p>
+                          Empower yourself with knowledge, skills, and credentials through EduConnect, and take a significant step toward 
+                          achieving your personal and professional goals. <strong>Start your learning journey today!</strong>
+                      </p>
+                  </div>
+                  
+                  </div>
+                  <div class="col-md-4 text-center">
+                    <img src="{% static 'img/certificate.png' %}" alt="Diploma Sample" class="img-fluid"> 
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      {% if skills %}
+      <div class="container-fluid p-3 bg-dark text-light" style="border-radius: 20px;"> 
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <i class="bi bi-info-circle-fill text-primary"></i> 
+          </div>
+          <div class="col">
+            <h6 class="mb-0">Knowledge & Skills You Will Learn</h6>
+          </div>
+        </div>
+        <div class="row mt-3 justify-content-center">
+          {% for skill in skills %}
+          <div class="col-md-2 col-sm-3 mb-2">
+            <button type="button" class="btn btn-outline-primary btn-sm">{{skill.skills}}</button>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="container-fluid p-2 mt-3" style="border-radius: 20px; background-color: rgb(216, 216, 216);">
+        <div class="row">
+          <div class="col-md-8">
+            <h4 class="mb-3">Complete This Course on EduConnect & Earn Your Certificate!</h4>
+            <div class="row mb-4"> 
+              <div class="row-md-4 mb-3">
+                <div class="card bg-dark text-white text-center p-3">
+                  <i class="bi bi-shield-check fs-3 mb-2"></i>
+                  <h5>Certify Your Skills</h5>
+                  <p class="mb-0">An EduConnect Certificate validates the knowledge and skills you've gained, showcasing your expertise and dedication to learning.</p>
+                </div>
+              </div>
+              <div class="row-md-4 mb-3">
+                <div class="card bg-dark text-white text-center p-3">
+                  <i class="bi bi-chat-square-text fs-3 mb-2"></i>
+                  <h5>Stand Out From The Crowd</h5>
+                  <p class="mb-0">Add your Alison Certification to your resume and stay ahead of the competition.</p>
+                </div>
+              </div>
+              <div class="row-md-4 mb-3">
+                <div class="card bg-dark text-white text-center p-3">
+                  <i class="bi bi-briefcase-fill fs-3 mb-2"></i>
+                  <h5>Advance in Your Career</h5>
+                  <p class="mb-0">Share your Alison Certification with potential employers to show off your skills and capabilities.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <img src="{% static 'img/certificate.png' %}" alt="Diploma Sample" class="img-fluid">
+            <!-- <button type="button" class="btn btn-primary mt-4">Start Course Now <i class="bi bi-arrow-right"></i></button> -->
+          </div>
+        </div>
+      </div>
+
+      
+
+      {% if other_course %}
+      <div class="container mt-4">
+        <h3>Other Course</h3>
+        <hr>
+        <div class="row">
+          <div class="col-md-8 w-100">
+            <div class="row">
+            <div class="card-swiper position-relative">
+              <button class="btn btn-primary swiper-btn swiper-btn-left" id="btn-left">
+                <i class="bi bi-arrow-left"></i>
+              </button>
+              <div class="swiper-wrapper d-flex overflow-hidden">
+                <!-- Card 1 -->
+                 {% for course in other_course %}
+                <a href="{% url 'course_detail' course.id %}" class="text-decoration-none text-black">
+                  <div class="card custom-card mx-2" style="width: 230px;height: 350px ; overflow: hidden; flex-shrink: 0;">
+                    <img src="{{course.course_img.url}}" class="card-img-top" style="height: 150px; object-fit: cover;"  alt="Card Image 1">
+                    <div class="card-body">
+                      <h5 class="card-title-edu edu-after" style="min-height: 20px;">{{course.title}}</h5>
+                      <p class="card-text-edu">{{course.description}}</p>
+                    </div>
+                  </div>
+                </a>
+                {% endfor %}
+                <script src="{% static 'js/courseDetail1.js' %}"></script>
+                <!-- Add more cards as needed -->
+                
+              </div>
+              <button class="btn btn-primary swiper-btn swiper-btn-right" id="btn-right">
+                <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      
+  {% if comment %}
+  <div class="container-fluid p-3 mt-3" style="border-radius: 20px; background-color: rgb(216, 216, 216);">
+    <h4 class="mb-3 text-center">Learner Reviews & Feedback</h4>
+    <div class="row align-items-center mb-2">
+      <div class="col-auto">
+        <i class="bi bi-hand-thumbs-up-fill text-primary"></i> {{courses.like}}
+      </div>
+      <div class="col-auto">
+        <i class="bi bi-hand-thumbs-down-fill text-danger"></i> {{courses.dislike}}
+      </div>
+    </div>
+    {% endif %}
+  
+    {% for com in comment %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <img src="{% static 'img/clogo.png' %}" alt="User 1" class="rounded-circle" width="40" height="40"> 
+          <div class="ms-3">
+            <h6 class="mb-0">{{com.name}} <span class="text-muted" style="font-size: 10px;"> (EduConnect Student)</span></h6>
+            <span class="text-primary"> 
+              {% if com.value %} 
+              <i class="bi bi-hand-thumbs-up-fill"></i> liked this course
+              {% else %}
+              <i class="bi bi-hand-thumbs-down-fill text-danger"></i> Dislike this course
+              {% endif %}
+            </span>
+          </div>
+        </div>
+        <p class="card-text pb-2">{{com.comment}}</p>
+        
+      </div>
+    </div>
+  {% endfor %}
+    
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/courseDetail.js' %}"></script>
+
+{% endblock 'main_home' %}

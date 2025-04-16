@@ -1,0 +1,658 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    .upload-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .show {
+    display: block !important;
+}
+    .custom-input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background: white;
+    }
+
+    .custom-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        min-height: 120px;
+        margin-bottom: 15px;
+        background: white;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 15px;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .delete-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #dc3545;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 18px;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .card-header {
+        background: #f8f9fa;
+        padding: 20px;
+    }
+
+    .section-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .btn-add {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .assignment-block {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .dropdown-menu {
+        max-height: 300px;
+        overflow-y: auto;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .dropdown-toggle {
+        width: 100%;
+        text-align: left;
+        position: relative;
+        background-color: white;
+        border: 2px solid #e0e0e0;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+
+    .dropdown-toggle::after {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .dropdown-search {
+        padding: 8px;
+        margin-bottom: 10px;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .dropdown-item {
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    #contentNumber {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background: white;
+    }
+
+    .ck-editor__editable {
+        min-height: 200px;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+        
+        .card {
+            margin: 10px 0;
+        }
+    }
+</style>
+
+<div class="container mt-5 bg-white">
+    <div class="upload-container bg-white">
+        <!-- Section 1: Course Selection -->
+        <div class="card bg-white" id="section1 ">
+            <div class="card-header">
+                <h3 class="section-title">Choose Course</h3>
+            </div>
+            <div class="card-body">
+                <div class="course-selection-container">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="courseDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select a course
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="courseDropdown">
+                            <input type="text" class="dropdown-search" placeholder="Search courses..." onkeyup="filterDropdown(this)">
+                            <a class="dropdown-item" data-value="create">+ Create New Course</a>
+                            <div class="dropdown-divider"></div>
+                            {% for course in courses %}
+                                <a class="dropdown-item course-item" data-value="{{ course.id }}">{{ course.title }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <!-- New Course Form -->
+                <div id="newCourseForm" style="display: none;" class="mt-4">
+                    <input type="text" class="custom-input" placeholder="Course Title">
+                    <textarea class="custom-textarea" placeholder="Main Description"></textarea>
+                    <textarea class="custom-textarea" placeholder="Other Description"></textarea>
+                    
+                    <div id="featuresContainer">
+                        <h5>Features</h5>
+                        <div class="input-group">
+                            <input type="text" class="custom-input mb-0" placeholder="Feature">
+                            <button class="delete-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <button class="btn-add" onclick="addField('featuresContainer', 'Feature')">+ Add Feature</button>
+                    </div>
+
+                    <div id="skillsContainer" class="mt-4">
+                        <h5>Skills</h5>
+                        <div class="input-group">
+                            <input type="text" class="custom-input mb-0" placeholder="Skill">
+                            <button class="delete-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <button class="btn-add" onclick="addField('skillsContainer', 'Skill')">+ Add Skill</button>
+                    </div>
+
+                    <div id="learningContainer" class="mt-4">
+                        <h5>Learning Outcomes</h5>
+                        <div class="input-group">
+                            <input type="text" class="custom-input mb-0" placeholder="Learning Outcome">
+                            <button class="delete-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                        <button class="btn-add" onclick="addField('learningContainer', 'Learning Outcome')">+ Add Learning Outcome</button>
+                    </div>
+
+                    
+
+                    <input type="text" class="custom-input mt-4" placeholder="Tags (comma separated)">
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+            
+
+        <!-- Section 2: Content -->
+        <div class="card bg-white" id="section2" style="display: none;">
+            <div class="card-header">
+                <h3 class="section-title">Course Content</h3>
+            </div>
+            <div class="card-body">
+                <div class="content-actions">
+                    <button class="btn btn-primary me-2" onclick="showContentEditor('select')">Select Content</button>
+                    <button class="btn btn-primary" onclick="showContentEditor('new')">Add New Content</button>
+                </div>
+
+                <div id="contentSelector" style="display: none;" class="mb-3">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="contentDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Select existing content
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="contentDropdown">
+                            <input type="text" class="dropdown-search" placeholder="Search content..." onkeyup="filterDropdown(this)">
+                            <div id="contentList">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contentForm" style="display: none;" class="mb-3">
+                    <input type="number" class="form-control mb-3" id="contentNumber" placeholder="Content Number">
+                    <div id="editor">{{ existing_description|safe }}</div>
+                    <div id="assignmentsContainer" class="mt-4">
+                        <h5>Assignments</h5>
+                        <div class="assignment-block">
+                            <button class="delete-btn"><i class="fas fa-times"></i></button>
+                            <textarea class="custom-textarea" id="assignment" placeholder="Assignment Description" name="assignment">{{ existing_assignment }}</textarea>
+                        </div>
+                        <button class="btn-add" onclick="addAssignment()">+ Add Assignment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-end">
+            <button class="btn btn-primary" onclick="saveAll()" id="submitContent">Save All</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<script>
+$(document).ready(function () {
+    CKEDITOR.replace('editor');
+
+    $(".dropdown-item").click(function () {
+        let courseId = $(this).data("value");
+        fetch(`/teacher/get-course-content/${courseId}`)
+            .then(response => response.json())
+            .then(data => {
+                $("#contentDropdown").empty();
+                data.forEach(content => {
+                    $("#contentDropdown").append(`<option value="${content.id}">${content.title}</option>`);
+                });
+                $("#contentSection").show();
+            });
+    });
+});
+
+function showContentEditor(action) {
+    $("#contentSelector").toggle(action === 'select');
+    $("#contentForm").toggle(action === 'new');
+}
+
+function selectContent(contentId) {
+    fetch(`/teacher/get-content-details/${contentId}`)
+        .then(response => response.json())
+        .then(data => {
+            $("#contentNumber").val(data.number);
+            CKEDITOR.instances.editor.setData(data.content);
+
+            let assignmentContainer = $("#assignmentsContainer").empty().append("<h5>Assignments</h5>");
+            data.assignments.forEach(assignment => {
+                assignmentContainer.append(`
+                    <div class="assignment-block">
+                        <button onclick="deleteAssignment(${assignment.id}, this)">✖</button>
+                        <textarea>${assignment.title}</textarea>
+                    </div>
+                `);
+            });
+            assignmentContainer.append('<button onclick="addAssignment()">+ Add Assignment</button>');
+        });
+}
+
+function addAssignment() {
+    $("#assignmentsContainer").append(`
+        <div class="assignment-block">
+            <button onclick="removeAssignment(this)">✖</button>
+            <textarea placeholder="Assignment Description"></textarea>
+        </div>
+    `);
+}
+
+function removeAssignment(button) {
+    $(button).parent().remove();
+}
+
+function deleteAssignment(assignmentId, button) {
+    fetch(`/teacher/delete-assignment/${assignmentId}`, { method: 'DELETE' })
+        .then(response => {
+            if (response.ok) $(button).parent().remove();
+        });
+}
+
+$("#submitContent").click(function () {
+    let contentId = $("#contentNumber").val();
+    let contentDescription = CKEDITOR.instances.editor.getData();
+    let assignments = $(".assignment-block textarea").map(function () { return $(this).val(); }).get();
+
+    let formData = new FormData();
+    formData.append("contentNumber", contentId);
+    formData.append("contentDescription", contentDescription);
+    assignments.forEach(desc => formData.append("assignments[]", desc));
+
+    fetch(`/teacher/update-content/${contentId}/`, { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(data => alert(data.message));
+});
+
+</script>
+
+<script>
+    function selectContent(contentId) {
+    document.querySelector("#contentSelector").style.display = "none";
+    document.querySelector("#contentForm").style.display = "block";
+
+    fetch(`/teacher/teacher/get-content-details/${contentId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector("#contentNumber").value = data.number || "";
+            editor.setData(data.content || "");
+
+            let assignmentContainer = document.querySelector("#assignmentsContainer");
+            assignmentContainer.innerHTML = '<h5>Assignments</h5>'; // Clear previous assignments
+
+            data.assignments.forEach(assignment => {
+                let assignmentBlock = document.createElement("div");
+                assignmentBlock.classList.add("assignment-block");
+                assignmentBlock.innerHTML = `
+                    <button class="delete-btn" onclick="deleteAssignment(${assignment.id}, this)"><i class="fas fa-times"></i></button>
+                    <textarea class="custom-textarea" data-assignment-id="${assignment.id}">${assignment.description}</textarea>
+                `;
+                assignmentContainer.appendChild(assignmentBlock);
+            });
+
+            // Add button for adding new assignments
+            let addBtn = document.createElement("button");
+            addBtn.classList.add("btn-add");
+            addBtn.textContent = "+ Add Assignment";
+            addBtn.onclick = addAssignment;
+            assignmentContainer.appendChild(addBtn);
+        })
+        .catch(error => console.error("Error loading content details:", error));
+}
+
+// Function to add a new assignment dynamically
+function addAssignment() {
+    let assignmentContainer = document.querySelector("#assignmentsContainer");
+    let assignmentBlock = document.createElement("div");
+    assignmentBlock.classList.add("assignment-block");
+    assignmentBlock.innerHTML = `
+        <button class="delete-btn" onclick="removeAssignment(this)"><i class="fas fa-times"></i></button>
+        <textarea class="custom-textarea" placeholder="Assignment Description"></textarea>
+    `;
+    assignmentContainer.insertBefore(assignmentBlock, assignmentContainer.lastElementChild);
+}
+
+// Function to remove an assignment block from UI
+function removeAssignment(button) {
+    button.parentElement.remove();
+}
+
+// Function to delete an assignment from the backend
+function deleteAssignment(assignmentId, button) {
+    fetch(`/teacher/delete-assignment/${assignmentId}`, {
+        method: 'DELETE',
+        headers: { 'X-CSRFToken': getCSRFToken() }
+    })
+    .then(response => {
+        if (response.ok) {
+            button.parentElement.remove();
+        } else {
+            console.error("Failed to delete assignment");
+        }
+    });
+}
+
+</script>
+
+<script>
+    $(document).ready(function () {
+    CKEDITOR.replace('editor'); 
+});
+    document.querySelector("#submitContent").addEventListener("click", function() {
+    let contentId = document.querySelector("#contentNumber").dataset.contentId;
+    let contentNumber = document.querySelector("#contentNumber").value;
+    let contentDescription = editor.getData();
+    let assignments = Array.from(document.querySelectorAll("#assignmentsContainer textarea")).map(textarea => textarea.value);
+
+    let formData = new FormData();
+    formData.append("contentNumber", contentNumber);
+    formData.append("contentDescription", contentDescription);
+    assignments.forEach(desc => formData.append("assignments[]", desc));
+
+    fetch(`/teacher/teacher/update-content/${contentId}/`, {
+        method: "POST",
+        body: formData,
+        headers: { "X-CSRFToken": getCSRFToken() }
+    })
+    .then(response => response.json())
+    .then(data => alert(data.message))
+    .catch(error => console.error("Error updating content:", error));
+});
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".course-item").forEach(item => {
+        item.addEventListener("click", function (event) {
+            event.preventDefault();
+            
+            let courseId = this.getAttribute("data-value");
+
+            if (courseId === 'create') {
+                document.querySelector("#newCourseForm").style.display = "block";
+                document.querySelector("#contentSelector").style.display = "none";
+                document.querySelector("#contentForm").style.display = "none";
+                localStorage.removeItem("selectedCourseId");
+            } else {
+                document.querySelector("#newCourseForm").style.display = "none";
+                document.querySelector("#contentSelector").style.display = "block";
+                document.querySelector("#contentForm").style.display = "none"; // Hide form until content is selected
+
+                localStorage.setItem("selectedCourseId", courseId);
+
+                let newUrl = window.location.origin + window.location.pathname + "?course_id=" + courseId;
+                history.pushState({ path: newUrl }, '', newUrl);
+
+                fetchContent(courseId);
+            }
+        });
+    });
+
+    function fetchContent(courseId) {
+        fetch(`/teacher/get-course-content/${courseId}`)
+            .then(response => response.json())
+            .then(data => {
+                let contentContainer = document.querySelector("#contentList");
+                contentContainer.innerHTML = "";
+
+                if (data.length === 0) {
+                    contentContainer.innerHTML = "<p>No content available.</p>";
+                    return;
+                }
+
+                data.forEach(item => {
+                    let contentItem = document.createElement("a");
+                    contentItem.classList.add("dropdown-item");
+                    contentItem.innerHTML = item.title;
+                    contentItem.setAttribute("data-content-id", item.id);
+                    contentItem.addEventListener("click", function () {
+                        selectContent(item.id);
+                    });
+                    contentContainer.appendChild(contentItem);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching content:", error);
+            });
+    }
+
+    function selectContent(contentId) {
+        document.querySelector("#contentSelector").style.display = "none";
+        document.querySelector("#contentForm").style.display = "block";
+
+        // Optional: Fetch content details and prefill the form
+        fetch(`/teacher/get-content-details/${contentId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector("#contentNumber").value = data.number || "";
+                document.querySelector("#editor").innerHTML = data.content || "";
+                // Populate assignments if needed
+            })
+            .catch(error => console.error("Error loading content details:", error));
+    }
+});
+
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize CKEditor
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(newEditor => {
+            editor = newEditor;
+        })
+        .catch(error => console.error(error));
+
+    // Initialize dropdowns manually
+    const dropdowns = document.querySelectorAll('.dropdown-toggle');
+    dropdowns.forEach(dropdown => {
+        dropdown.addEventListener('click', function(e) {
+            e.preventDefault();
+            const menu = this.nextElementSibling;
+            menu.classList.toggle('show');
+        });
+    });
+
+    // Handle course selection
+    const courseItems = document.querySelectorAll('#courseDropdown + .dropdown-menu .dropdown-item');
+    courseItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+            
+            // Update dropdown text
+            document.querySelector('#courseDropdown').textContent = text;
+            
+            // Handle form display
+            if (value === 'create') {
+                document.querySelector('#newCourseForm').style.display = 'block';
+                document.querySelector('#section2').style.display = 'none';
+            } else {
+                document.querySelector('#newCourseForm').style.display = 'none';
+                document.querySelector('#section2').style.display = 'block';
+            }
+            
+            // Close dropdown
+            this.closest('.dropdown-menu').classList.remove('show');
+        });
+    });
+
+    // Handle content selection
+    const contentItems = document.querySelectorAll('#contentDropdown + .dropdown-menu .dropdown-item');
+    contentItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+            
+            // Update dropdown text
+            document.querySelector('#contentDropdown').textContent = text;
+            
+            // Show content form
+            document.querySelector('#contentForm').style.display = 'block';
+            document.querySelector('#contentNumber').value = value;
+            editor.setData('Content ' + value + ' details here');
+            
+            // Close dropdown
+            this.closest('.dropdown-menu').classList.remove('show');
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.matches('.dropdown-toggle') && !e.target.closest('.dropdown-menu')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+    });
+
+    // Delete button functionality
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('.delete-btn') || e.target.closest('.delete-btn')) {
+            const element = e.target.closest('.input-group, .assignment-block');
+            if (element) element.remove();
+        }
+    });
+});
+
+// Other functions remain the same
+function filterDropdown(input) {
+    const filter = input.value.toLowerCase();
+    const items = input.closest('.dropdown-menu').querySelectorAll('.dropdown-item');
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(filter) ? "" : "none";
+    });
+}
+
+function addField(containerId, placeholder) {
+    const newField = `
+        <div class="input-group">
+            <input type="text" class="custom-input mb-0" placeholder="${placeholder}">
+            <button class="delete-btn"><i class="fas fa-times"></i></button>
+        </div>
+    `;
+    document.querySelector(`#${containerId} .btn-add`).insertAdjacentHTML('beforebegin', newField);
+}
+
+function addAssignment() {
+    const newAssignment = `
+        <div class="assignment-block">
+            <button class="delete-btn"><i class="fas fa-times"></i></button>
+            <textarea class="custom-textarea" placeholder="Assignment Description"></textarea>
+        </div>
+    `;
+    document.querySelector('#assignmentsContainer .btn-add').insertAdjacentHTML('beforebegin', newAssignment);
+}
+
+function showContentEditor(type) {
+    const contentSelector = document.querySelector('#contentSelector');
+    const contentForm = document.querySelector('#contentForm');
+    const contentDropdown = document.querySelector('#contentDropdown');
+    
+    if (type === 'select') {
+        contentSelector.style.display = 'block';
+        contentForm.style.display = 'none';
+        contentDropdown.textContent = 'Select existing content';
+    } else if (type === 'new') {
+        contentSelector.style.display = 'none';
+        contentForm.style.display = 'block';
+        editor.setData('');
+        document.querySelector('#contentNumber').value = '';
+    }
+}
+
+function saveAll() {
+    alert('Content saved successfully!');
+}
+</script>
+
+
+
+{% endblock %}

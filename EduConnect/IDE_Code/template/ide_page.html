@@ -1,0 +1,85 @@
+{% load static %}{% include 'ide_index.html' %}
+{% block 'ide_main' %}
+<link rel="stylesheet" href="{% static 'css/ide_index.css' %}">
+<div class="row m-0 p-0">
+    <div class="container hint">
+        EduConnect Editor allows you to write and execute code in various programming languages, all within a user-friendly interface. Once you save your program, it will be securely stored, and while it can't be deleted, you can easily modify it anytime by simply clicking on its name. Experience seamless coding with options to run and save your work effortlessly.
+
+    </div>
+</div>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Filter Input -->
+        <input type="text" class="form-control filter-box" id="searchInput" onkeyup="filterSnippets()" placeholder="Filter username...">
+        
+        <div class="d-flex">
+            <!-- Add Snippet Button -->
+            <a href="{% url 'IDE_page_home' %}"><button class="btn btn-add-snippet me-2">Add Your Snippet</button></a>
+            
+            
+        </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="table-container table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Language</th>
+                    <th>Title</th>
+                    <th>Code</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if data %}
+                {% for item in data%}
+                <tr class="snippetRow">
+                    
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{item.language}}</td>
+                    <td><a href="{% url 'IDE_page' item.id %}">{{item.title}}</a></td>
+                    <td>...</td>
+                    <td>{{item.created_at|date:"Y-m-d"}}</td>
+                    <td>{{item.updated_at|date:"Y-m-d"}}</td>
+                    
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No results.</td>
+                </tr>
+                {% endif %}
+                
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between mt-3">
+        <p class="text-muted">EduConnect Editor.</p>
+        <div>
+            <i>Copyright EduConnect</i>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterSnippets() {
+        let searchInput = document.getElementById("searchInput").value.toLowerCase();
+        let rows = document.querySelectorAll(".snippetRow");
+
+        rows.forEach(row => {
+            let title = row.querySelector("td:nth-child(3) a").textContent.toLowerCase();
+            if (title.includes(searchInput)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+</script>
+
+{% endblock 'ide_main' %}

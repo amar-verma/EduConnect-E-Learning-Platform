@@ -1,0 +1,369 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=developer_guide"
+      />
+    <link rel="icon" href="{% static 'img/clogo.png' %}" type="image/x-icon">
+
+    <style>
+        body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+#chat-container {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 312px;
+    height: 416px;
+    background: #6474f2;
+    border-radius: 17px;
+    box-shadow: 0 4px 15px rgb(0 0 0 / 20%);
+    overflow: hidden;
+    z-index: 9999;
+}
+
+#chat-header {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+#chat-body {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgb(233 233 233);
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-input {
+    display: flex;
+    padding: 10px;
+    background: white;
+    color: black;
+    font-weight: 300;
+}
+
+#user-input {
+    flex: 1;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 7px;
+}
+
+#chat-input button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.user-message, .bot-message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin: 4px 8px;
+    max-width: 75%; /* Message ka max width */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 16px;
+    line-height: 1.4;
+    display: inline-block;
+}
+
+.user-message {
+    text-align: right;
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px; /* WhatsApp jaise */
+}
+
+.bot-message {
+    text-align: left;
+    background-color: #f1f1f1;
+    color: black;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px; /* WhatsApp jaise */
+}
+
+.message-container {
+    display: flex;
+    width: 100%;
+}
+
+.user-container {
+    justify-content: flex-end;
+}
+
+.bot-container {
+    justify-content: flex-start;
+}
+
+.typing-indicator {
+    font-style: italic;
+    color: grey;
+    margin: 5px;
+}
+
+.dots {
+    display: inline-block;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+/* change  */
+.user-message, .bot-message {
+    padding: 2px 12px;
+    border-radius: 12px;
+    margin: 4px 8px;
+    max-width: 75%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    font-size: 16px;
+    line-height: 1.4;
+    display: inline-block;
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out; /* Smooth animation */
+}
+
+/* WhatsApp style timestamps */
+.message-time {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    bottom: -18px;
+    right: 10px;
+}
+
+.user-message {
+    text-align: right;
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.bot-message {
+    text-align: left;
+    background-color: #f1f1f1;
+    color: black;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+}
+
+.message-container {
+    display: flex;
+    width: 100%;
+}
+
+.user-container {
+    justify-content: flex-end;
+}
+
+.bot-container {
+    justify-content: flex-start;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Chatbot Button -->
+    <button id="chatbot-btn" onclick="toggleChat()">💬</button>
+
+    <!-- Chatbot Container -->
+    <div id="chat-container" style="z-index:999">
+        <div id="chat-header">
+            <span>AI Chatbot</span>
+            <button onclick="toggleChat()">✖</button>
+        </div>
+        <div id="chat-body"></div>
+        <div id="chat-input">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- <script src="/static/js/script.js"></script> -->
+     <!-- <script src="../js/script.js"></script>
+     <script src="../js/script.js"></script> -->
+     <script src="{% static 'js/script.js' %}"></script>
+     <script>
+        // Function to toggle the chatbot visibility
+        function toggleChat() {
+            let chatContainer = document.getElementById("chat-container");
+            if (chatContainer.style.display === "none" || chatContainer.style.display === "") {
+                chatContainer.style.display = "block";
+            } else {
+                chatContainer.style.display = "none";
+            }
+        }
+    
+        // Function to send message
+        function sendMessage() {
+            let userInput = document.getElementById("user-input");
+            let message = userInput.value.trim();
+    
+            if (message === "") return;
+    
+            let chatBody = document.getElementById("chat-body");
+    
+            // User's message on the right side
+            let userMessage = document.createElement("div");
+            userMessage.classList.add("user-message");
+            userMessage.innerHTML = "<strong>You:</strong> " + message;
+            chatBody.appendChild(userMessage);
+    
+            // Clear input
+            userInput.value = "";
+            chatBody.scrollTop = chatBody.scrollHeight;
+    
+            // Typing indicator (loader effect)
+            let typingIndicator = document.createElement("div");
+            typingIndicator.classList.add("bot-message", "typing-indicator");
+            typingIndicator.innerHTML = "<strong>Bot:</strong> <span class='dots'>...</span>";
+            chatBody.appendChild(typingIndicator);
+            chatBody.scrollTop = chatBody.scrollHeight;
+    
+            // Call AI for response
+            fetch('/main/api/chat/', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove typing indicator
+                chatBody.removeChild(typingIndicator);
+    
+                // Bot's response on the left side
+                let botMessage = document.createElement("div");
+                botMessage.classList.add("bot-message");
+                botMessage.innerHTML = "<strong>Bot:</strong> " + data.response;
+                chatBody.appendChild(botMessage);
+    
+                chatBody.scrollTop = chatBody.scrollHeight;
+    
+                // Save chat messages in session if allowed
+                saveMessageInSession(message, data.response);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    
+        // Save message to session
+        function saveMessageInSession(userMessage, botMessage) {
+            fetch('/main/save_chat_history/', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie('csrftoken')  // Get CSRF token for POST request
+                },
+                body: JSON.stringify({ user_message: userMessage, bot_message: botMessage })
+            });
+        }
+    
+        // Load messages from session
+        function loadMessages() {
+            fetch('/main/load_chat_history/', {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                let chatBody = document.getElementById("chat-body");
+                data.chat_history.forEach(msg => {
+                    let messageDiv = document.createElement("div");
+                    messageDiv.classList.add(msg.sender === "user" ? "user-message" : "bot-message");
+                    messageDiv.innerHTML = `<strong>${msg.sender === "user" ? "You" : "Bot"}:</strong> ${msg.text}`;
+                    chatBody.appendChild(messageDiv);
+                });
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+        }
+
+
+    document.getElementById("user-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault(); 
+            sendMessage(); 
+        }
+    });
+    
+        window.onload = function () {
+            loadMessages();
+        }
+    
+        // CSRF token helper function
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                let cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+    
+</body>
+</html>

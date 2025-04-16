@@ -1,0 +1,138 @@
+* {
+    font-family: "Poppins", sans-serif;
+    ;
+}
+
+.certificate-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.certificate {
+    width: 800px;
+    max-width: 90%;
+    aspect-ratio: 1.4/1;
+    background: white;
+    padding: 15px;
+    margin: 20px auto;
+}
+
+.border {
+    height: 100%;
+    border: 2px solid #c17f59;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #fff, #f9f9f9);
+    position: relative;
+    padding: 20px;
+}
+
+.border::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid #234b8f;
+    border-radius: 12px;
+    z-index: -1;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    padding: 20px;
+}
+
+.title {
+    font-size: 48px;
+    color: #234b8f;
+    margin: 0;
+    font-family: 'Times New Roman', serif;
+}
+
+.subtitle {
+    font-size: 24px;
+    color: #c17f59;
+    margin: 5px 0 20px;
+}
+
+.present-text {
+    font-size: 18px;
+    color: #666;
+}
+
+.recipient {
+    font-size: 36px;
+    font-family: 'Brush Script MT', cursive;
+    color: #234b8f;
+    margin: 10px 0;
+    border-bottom: 2px solid #c17f59;
+    padding-bottom: 5px;
+}
+
+.description {
+    font-size: 16px;
+    color: #444;
+    max-width: 80%;
+    line-height: 1.5;
+}
+
+.signature-section {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.signature {
+    text-align: center;
+}
+
+.sign-line {
+    width: 150px;
+    height: 2px;
+    background: #000;
+    margin-bottom: 5px;
+}
+
+.seal {
+    width: 100px;
+    height: 100px;
+    background: url('../images/seal.png') center/contain no-repeat;
+}
+
+.download-btn {
+    padding: 12px 24px;
+    background: #234b8f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.download-btn:hover {
+    background: #1a3a6d;
+}
+
+@media (max-width: 768px) {
+    .certificate {
+        width: 95%;
+    }
+
+    .title {
+        font-size: 36px;
+    }
+
+    .recipient {
+        font-size: 28px;
+    }
+}

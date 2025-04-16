@@ -1,0 +1,87 @@
+{% extends 'tech_index.html' %} {% load static %} {% load tz %}
+
+{% now "Y-m-d" as today_date %}
+ {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_meeting.css' %}">
+
+<div class="container">
+    <h1 class="page-title text-start">Schedule Meetings</h1>
+    
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div id="toast-container" class="toast-container bottom-0 end-0 p-3">
+            {% for message in messages %}
+            <div class="toast align-items-center text-white {% if message.tags == 'success' %}bg-success{% else %}bg-danger{% endif %} border-0"
+                role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    
+    <!-- Meeting Form -->
+    <form method="POST">
+        {% csrf_token %}
+        <div class="meeting-form">
+            <input type="text" name="meetingTitle" class="form-input" placeholder="Meeting Title" required>
+
+            <select name="courseSelect" class="form-select" required>
+                <option value="select" disabled selected>Select a Course</option>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.title }}</option>
+                {% endfor %}
+            </select>
+            <textarea name="desc" id="desc" class="form-input" placeholder="Description"></textarea>
+            <input type="date" name="meetingDate" class="form-input" required>
+            <button type="submit" class="form-button">Schedule Meeting</button>
+        </div>
+    </form>
+
+    <!-- Display Webinars Grouped by Course -->
+    {% for course, webinars in webinars_by_course.items %}
+    <div class="meeting-table tech-table shadow rounded p-2 border mb-2">
+        <h4>{{ course.title }}</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Meeting Title</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for webinar in webinars %}
+                <tr>
+                    <td>{{ webinar.title }} {% if webinar.status %} <a href="{% url 'teacher_meeting' meeting_id=webinar.course.meeting_code course_id=webinar.course.id webinar_id=webinar.id  %}"><span class="badge bg-success"> Join </span></a> {% endif %} </td>
+                    <td>{{ webinar.scheduled_date|date:"Y-m-d" }}</td>
+                    <td>
+                        {% if webinar.scheduled_date|date:"Y-m-d" == current_date|date:"Y-m-d" %}
+                            <a href="{% url 'toggle_webinar_status' webinar.id %}">
+                                <input type="checkbox" {% if webinar.status %} checked {% endif %}> {% if webinar.status %} On  {% else %} off {% endif %}
+                            </a>
+                        {% else %}
+                            <input type="checkbox" {% if webinar.status %} checked {% endif %} disabled> {% if webinar.status %} On  {% else %} off {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var toastElList = document.querySelectorAll(".toast");
+    toastElList.forEach(function (toastEl) {
+        var toast = new bootstrap.Toast(toastEl, { autohide: true, delay: 5000 }); // 5 seconds
+        toast.show();
+    });
+});
+</script>
+{% endblock 'tech_main' %}

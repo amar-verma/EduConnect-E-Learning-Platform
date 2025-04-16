@@ -1,0 +1,218 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+
+<style>
+    .card {
+border-radius: 15px;
+box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+border-radius: 15px 15px 0 0;
+height: 300px;
+object-fit: cover;
+}
+
+.ratings .fas {
+font-size: 1.2rem;
+}
+
+.stats {
+color: #666;
+}
+
+.accordion-button:not(.collapsed) {
+background-color: #f8f9fa;
+color: #0d6efd;
+}
+
+.list-group-item {
+border: none;
+padding: 0.75rem 0;
+}
+
+.comment-section img {
+width: 50px;
+height: 50px;
+object-fit: cover;
+}
+
+@media (max-width: 768px) {
+.card-img-top {
+    height: 200px;
+}
+
+.stats {
+    flex-wrap: wrap;
+}
+
+.pricing .h2 {
+    font-size: 1.5rem;
+}
+}
+
+</style>
+
+<div class="container-fluid py-5">
+    {% if messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% endfor %}    
+    </div>
+    {% endif %}
+    <!-- Course Header Section -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <img src="{{ course.course_img.url }}" class="card-img-top" alt="{{ course.title }}">
+                <div class="card-body bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="badge bg-primary">{{ course.category }}</span>
+                        <div class="ratings">
+                            {% for i in "12345"|make_list %}
+                                <i class="fas fa-star {% if forloop.counter <= course.rating %}text-warning{% endif %}"></i>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <h1 class="card-title mt-3">{{ course.title }}</h1>
+                    <p class="card-text">{{ course.description }}</p>
+                    
+                    <!-- Price Section -->
+                    <div class="pricing my-4">
+                        {% if course.old_price %}
+                        <span class="text-muted text-decoration-line-through">${{ course.old_price }}</span>
+                        {% endif %}
+                        <span class="h2 ms-2">${{ course.price }}</span>
+                    </div>
+
+                    <!-- Enrollment Stats -->
+                    <div class="stats d-flex gap-4 mb-4">
+                        <div><i class="fas fa-users"></i> {{ course.enroll }} enrolled</div>
+                        <div><i class="fas fa-clock"></i> {{ course.duration }} hours</div>
+                        <div><i class="fas fa-calendar"></i> {{ course.months }} months</div>
+                        <div><a href="{% url 'update_course_z' course.id %}"> <i class="fas fa-pencil"></i> edit </a> </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Content Section -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>Course Content</h3>
+                </div>
+                <div class="card-body bg-white">
+                    <div class="accordion" id="courseContent">
+                        {% for content in course.content_items.all %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                        data-bs-target="#content{{ content.id }}">
+                                    {{ content.title }}
+                                </button>
+                            </h2>
+                            <div id="content{{ content.id }}" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    {{ content.desc|safe }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% if not course.content_items.all %}
+                            <p>no content has added yet..</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Teacher Info -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Instructor</h4>
+                </div>
+                <div class="card-body bg-white">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ course.teacher.profile_picture.url }}" class="rounded-circle me-3 profile-pic" width="60">
+                        <div>
+                            <h5>{{ course.teacher.first_name }} {{ course.teacher.last_name }}</h5>
+                            <p class="text-muted mb-0">{{ course.teacher.availability }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Features -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Features</h4>
+                </div>
+                <div class="card-body bg-white">
+                    <ul class="list-group list-group-flush">
+                        {% for feature in course.content_features.all %}
+                        <li class="list-group-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            {{ feature.features }}
+                        </li>
+                        {% endfor %}
+                        {% if not course.content_features.all %}
+                            <p>no features has added yet..</p>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Skills You'll Learn -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Skills You'll Learn</h4>
+                </div>
+                <div class="card-body bg-white">
+                    <ul class="list-group list-group-flush">
+                        {% for skill in course.content_skills.all %}
+                        <li class="list-group-item">
+                            <i class="fas fa-arrow-right text-primary me-2"></i>
+                            {{ skill.skills }}
+                        </li>
+                        {% endfor %}
+                        {% if not course.content_skills.all %}
+                            <p>no skills has added yet..</p>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="row mt-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Student Comments</h3>
+                </div>
+                <div class="card-body bg-white">
+                    {% for comment in course.content_comment.all %}
+                    <div class="d-flex mb-4">
+                        <img src="" class="rounded-circle me-3 profile-pic" width="50">
+                        <div>
+                            <h5>{{ comment.name }}</h5>
+                            <p>{{ comment.comment }}</p>
+                            <div class="text-muted">
+                                <i class="fas fa-thumbs-{% if comment.value %}up{% else %}down{% endif %}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if not course.content_comment.all %}
+                    <p>no comments yet..</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock 'tech_main' %}

@@ -1,0 +1,86 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+
+<link rel="stylesheet" href="{% static 'css/std_courses.css' %}" />
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    {% endfor %}
+</div>
+{% endif %}
+<h2 class="mb-0">OverView</h2>
+<p class="hint">The Overview Section provides a snapshot of a student's progress and performance in managing their assignments.</p>
+<hr>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="cards-container">
+            <div class="row gap-3 mx-auto">
+                <div class="col-md-3 mb-2 card-style-1 col">
+                    <h3>Assignments</h3>
+                    <p class="number">{{ pending_assignments }}</p>
+                    <p class="description">Assignments you have submitted but yet to check </p>
+                </div>
+
+                <div class="col-md-3 card-style-2 mb-2">
+                    <h3>Checked Assignments</h3>
+                    <p class="number">{{ completed_assignments }} <span class="text-white" style="font-size: 12px;"> / {{rework_assignments}} (Rework)</span> </p>
+                    <p class="description">Assignments you have completed and checked</p>
+                </div>
+
+                <div class="col-md-3 card-style-3 mb-2">
+                    <div class="icon-container">📄</div>
+                    <div class="content">
+                        <h3>Total Assignments</h3>
+                        <p class="number">{{ total_assignments }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-0">Courses</h2>
+<p class="hint">Courses Section allows students to manage and monitor their course progress effectively.</p>
+<hr>
+
+<div class="row">
+    {% for course_progress in courses_progress %}
+    <div class="col-md-6">
+        <div class="crse-con mb-2">
+            <div class="course-card w-100">
+                <div class="course-info">
+                    <h3>{{ course_progress.course.title | truncatechars:30 }} </h3>
+                    <p>{{ course_progress.course.category }}</p>
+                    <a href="{% url 'course_detail' course_progress.course.id %}">View course details &#8594;</a>
+                </div>
+                <div class="chapter-info">
+                    {% if course_progress.current_chapter %}
+                    <h4>CHAPTER {{ course_progress.current_chapter.order }}: {{ course_progress.current_chapter.title | truncatechars:25 }}</h4>
+                    {% else %}
+                        <h4>No chapters available</h4>
+                    {% endif %}                    
+                    <div class="progress">
+                        <div class="progress-bar" id="progress-bar-{{ forloop.counter }}" role="progressbar" style="width: 0%;"></div>
+                    </div>
+                    <script type="text/javascript">
+                        var progressValue = "{{ course_progress.progress|default:0 }}";
+                        document.getElementById("progress-bar-{{ forloop.counter }}").style.width = progressValue + "%";
+                        document.getElementById("progress-bar-{{ forloop.counter }}").setAttribute("aria-valuenow", progressValue);
+                    </script>
+                    <span>{{ course_progress.completed_chapters }}/{{ course_progress.total_chapters }} Chapters</span>
+                    {% if course_progress.remaining_time %}
+                    <p>{{ course_progress.remaining_time }} days remaining</p>
+                    {% endif %}
+                    <a href="{% url 'enroll_course' course_progress.course.id %}"><button class="continue-btn mt-2 text-decoration-none">Continue</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock 'main' %}

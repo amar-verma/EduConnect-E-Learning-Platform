@@ -1,0 +1,510 @@
+#home-hero-wrapper {
+    background-color: rgb(5, 4, 3);
+}
+
+@media screen and (min-width: 767px) and (max-width: 1200px) {
+    #home-hero-wrapper {
+        background-position: bottom right;
+    }
+}
+
+#home-hero-wrapper {
+    padding: 50px 0px 100px;
+
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    margin-top: 62px;
+}
+
+nav,
+section {
+    display: block;
+}
+
+*,
+::after,
+::before {
+    box-sizing: border-box;
+}
+
+
+
+.col-lg-7 {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+/* section 2 */
+.slider {
+    background: linear-gradient(to right, #ffe5d9, #ffecd2);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    bottom: 60px;
+    /* margin-bottom: 20px; */
+}
+
+.slide-header img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.slide-content {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.terms {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1);
+}
+
+/* section 3 */
+.key-highlights {
+    padding: -20px 0;
+    background-color: #343434;
+    border-radius: 20px;
+    max-width: 1100px;
+    position: relative;
+    bottom: 50px;
+}
+
+.highlight-card {
+    text-align: center;
+    color: #fff;
+}
+
+.highlight-card i {
+    font-size: 2rem;
+    color: #ff6700;
+    margin-bottom: 10px;
+}
+
+.highlight-divider {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    height: 50px;
+    margin: 0 auto;
+}
+
+.scroller {
+    max-width: 600px;
+}
+
+.scroller ul li:hover {
+    background-color: #5b3edc;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.scroller__inner {
+    padding-block: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.scroller[data-animated="true"] {
+    overflow: hidden;
+    -webkit-mask: linear-gradient(90deg,
+            transparent,
+            white 20%,
+            white 80%,
+            transparent);
+    mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+}
+
+.scroller[data-animated="true"] .scroller__inner {
+    width: max-content;
+    flex-wrap: nowrap;
+    animation: scroll var(--_animation-duration, 40s) var(--_animation-direction, forwards) linear infinite;
+}
+
+.scroller[data-direction="right"] {
+    --_animation-direction: reverse;
+}
+
+.scroller[data-direction="left"] {
+    --_animation-direction: forwards;
+}
+
+.scroller[data-speed="fast"] {
+    --_animation-duration: 20s;
+}
+
+.scroller[data-speed="slow"] {
+    --_animation-duration: 60s;
+}
+
+@keyframes scroll {
+    to {
+        transform: translate(calc(-50% - 0.5rem));
+    }
+}
+
+/* general styles */
+
+:root {
+    --clr-neutral-100: hsl(0, 0%, 100%);
+    --clr-primary-100: hsl(205, 15%, 58%);
+    --clr-primary-400: hsl(215, 25%, 27%);
+    --clr-primary-800: hsl(217, 33%, 17%);
+    --clr-primary-900: hsl(218, 33%, 9%);
+}
+
+
+.tag-list {
+    margin: 0;
+    padding-inline: 0;
+    list-style: none;
+}
+
+.tag-list li {
+    padding: 1rem;
+    background: var(--clr-primary-400);
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem -0.25rem var(--clr-primary-900);
+}
+
+/* for testing purposed to ensure the animation lined up correctly */
+.test {
+    background: red !important;
+}
+
+.scroller {
+    margin-top: 30px;
+}
+
+/* section 5 */
+
+.sidebar {
+    height: 70vh;
+    overflow-y: auto;
+    background-color: #222;
+    padding: 20px;
+}
+
+.sidebar a {
+    color: #ddd;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #4A47A3;
+    color: #fff;
+}
+
+.course-card {
+    background-color: #222;
+    border: 1px solid #333;
+    border-radius: 10px;
+}
+
+.course-card img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.course-card .card-body {
+    color: #fff;
+}
+
+@media (max-width: 1200px) {
+    .col-md-4 {
+        flex: 0 0 50%;
+        /* Each card takes 50% width */
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 1000px) {
+    .col-md-4 {
+        flex: 0 0 100%;
+        /* Each card takes 100% width */
+        max-width: 100%;
+    }
+}
+
+/* section 7 */
+/* section 8 */
+
+.banner {
+    background-color: #1a1a1a;
+    /* Dark background color */
+    color: #fff;
+    /* Text color */
+    padding: 20px;
+    text-align: center;
+    background-image: url(https://intellipaat.com/wp-content/themes/intellipaat/images/TransitionCTABig.png);
+}
+
+
+.banner h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.banner button {
+    background-color: #ff9900;
+    /* Orange button color */
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+/* section 9 */
+
+.learner-benefits-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.learner-benefits-image {
+    flex: 0 0 200px;
+    /* Set initial width for image */
+    margin-right: 30px;
+}
+
+.learner-benefits-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.learner-benefits-content {
+    flex: 1;
+    /* Allow content to take remaining space */
+}
+
+.learner-benefits-content h4 {
+    margin-bottom: 20px;
+}
+
+.learner-benefits-content ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.learner-benefits-content ul li {
+    margin-bottom: 10px;
+}
+
+.learner-benefits-icons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.learner-benefits-icons div {
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .learner-benefits-section {
+        flex-direction: column;
+    }
+
+    .learner-benefits-image {
+        margin-bottom: 20px;
+        /* Add spacing below image on smaller screens */
+    }
+}
+
+/* section 10 */
+
+.container-dark {
+    background-color: #313131;
+    /* Dark background color */
+    padding: 50px 0;
+    /* Add padding for spacing */
+    color: #fff;
+    /* Text color */
+}
+
+@media (max-width: 992px) {
+
+    /* Adjust for medium screens */
+    .company-logos {
+        grid-template-columns: repeat(2, 1fr);
+        /* Two columns */
+    }
+}
+
+@media (max-width: 768px) {
+    .left-container {
+        margin-right: 0;
+    }
+
+    .company-logos {
+        grid-template-columns: 1fr;
+        /* One column */
+    }
+}
+
+/* section 10 */
+.feature-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.feature-icon {
+    margin-right: 15px;
+    font-size: 20px;
+}
+
+.btn-demo {
+    background-color: #ff9900;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+.company-logos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Three columns */
+    grid-gap: 20px;
+    /* Spacing between logos */
+}
+
+.company-logo {
+    text-align: center;
+    padding: 20px;
+    /* Add padding to logo containers */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Add subtle border */
+}
+
+.company-logo img {
+    max-width: 100%;
+    /* Ensure logos don't exceed their container */
+}
+
+@media (max-width: 992px) {
+
+    /* Adjust for medium screens */
+    .company-logos {
+        grid-template-columns: repeat(2, 1fr);
+        /* Two columns */
+    }
+}
+
+@media (max-width: 768px) {
+    .company-logos {
+        grid-template-columns: 1fr;
+        /* One column */
+    }
+}
+
+/* section 12 */
+.testimonial-card {
+    background-color: #222;
+    /* Dark background */
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+    /* For absolute positioning of LinkedIn icon */
+}
+
+.testimonial-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    /* Add a border to the image */
+    margin-bottom: 15px;
+}
+
+.testimonial-name {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.testimonial-designation {
+    color: #ccc;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.testimonial-stars {
+    margin-bottom: 15px;
+}
+
+.testimonial-stars i {
+    color: #ffc107;
+    /* Gold color for stars */
+    font-size: 14px;
+}
+
+.testimonial-text {
+    color: #ccc;
+}
+
+.linkedin-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.linkedin-icon i {
+    color: #0077b5;
+    /* LinkedIn blue color */
+}
+
+@media (max-width: 768px) {
+    .testimonial-card {
+        width: 100%;
+    }
+}
+
+/* section13 */
+.nsdc-section {
+    background-color: #1a1a1a;
+    /* Dark background color */
+    color: #fff;
+    /* Text color */
+    padding: 50px 0;
+    /* Add padding for spacing */
+}
+
+.nsdc-image {
+    max-width: 300px;
+    /* Set a maximum width for the image */
+    margin-right: 30px;
+}

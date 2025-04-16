@@ -1,0 +1,284 @@
+.home-back-bg {
+    padding: 50px;
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 50%, #6f42c1 50%);
+    box-sizing: border-box;
+    height: auto;
+}
+
+.hi-icon {
+    color: rgb(70, 70, 243);
+    font-size: 28px;
+}
+
+.rating-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.rating-card.trustpilot {
+    border-top: 4px solid #ff8800;
+}
+
+.rating-card.sitejabber {
+    border-top: 4px solid #00b300;
+}
+
+.rating-card.mouthshut {
+    border-top: 4px solid #ffc107;
+}
+
+.slider {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(to right, #ffe5d9, #ffecd2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.slide {
+    display: none;
+    padding: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.slide-header img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.slide-content {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.navigation {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.nav-btn:hover {
+    color: #ff7a59;
+}
+
+.terms {
+    font-size: 12px;
+    color: #888;
+    margin-top: 10px;
+}
+
+/* .active-bar {
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  width: 0;
+  background-color: #ff9800;
+  transition: all 0.3s ease-in-out; 
+} */
+.course-card {
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 15px;
+    background-image: radial-gradient(circle farthest-corner at 3.7% 49.8%, rgba(143, 232, 255, 1) 21.9%, rgba(209, 243, 251, 1) 52.9%);
+    transition: transform 0.2s;
+}
+
+.course-card:hover {
+    transform: scale(1.03);
+}
+
+.course-img {
+    border-radius: 8px;
+    height: 150px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.course-logo {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.organization-name {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.course-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    color: #333;
+}
+
+.course-details {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+
+
+.profile-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    width: 280px;
+}
+
+.profile-card .header {
+    background: linear-gradient(135deg, #8400ff, #9900ff);
+    height: 100px;
+}
+
+.profile-card .avatar {
+    margin-top: -50px;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.profile-card h5 {
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.profile-card .quote {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 10px 20px;
+}
+
+.profile-card .quote::before {
+    content: "“";
+    font-size: 20px;
+    color: #6c757d;
+}
+
+.profile-card .quote::after {
+    content: "”";
+    font-size: 20px;
+    color: #6c757d;
+}
+
+
+.custom-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.university-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.university-info img {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+}
+
+.university-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+
+
+.cohort {
+    font-size: 14px;
+    color: #555;
+}
+
+.duration {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.edu-hide {
+    visibility: hidden;
+}
+
+.edu-card1:hover .edu-hide {
+
+    visibility: visible;
+}
+
+
+
+
+.tpic {
+    position: relative;
+}
+
+.active-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    width: 120px;
+    /* Start with 50% width for two links */
+    background-color: #0084ff;
+    /* Active bar color */
+    transition: transform 0.3s ease-in-out;
+    /* Smooth movement */
+}
+
+.active-bar1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    width: 80px;
+    /* Start with 50% width for two links */
+    background-color: #0084ff;
+    /* Active bar color */
+    transition: transform 0.3s ease-in-out;
+    /* Smooth movement */
+}
+

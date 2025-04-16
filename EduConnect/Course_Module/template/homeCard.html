@@ -1,0 +1,462 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block 'main_home' %}
+
+<link rel="stylesheet" href="{% static 'css/homeCard.css' %}">
+<link rel="stylesheet" href="{% static 'css/homeCard1.css' %}">
+
+<div class="container-fluid bg-white">
+  <div class="container">
+    
+    <!-- edu-head -->
+    <div class="row mb-4">
+      <div class="col-md-7 fix-font">
+        <img src="pic.jpg" alt="" class="" height="120px" width="auto" />
+        <h2 class="edu-heading m-0">
+          {{eduCourse.title}}
+        </h2>
+        <p class="edu-highlight">5+ Ratings</p>
+        <p>{{eduCourse.map}}
+          
+          Course by <b>EduConnect (Best E-Learning platform)</b></p>
+        <p>
+          <p>{{eduCourse.body}}</p>
+          <i class="bi bi-check-circle-fill edu-bg-green me-1"></i>Master IT and programming skills like coding, software development, cloud computing, cybersecurity, data analysis, machine learning, and more to drive innovation and growth.
+        </p>
+        <p>
+          <i class="bi bi-check-circle-fill edu-bg-green me-1"></i>Learn
+          from industry professionals and EduConnect faculty.
+        </p>
+        <p>
+          <i class="bi bi-check-circle-fill edu-bg-green me-1"></i>Earn
+          EduConnect students status and 3-day campus Course program at EduConnect.
+        </p>
+        <a href="#EduConnect_Counselling" class="btn edu-button mb-1">Talk to Advisor</a>
+        <a href="#" class="btn edu-btn-outline mb-1">Download Brochure</a>
+      </div>
+      <div class="col-md-5 home-back-bg text-center">
+        <img src="{% static 'img/' %}{{ eduCourse.image }}" height="300px" width="auto" alt="" />
+      </div>
+    </div>
+
+    <!-- edu-highlight -->
+    <div class="row justify-content-between mb-4">
+      <h2 class="edu-heading mt-1">Key Highlights</h2>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-3 gap-0">
+        <i class="bi bi-calendar2-week hi-icon me-3"></i>
+        <span class="edu-font">9 Months Live Sessions by EduConnect Experts</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-3">
+        <i class="bi bi-tv hi-icon me-3"></i>
+        <span class="edu-font">80+ Live sessions across 9 Months</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-3">
+        <i class="bi bi-newspaper hi-icon me-3"></i>
+        <span class="edu-font">Executive EduConnect Status of IT Industry</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-3">
+        <i class="bi bi-building-add hi-icon me-3"></i>
+        <span class="edu-font">3 Days Campus Immersion at EduConnect</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-3">
+        <i class="bi bi-file-earmark-arrow-down hi-icon me-3"></i>
+        <span class="edu-font">Certification by EduConnect</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-4">
+        <i class="bi bi-person-raised-hand hi-icon me-3"></i>
+        <span class="edu-font">Career Services from EduConnect</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-4">
+        <i class="bi bi-bank hi-icon me-3"></i>
+        <span class="edu-font">No-cost EMI Option</span>
+      </div>
+      <div class="col-md-3 d-flex flex-row align-items-center mb-4">
+        <i class="bi bi-clock-history hi-icon me-3"></i>
+        <span class="edu-font">24/7 Support</span>
+      </div>
+    </div>
+
+    <!-- sticker -->
+    <div class="row ">
+      <div class="col-md-4 mb-3 ">
+        <div class="rating-card mouthshut px-2 py-1 bg-light" >
+          <img src="{% static 'img/professors.jpeg' %}" class="img-fluid" height="82px" width="auto" alt="EduConnect Professors"/>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="rating-card sitejabber px-2 py-1 bg-light">
+          <img src="{% static 'img/classroom.jpeg' %}" class="img-fluid" height="82px" width="auto" alt="EduConnect Classroom" />
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="rating-card trustpilot px-2 py-1 bg-light">
+          <img src="{% static 'img/faculty.jpeg' %}" class="img-fluid" height="82px" width="auto" alt="EduConnect Faculty" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-9 mx-auto">
+            <div class="slider h-auto">
+                <div class="slide active">
+                  <div class="slide-header">
+                    <img src="{% static 'img/clogo.png' %}" height="5px"  alt="EduConnect">
+                    <span>Success Highlights</span>
+                  </div>
+                  <div class="slide-content">85% of the learners achieved their training objectives within 9 months of course completion*</div>
+                  <div class="terms">*Subject to Terms and Conditions</div>
+                </div>
+                <div class="slide">
+                  <div class="slide-header">
+                    <img src="{% static 'img/clogo.png' %}" height="5px" alt="EduConnect">
+                    <span>Process Advisors</span>
+                  </div>
+                  <div class="slide-content">90% of our learners successfully transitioned to new roles or advanced their careers within 6 months of course completion*</div>
+                  <div class="terms">*Subject to Terms and Conditions</div>
+                </div>
+                <div class="navigation">
+                  <button class="nav-btn" id="prev">&#8249;</button>
+                  <button class="nav-btn" id="next">&#8250;</button>
+                </div>
+              </div>
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const nextButton = document.getElementById("next");
+            
+                    if (nextButton) {
+                        function autoClickNext() {
+                            nextButton.click();
+                        }
+                        setInterval(autoClickNext, 7000);
+                    }
+                });
+            </script>
+            
+              
+        </div>
+    </div>
+
+    {% if eduCard1 %}
+    <!-- section card -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tpic d-flex gap-3 position-relative">
+                <a href="javascript:void(0)" id="most-popular-link" class=" text-decoration-none ps-2 mb-2" >Most Popular</a>
+                <a href="javascript:void(0)" id="best-courses-link" class=" text-decoration-none mb-2" style="color: black;">Best Courses</a>
+                <div class="active-bar"></div>
+            </div>
+            <hr class="mt-0">
+            <div class="mst-popular" id="mst-popular">
+                <div class="container my-4">
+                  <div class="row justify-content-star card-flow" id="popular-cards">
+                    {% for card in eduCard1 %}
+                    <div class="col-md-3 card-flow-wdth mb-1 ">
+                      <div class="card custom-card edu-card1">
+                        <img src="{{card.course_img.url}}" class="card-img-top img-fluid" alt="Course Header">
+                        <div class="card-body">
+                          <div class="university-info">
+                            <img src="{{card.teacher.profile_picture.url}}" alt="img-fluid ">
+                            <a href="{% url 'teacher_profile' card.teacher.teacher_id %}" class="text-decoration-none"><span class="university-name">{{card.teacher.first_name}} {{card.teacher.last_name}}</span></a>
+                          </div>
+                          <h5 class="card-title">{{card.title}}</h5>
+                          <p class="cohort">UpDated At: <strong>{{ card.updated_at|date:"d M Y" }}</strong></p>
+                          <p class="duration"><i class="fa fa-calendar"></i> {{card.duration}} Hours </p>
+                          
+                          <hr class="edu-hide">
+                          <a href="{% url 'course_detail' card.id %}"><p class="text-center mb-0 edu-hide">Know More</p></a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- card -->
+                    <!-- end -->
+
+                  </div>
+
+                </div>
+
+            </div>
+            <div class="best-courses" id="best-courses" style="display:none;">
+              <div class="container my-4">
+                <div class="row justify-content-star card-flow" id="best-cards">
+                  {% for card in eduCard2 %}
+                    <div class="col-md-3 card-flow-wdth mb-1 ">
+                      <div class="card custom-card edu-card1">
+                        <img src="{{card.course_img.url|default:'None'}}" class="card-img-top img-fluid" alt="Course Header">
+                        <div class="card-body">
+                          <div class="university-info">
+                            <img src="{{card.teacher.profile_picture.url}}" alt="img-fluid ">
+                            <a href="{% url 'teacher_profile' card.teacher.teacher_id %}" class="text-decoration-none"><span class="university-name">{{card.teacher.first_name}} {{card.teacher.last_name}}</span></a>
+                          </div>
+                          <h5 class="card-title">{{card.title}}</h5>
+                          <p class="cohort">UpDated At: <strong>{{ card.updated_at|date:"d M Y" }}</strong></p>
+                          <p class="duration"><i class="fa fa-calendar"></i> {{card.duration}} Hours </p>
+                          <hr class="edu-hide">
+                          <a href="{% url 'course_detail' card.id %}"><p class="text-center mb-0 edu-hide">Know More</p></a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  
+                  <!-- card -->
+                  <!-- end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+   
+    <style>
+      
+    </style>
+    {% if eduTech %}
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <h2 class="edu-heading mb-0 mt-2">Meet the Professors</h2>
+            <div class="row mt-3">
+                <div class="col-md-12 ">
+                  
+                    <div class="row card-flow gap-1 justify-content-evenly">
+                      {% for tech in eduTech %}
+                        <div class=" col-md-3 card-flow-wdth profile-card mb-2 p-0 m-0">
+                            <div class="header"></div>
+                            <img src="{{tech.teacher.profile_picture.url}}" alt="Profile Picture" class="avatar">
+                            <a href="{% url 'teacher_profile' tech.teacher.teacher_id %}"><h5>{{tech.teacher.first_name}} {{tech.teacher.last_name}}</h5></a>
+                            <p class="quote">{{tech.teacher.bio}}</p>
+                        </div>
+                      {% endfor %}
+                    </div> 
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+
+    <!-- section container -->
+    <div class="row mt-2 mb-3">
+
+        <div class="row">
+          <div class="col-md-6 text-center">
+            <img src="{% static 'img/certificate.png' %}" alt="Certificate of Completion" class="img-fluid shadow-sm mb-2" style="border: 1px solid #ddd; border-radius: 5px;">
+          </div>
+
+          
+          <div class="col-md-6">
+            <h4 class="mb-3 edu-subheading">About EduConnect, Mumbai</h4>
+            <div id="edu-connect-description">
+              <p id="edu-connect-text">
+                EduConnect is a next-generation e-learning platform designed to revolutionize education through cutting-edge technology and innovative teaching methods. <br> It aims to bridge the gap between learners and educators by providing a seamless, interactive, and personalized online learning experience. With a focus on inclusivity and accessibility, EduConnect empowers individuals to achieve their academic and professional goals. <br> EduConnect offers an extensive array of courses across various disciplines, including Programming, Data Science, Artificial Intelligence, and Web Development. The platform also integrates advanced tools like AI-based chatbots and live webinars to enhance learning outcomes and foster collaboration among students and teachers.
+              </p>
+              <button id="read-more-btn-press" class="border-0 bg-transparent text-decoration-underline text-primary">Read More</button>
+            </div>
+            
+            <div class="card p-3 bg-light border-0 shadow-sm mt-4">
+              <h6 class="fw-bold">Upon the completion of this program, you will:</h6>
+              <ul class="list-unstyled mt-2">
+                <li class="d-flex align-items-start mb-2">
+                  <i class="bi bi-dot fs-4 text-primary me-2"></i>
+                  <span>Access exclusive career support services to enhance employability.</span>
+                </li>
+                <li class="d-flex align-items-start mb-2">
+                  <i class="bi bi-dot fs-4 text-primary me-2"></i>
+                  <span>Gain hands-on experience through practical projects and real-world case studies</span>
+                </li>
+              </ul>
+              <h6 class="fw-bold mt-3">Benefits for students from EduConnect:</h6>
+              <ul class="list-unstyled mt-2">
+                <li class="d-flex align-items-start mb-2">
+                  <i class="bi bi-dot fs-4 text-primary me-2"></i>
+                  <span>Industry-recognized certification from EduConnect</span>
+                </li>
+                <li class="d-flex align-items-start mb-2">
+                  <i class="bi bi-dot fs-4 text-primary me-2"></i>
+                  <span>Real-time projects and exercises</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+      
+          
+          
+        </div>
+        
+
+        
+        
+        
+    </div>
+
+    {% if edu_content %}
+    <div class="row">
+      <h2 class="edu-heading">Who Can Apply for the Course?</h2>
+      <div class="col-md-8">
+        {% for edu_course in edu_content %}
+        <p><i class="bi bi-check-circle-fill edu-bg-green me-1"></i>{{edu_course.whoCan}}</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- accordion -->
+    <div class="row">
+      
+      <div class="col-md-6">
+        <div class="container my-5">
+          <h3 class="mb-4 edu-heading">Frequently Asked Questions</h3>
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  How will I receive my certificate?
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  You will receive your certificate through your Dashboard upon successfully completing the course and meeting the required criteria. To access it anywhere, anytime without loss.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Will EduConnect Faculty, be helping with the Career Services?
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  Yes, the program offers support in terms of career services, including guidance and access to career resources.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Why should I sign up for this {{eduCourse.map}}?
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  This certification course equips you with industry-relevant skills and knowledge, preparing you for a successful career in {{eduCourse.map}}.
+                </div>
+              </div>
+            </div>
+            <!-- Add more questions here -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingfour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefour" aria-expanded="false" aria-controls="collapsefour">
+                  Why should I apply for an EduConnect certificate?
+                </button>
+              </h2>
+              <div id="collapsefour" class="accordion-collapse collapse " aria-labelledby="headingfour" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  The EduConnect Certificate holds significant value as it demonstrates a learner's commitment to acquiring specialized skills and knowledge in their chosen field. <br> Recognized by industry professionals, the certificate validates expertise in disciplines like Programming, Data Science, Artificial Intelligence, and more. It serves as a powerful tool for career advancement, enhancing employability, and showcasing proficiency in modern, in-demand technologies.                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <div class="col-md-6 " id="EduConnect_Counselling">
+        
+        {% if message %}
+        <div class="alert-container ">
+          <div id="autoDismissAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong >{{message}}</strong> 
+            <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+        {% endif %}
+        <div class="containers d-flex justify-content-center align-items-center w-100 min-vh-100 mt-0">
+          <div class="card counselling-card border-0 pt-0 p-4  mt-0">
+            <div class="card-header bg-primary text-white text-center ">
+              <h5>Free Career Counselling</h5>
+              <p class="mb-0">We are happy to help you 24/7</p>
+            </div>
+            <div class="card-body">
+              <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="name" placeholder="Full Name*" required>
+                </div>
+                <div class="mb-3">
+                  <input type="email" class="form-control" name="mail_id" placeholder="Email*" required>
+                </div>
+                <div class="mb-3 d-flex">
+                  <select class="form-select w-auto me-2" name="country_code" required>
+                    <option value="+91" selected>+91 IN</option>
+                    <option value="+1">+1 US</option>
+                    <option value="+44">+44 UK</option>
+                  </select>
+                  <input type="text" class="form-control" name="mobile" placeholder="Mobile Number*" required>
+                </div>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-warning text-white fw-bold unique-submit-btn">Submit</button>
+                </div>
+                <div class="form-text mt-3">
+                  <input type="checkbox" id="termsCheckbox" checked required>
+                  <label for="termsCheckbox"></label>
+                  By providing your contact details, you agree to our
+                  <a href="#" class="text-primary">Terms of Use</a> &
+                  <a href="#" class="text-primary">Privacy Policy</a>
+                </div>
+              </form>
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+
+
+
+
+
+
+  </div>
+</div>
+
+<script src="{% static 'js/homeCard.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const textElement = document.getElementById("edu-connect-text");
+    const button = document.getElementById("read-more-btn-press");
+    const fullText = textElement.innerHTML; // Store the full text
+    const maxLength = 350; // Character limit
+
+    if (fullText.length > maxLength) {
+      const truncatedText = fullText.substring(0, maxLength) + "...";
+      textElement.innerHTML = truncatedText;
+
+      let isExpanded = false; // Track the state of the text
+
+      button.addEventListener("click", function () {
+        if (isExpanded) {
+          textElement.innerHTML = truncatedText;
+          button.innerText = "Read More";
+        } else {
+          textElement.innerHTML = fullText;
+          button.innerText = "Read Less";
+        }
+        isExpanded = !isExpanded;
+      });
+    } else {
+      button.style.display = "none"; // Hide button if text is short
+    }
+  });
+</script>
+
+<script
+  src="https://kit.fontawesome.com/a076d05399.js"
+  crossorigin="anonymous"
+></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock 'main_home' %}

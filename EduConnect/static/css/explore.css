@@ -1,0 +1,151 @@
+.card-swiper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.swiper-wrapper {
+    display: flex;
+    scroll-behavior: smooth;
+}
+
+.swiper-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: #fff;
+}
+
+.swiper-btn-left {
+    left: 0;
+}
+
+.swiper-btn-right {
+    right: 0;
+}
+
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    line-height: 1.4;
+    /* Adjust as per your design */
+    max-height: calc(1.4em * 2);
+    /* Limit to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}
+
+.card-flow {
+    display: flex;
+    flex-wrap: nowrap;
+    /* Prevent wrapping on mobile */
+    /* overflow-x: auto; */
+    -ms-overflow-style: none;
+    /* For Internet Explorer and Edge */
+    scrollbar-width: none;
+    /* For Firefox */
+}
+
+.card-flow::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari, and Opera */
+}
+
+.card-flow-wdth {
+    width: 280px;
+}
+
+@media (max-width: 768px) {
+    .card-flow {
+        display: flex;
+        flex-wrap: nowrap;
+        /* Prevent wrapping on mobile */
+        overflow-x: auto;
+    }
+
+    .card-flow .card-flow-wdth {
+        flex: 0 0 80%;
+        /* Make cards take 80% width on mobile */
+        min-width: 250px;
+        /* Minimum width for cards on mobile */
+    }
+
+    .swiper-btn {
+        display: none;
+    }
+}
+
+
+.custom-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.university-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.university-info img {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+}
+
+.university-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.4;
+    /* Adjust as per your design */
+    max-height: calc(1.4em * 2);
+    /* Limit to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}
+
+
+
+.cohort {
+    font-size: 14px;
+    color: #555;
+}
+
+.duration {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.edu-hide {
+    visibility: hidden;
+}
+
+.edu-card1:hover .edu-hide {
+
+    visibility: visible;
+}
+
+

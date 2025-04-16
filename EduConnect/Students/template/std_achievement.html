@@ -1,0 +1,180 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+
+<link rel="stylesheet" href="{% static 'css/std_achievement.css' %}" />
+
+<div class="container">
+  {% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    {% endfor %}
+</div>
+{% endif %}
+  <!-- Certificates Section -->
+  <div class="achievement-section">
+    <h3 class="mb-0">Certificates</h3>
+    <p class="hint">The Certificates Section is a dedicated space that highlights the student's achievements in professional and academic courses.</p>
+    <div class="accordion" id="certificateAccordion">
+      {% for cert in certificates %}
+      <div class="accordion-item mb-1">
+        <h2 class="accordion-header">
+          <button class="accordion-button bg-light" type="button">
+            {{ cert.title }}
+          </button>
+        </h2>
+        <div class="accordion-collapse">
+          <div class="accordion-body">
+            <p><strong>Issuing Organization:</strong> {{ cert.organization }}</p>
+            <p><strong>Teacher:</strong> {{ cert.teacher }}</p>
+            <p><strong>Issue Date:</strong> {{ cert.issue_date|date:"F d, Y" }}</p>
+            <p><strong>Expiry Date:</strong> N/A</p>
+            <p><strong>Certificate ID:</strong> {{ cert.certificate_id }}</p>
+            <p>
+              <strong>Verification Link:</strong>
+              <a href="{{ cert.verify_link }}" target="_blank">Verify Here</a>
+            </p>
+            <a href="{{ cert.download_link }}" class="btn btn-primary">Download Certificate</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% if not certificates %}
+      <span class="text-center">no data available</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Course Completion Data Section -->
+  <div class="achievement-section table-responsive">
+    <h3 class="mb-0">Course Completion Data</h3>
+    <p class="hint">Course progress and completion status <span style="font-size: 9px;">[ progress may have different from module its calcuclate based on contents ]</span> </p>
+    <table class="table table-bordered table-hover">
+      <thead class="table-success">
+        <tr>
+          <th>Course Title</th>
+          <th>Teacher</th>
+          <th>Completion Date</th>
+          <th>Progress</th>
+          <th>Duration</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in course_data %}
+        <tr>
+          <td>{{ course.title }}</td>
+          <td>{{ course.teacher }}</td>
+          <td>{{ course.completion_date|date:"F d, Y" }}</td>
+          <td>{{ course.percentage }}%</td>
+          <td>{{ course.duration }}</td>
+          <td>{{ course.status }}</td>
+        </tr>
+        {% endfor %}
+        {% if not course_data %}
+        <tr class="text-center">
+          <td colspan="6" >no data available</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Form Submissions Section -->
+  <div class="achievement-section table-responsive">
+    <h3 class="mb-0">Test & Quiz Performance</h3>
+    <p class="hint">Summary of completed assessments and scores</p>
+    <table class="table table-bordered table-hover">
+      <thead class="table-info">
+        <tr>
+          <th>Title</th>
+          <th>Course</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for submission in submission_data %}
+        <tr>
+          <td>{{ submission.title }}</td>
+          <td>{{ submission.course }}</td>
+          <td>{{ submission.type }}</td>
+          <td>{{ submission.date|date:"F d, Y" }}</td>
+          <td>{{ submission.score }}%</td>
+        </tr>
+        {% endfor %}
+        {% if not submission_data %}
+        <tr class="text-center">
+          <td colspan="5">no data available</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Webinar Section -->
+  <div class="achievement-section table-responsive">
+    <h3 class="mb-0">Webinar Participation</h3>
+    <p class="hint">Record of course webinars and attendance</p>
+    <table class="table table-bordered table-hover">
+      <thead class="table-warning">
+        <tr>
+          <th>Title</th>
+          <th>Course</th>
+          <th>Teacher</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Attendance</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for webinar in webinar_data %}
+        <tr>
+          <td>{{ webinar.title }}</td>
+          <td>{{ webinar.course }}</td>
+          <td>{{ webinar.teacher }}</td>
+          <td>{{ webinar.date|date:"F d, Y" }}</td>
+          <td>{% if webinar.status %} on {% else %} off {% endif %} </td>
+          <td>{{ webinar.attended }}</td>
+          <td>{{ webinar.duration }}</td>
+        </tr>
+        {% endfor %}
+        {% if not webinar_data %}
+        <tr class="text-center">
+          <td colspan="7">no data available</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const accordions = document.querySelectorAll(".accordion-item");
+
+    accordions.forEach((item) => {
+      const button = item.querySelector(".accordion-button");
+      const collapse = item.querySelector(".accordion-collapse");
+
+      button.addEventListener("click", function () {
+        // Close all other accordion items
+        accordions.forEach((otherItem) => {
+          if (otherItem !== item) {
+            const otherCollapse = otherItem.querySelector(".accordion-collapse");
+            otherCollapse.classList.remove("show");
+          }
+        });
+
+        // Toggle the current accordion item
+        collapse.classList.toggle("show");
+      });
+    });
+  });
+</script>
+
+{% endblock 'main' %}

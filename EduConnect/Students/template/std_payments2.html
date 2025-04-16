@@ -1,0 +1,101 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+<link rel="stylesheet" href="{% static 'css/std_payments2.css' %}" />
+
+<div class="container mt-2">
+  <div class="header">
+      <h2 class="text-white">Student Payment Details</h2>
+  </div>
+
+  <div class="row mb-4">
+      <div class="col-md-6">
+          <!-- Payment Details -->
+          <div class="mb-4">
+              <h5 class="mb-3">Payment Details</h5>
+              <hr>
+              <p><strong>Payment Date:</strong> <span>{{ payment.created_at|date:"M d, Y" }}</span></p>
+              <p><strong>Amount Paid:</strong> ₹{{ payment.amount }}</p>
+              <p><strong>Payment Method:</strong>{{ payment.payment_method | default:' -' }}</p>
+              <p><strong>Invoice/Receipt:</strong> <a href="{% url 'download_invoice' payment.id %}" class="download-btn">Download Invoice</a></p>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="mb-4">
+              <h5 class="mb-3">Course Details</h5>
+              <hr>
+              <p><strong>Course Title(s):</strong> {{ course.title }}</p>
+              <p><strong>Enrollment Date:</strong> {{ payment.created_at|date:"M d, Y" }}</p>
+              <p><strong>Course Status:</strong> <span class="badge">{% if certificate_status == 'Available' %} completed {% else %} In Progress {% endif %}</span></p>
+              <p><strong>Access Duration:</strong> {{ course.months }} Months</p>
+              <p><strong>Instructor Details:</strong> {{ course.teacher.user.first_name }} {{ course.teacher.user.last_name }}, <a href="{% url 'teacher_profile' course.teacher.teacher_id  %}">View Profile</a></p>
+          </div>
+      </div>
+  </div>
+
+  <!-- Course Features -->
+  <div class="row mb-4">
+      <div class="col-md-6">
+          <div class="mb-4">
+              <h5 class="mb-3">Course Features</h5>
+              <hr>
+              {% if features %}
+              <ul>
+                {% for feature in features %}
+                  <li>{{feature.features}}</li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              <ul>
+                  <li>no features available</li>
+              </ul>
+              {% endif %}
+              
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-4">
+            <h5 class="mb-3">Course Learning</h5>
+            <hr>
+            {% if learning %}
+            <ul>
+              {% for learning in learning %}
+                <li>{{learning.learn}}</li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <ul>
+                <li>no data available</li>
+            </ul>
+            {% endif %}
+            
+        </div>
+    </div>
+  </div>
+
+  <!-- Deadlines -->
+  <div class="mb-4">
+      <h5 class="mb-3">Courses Skills</h5>
+      <hr>
+      {% if skills%}
+      <ul>
+        {% for skills in skills %}
+          <li>{{skills.skills}}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <ul>
+          <li>no data available</li>
+      </ul>
+      {% endif %}
+  </div>
+
+  <!-- Certificate Status -->
+  <div>
+      <h5 class="mb-3">Certificate Status</h5>
+      <hr>
+      <p><strong>Status:</strong> {{ certificate_status }}</p>
+  </div>
+
+</div>
+
+
+{% endblock 'main' %}

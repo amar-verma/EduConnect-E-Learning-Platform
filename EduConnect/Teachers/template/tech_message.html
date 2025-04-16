@@ -1,0 +1,146 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_message.css' %}">
+
+<div class="container">
+    <h1>All Messages</h1>
+
+    <!-- Toast Notification -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+    {% if success_message %}
+        <div class="toast show align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ success_message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if error_message %}
+        <div class="toast show align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ error_message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+    
+
+    <div class="messaging">
+        <h2>Messaging</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="select-course">
+                <label>Select Course:</label>
+                <select name="course_id" id="courseSelect" required>
+                    <option value="" selected disabled>Select Course</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.title }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Select Student:</label>
+<select name="student_id" id="studentSelect" required>
+    <option value="" selected disabled >Select Student</option>
+    {% for course in courses %}
+        {% for enrollment in course.enrolled_students.all %}
+            <option value="{{ enrollment.student.student_id }}" data-course="{{ course.id }}" class="student-option">
+                {{ enrollment.student.first_name }} {{ enrollment.student.last_name }}
+            </option>
+        {% endfor %}
+    {% endfor %}
+</select>
+
+
+                <label>Message:</label>
+                <textarea name="message" id="messageInput" placeholder="Write a message..." required></textarea>
+
+                <button type="submit" class="button-main">Send Message</button>
+            </div>
+        </form>
+
+        <!-- Messages Table -->
+        <div class="message-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Student</th>
+                        <th>Message</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="messageBody">
+                    {% for msg in messages %}
+                        <tr>
+                            <td>{{ msg.course.title }}</td>
+                            <td>{{ msg.student.first_name }}</td>
+                            <td class="tooltip-cell" title="{{ msg.message }}">...</td>
+                            <td>{{ msg.created_at }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="4">No messages found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Toast & Enrolled Students -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const courseSelect = document.getElementById("courseSelect");
+        const studentSelect = document.getElementById("studentSelect");
+        const studentOptions = document.querySelectorAll(".student-option");
+
+        courseSelect.addEventListener("change", function () {
+            const selectedCourse = this.value;
+            
+            
+            studentSelect.innerHTML = '<option value="">Select Student</option>';
+
+            // Show students that belong to the selected course
+            studentOptions.forEach(option => {
+                if (option.getAttribute("data-course") === selectedCourse) {
+                    studentSelect.appendChild(option);
+                }
+            });
+        });
+
+        // Auto-hide toast after 5 seconds
+        setTimeout(function () {
+            var toasts = document.querySelectorAll('.toast');
+            toasts.forEach(function (toast) {
+                var bsToast = new bootstrap.Toast(toast);
+                bsToast.hide();
+            });
+        }, 5000);
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Auto-hide toast after 5 seconds
+        setTimeout(function () {
+            var toasts = document.querySelectorAll('.toast');
+            toasts.forEach(function (toast) {
+                var bsToast = new bootstrap.Toast(toast);
+                bsToast.hide();
+            });
+
+            // Clear Django messages after they are displayed
+            fetch(window.location.href, { method: "POST", body: new URLSearchParams({ "clear_messages": "true" }) })
+                .then(response => console.log("Messages cleared"))
+                .catch(error => console.error("Error clearing messages:", error));
+
+        }, 5000);
+    });
+</script>
+
+
+{% endblock 'tech_main' %}

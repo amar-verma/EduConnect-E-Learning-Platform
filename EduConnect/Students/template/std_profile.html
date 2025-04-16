@@ -1,0 +1,80 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+<link rel="stylesheet" href="{% static 'css/std_profile.css' %}" />
+
+<div class="profile-container">
+  <!-- Profile Header -->
+  <div class="row">
+    {% if messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {% for message in messages %}
+        {{ message }} <br>
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+      <div class="col-md-12 d-flex justify-content-between">
+              <div class="profile-header">
+                  <img src="{{student.profile_picture.url}}" alt="Profile Picture" />
+                  <h1 class="text-primary">{{student.first_name}} {{student.last_name}}</h1>
+                  <p>{{student.student_id}}</p> <br>
+            </div>
+            <p>{{student.user.username}}</p>
+            <div>
+              <a href="{% url 'std_profile_edit' %}"><span class="btn-edit">[Edit]</span></a>
+            </div>
+            
+      </div>
+  </div>
+
+  <!-- Personal Details Section -->
+  <div class="profile-section">
+    <h3 class="text-primary">Personal Details</h3><hr>
+    <div class="row">
+      <div class="col-md-6">
+        <p><span class="field-label">First Name:</span> <span class="field-value">{{student.first_name}}</span></p>
+        <p><span class="field-label">Last Name:</span> <span class="field-value">{{student.last_name}}</span></p>
+        <p><span class="field-label">Date of Birth:</span> <span class="field-value">{{ student.date_of_birth | default:'-' }}</span></p>
+        <p><span class="field-label">Gender:</span> <span class="field-value">{{student.gender}}</span></p>
+      </div>
+      <div class="col-md-6">
+        <p><span class="field-label">Email:</span> <span class="field-value">{{student.user.email}}</span></p>
+        <p><span class="field-label">Phone:</span> <span class="field-value">+{{student.phone_number}}</span></p>
+        <span class="field-label">Address:</span><p> <span class="field-value">{{student.address}} {{student.state}} {{student.city}} {{student.zip_code}}</span></p>
+        <p><span class="field-label">Country:</span> <span class="field-value">{{student.country}}</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Academic Details Section -->
+  <div class="profile-section">
+    <h3 class="text-primary">Academic Details</h3><hr>
+    <div class="row">
+      <div class="col-md-6">
+        <span class="field-label">Program:</span><p> <span class="field-value">{{ student.program | default:'-' }}</span></p>
+        <p><span class="field-label">Current Level:</span> <span class="field-value">{{ student.current_level | default:'-' }}</span></p>
+        <p><span class="field-label">Joining Date:</span> <span class="field-value">{{student.user.date_joined}}</span></p>
+      </div>
+      <div class="col-md-6">
+        <p><span class="field-label">Status:</span> <span class="field-value">{{student.status}}</span></p>
+        <!-- <p><span class="field-label">Premium:</span> <span class="field-value">{{ student.program | default:'-' }}</span></p> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Preferences Section -->
+  <div class="profile-section">
+    <h3 class="text-primary">Preferences & Notifications</h3><hr>
+    <p><span class="field-label">Notifications Enabled:</span> <span class="field-value">{{ notify | default:'-' }}</span></p>
+    <span class="field-label">Bio:</span><p> <span class="field-value">{{ student.bio | default:'-' }}</span></p>
+    <p>
+      <span class="field-label">Social Links:</span>
+      <span class="field-value">
+        <a href="{{ student.social_links | default:'' }}" target="_blank"><i class="bi bi-link-45deg"></i></a>
+      </span>
+    </p>
+  </div>
+
+  
+</div>
+
+{% endblock 'main' %}

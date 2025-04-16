@@ -1,0 +1,237 @@
+{% extends 'tech_index.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+
+
+    <div id="courseForm" class="card p-4">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Course Details Section -->
+            <h3>Course Details</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" class="form-control" required 
+                               value="{{ course.title|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description" class="form-control" required>{{ course.description|default:'' }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Description 2</label>
+                        <textarea name="description2" class="form-control">{{ course.description2|default:'' }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" class="form-control" required>
+                            {% for cat in categories %}
+                                <option value="{{ cat.0 }}" {% if course.category == cat.0 %}selected{% endif %}>
+                                    {{ cat.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Course Image</label>
+                        {% if course.course_img %}
+                            <img src="{{ course.course_img.url }}" class="img-thumbnail mb-2" style="max-width: 200px;">
+                        {% endif %}
+                        <input type="file" name="course_img" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (hours)</label>
+                        <input type="number" name="duration" class="form-control" required 
+                               value="{{ course.duration|default:'' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" name="price" class="form-control" required 
+                               value="{{ course.price|default:0 }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Old Price</label>
+                        <input type="number" name="old_price" class="form-control" 
+                               value="{{ course.old_price|default:0 }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <h3 class="mt-4">Course Features</h3>
+            <div id="featuresContainer">
+                {% if features %}
+                    {% for feature in features %}
+                        <div class="feature-item">
+                            <div class="form-group">
+                                <input type="text" name="features[]" class="form-control" 
+                                       value="{{ feature.features }}">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="feature-item">
+                        <div class="form-group">
+                            <input type="text" name="features[]" class="form-control" placeholder="Enter feature">
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <button type="button" class="btn btn-info" onclick="addFeature()">Add Feature</button>
+
+            <!-- Similar pattern for Skills and Learning sections -->
+
+            <!-- Content Section -->
+            <h3 class="mt-4">Course Content</h3>
+            <div id="contentContainer">
+                {% if contents %}
+                    {% for content in contents %}
+                        <div class="content-item card p-3 mb-3">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" name="content_title[]" class="form-control" 
+                                       value="{{ content.title }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="content_description[]" class="form-control">{{ content.description }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Order</label>
+                                <input type="number" name="content_order[]" class="form-control" 
+                                       value="{{ content.order }}" required>
+                            </div>
+                            
+                            <!-- Assignments for this content -->
+                            <div class="assignments-container">
+                                <h4>Assignments</h4>
+                                {% for assignment in content.content_assignment.all %}
+                                    <div class="assignment-item">
+                                        <div class="form-group">
+                                            <input type="text" name="assignment_title[]" class="form-control" 
+                                                   value="{{ assignment.title }}">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-warning mt-2" onclick="addAssignment(this)">Add Assignment</button>
+                            <button type="button" class="btn btn-danger mt-2" onclick="removeItem(this)">Remove Content</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="button" class="btn btn-info" onclick="addContent()">Add Content</button>
+
+            <button type="submit" class="btn btn-success mt-4">
+                {% if course %}Update{% else %}Create{% endif %} Course
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    function showCreateForm() {
+    document.getElementById('createCourseForm').style.display = 'block';
+}
+
+function showUpdateForm() {
+    // Will implement later
+}
+
+function addFeature() {
+    const container = document.getElementById('featuresContainer');
+    const newFeature = document.createElement('div');
+    newFeature.className = 'feature-item';
+    newFeature.innerHTML = `
+        <div class="form-group">
+            <input type="text" name="features[]" class="form-control" placeholder="Enter feature">
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+        </div>
+    `;
+    container.appendChild(newFeature);
+}
+
+function addSkill() {
+    const container = document.getElementById('skillsContainer');
+    const newSkill = document.createElement('div');
+    newSkill.className = 'skill-item';
+    newSkill.innerHTML = `
+        <div class="form-group">
+            <input type="text" name="skills[]" class="form-control" placeholder="Enter skill">
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+        </div>
+    `;
+    container.appendChild(newSkill);
+}
+
+function addLearning() {
+    const container = document.getElementById('learningContainer');
+    const newLearning = document.createElement('div');
+    newLearning.className = 'learning-item';
+    newLearning.innerHTML = `
+        <div class="form-group">
+            <input type="text" name="learning[]" class="form-control" placeholder="Enter learning outcome">
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+        </div>
+    `;
+    container.appendChild(newLearning);
+}
+
+function addContent() {
+    const container = document.getElementById('contentContainer');
+    const newContent = document.createElement('div');
+    newContent.className = 'content-item card p-3 mb-3';
+    newContent.innerHTML = `
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" name="content_title[]" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea name="content_description[]" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Order</label>
+            <input type="number" name="content_order[]" class="form-control" required>
+        </div>
+        <div class="assignments-container">
+            <h4>Assignments</h4>
+            <div class="assignment-item">
+                <div class="form-group">
+                    <input type="text" name="assignment_title[]" class="form-control" placeholder="Assignment title">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-warning mt-2" onclick="addAssignment(this)">Add Assignment</button>
+        <button type="button" class="btn btn-danger mt-2" onclick="removeItem(this)">Remove Content</button>
+    `;
+    container.appendChild(newContent);
+}
+
+function addAssignment(button) {
+    const container = button.previousElementSibling.querySelector('.assignments-container');
+    const newAssignment = document.createElement('div');
+    newAssignment.className = 'assignment-item';
+    newAssignment.innerHTML = `
+        <div class="form-group">
+            <input type="text" name="assignment_title[]" class="form-control" placeholder="Assignment title">
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(this)">Remove</button>
+        </div>
+    `;
+    container.appendChild(newAssignment);
+}
+
+function removeItem(button) {
+    button.closest('.feature-item, .skill-item, .learning-item, .content-item, .assignment-item').remove();
+}
+</script>
+{% endblock %}

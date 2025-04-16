@@ -1,0 +1,47 @@
+*{
+    font-family: "Poppins", sans-serif;
+}
+/* Custom Styles */
+body {
+    background-color: #f8f9fa;
+}
+.hint {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+}
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+}
+.logo-highlight {
+    color: #FFC107; /* Yellow color like in your image */
+}
+.container {
+    margin-top: 20px;
+}
+.filter-box {
+    max-width: 300px;
+}
+.table-container {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-add-snippet {
+    background-color: #000;
+    color: white;
+    font-weight: bold;
+}
+.btn-add-snippet:hover {
+    background-color: #333;
+}
+.pagination-btn {
+    border-radius: 5px;
+    padding: 8px 15px;
+}
+a{
+    text-decoration: none;
+    color: black;
+}

@@ -1,0 +1,61 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+<link rel="stylesheet" href="{% static 'css/std_payments.css' %}" />
+
+
+<div class="container mt-2">
+  {% if messages %}
+  <div class="alert-container">
+      {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="filter bar">
+
+  <!-- Transactions Table -->
+  <div class="table-container bg-white px-3 py-3 rounded payment-table mb-3">
+    <table class="table table-hover align-middle ">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Payment Id</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if payments %}
+        {% for pay in payments %}
+        <tr>
+          <td>{{pay.created_at | date:"Y-m-d "}}</td>
+          <td>{{pay.payment_id}}</td>
+          <td>₹{{pay.amount}}</td>
+          <td><span class="badge bg-success">{{pay.payment_status}}</span></td>
+          <td>
+            <a href="{% url 'std_payment' pay.id %}" class="btn-action"><i class="bi bi-receipt"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+          <td colspan="5">no payment is made yet</td>
+        </tr>
+        {% endif %}
+        <tr>
+          <td colspan="5" class="text-center">no payment is made yet</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>
+</div>
+
+</div>
+
+{% endblock 'main' %}

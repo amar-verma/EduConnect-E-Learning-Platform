@@ -1,0 +1,36 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_review.css' %}">
+
+<div class="container mt-2">
+    <h2 class="text-center text-success fw-bold">Student Reviews</h2>
+
+    <!-- Like & Dislike Percentage -->
+    <div class="rating-section">
+        <h3>{{ like_percentage }}% <i class="bi bi-hand-thumbs-up-fill bs-success-bg-subtle "></i> | {{ dislike_percentage }}% <i class="bi bi-hand-thumbs-down-fill bs-success-bg-subtle "></i></h3>
+        <p>Total Ratings: {{ total_votes }}</p>
+    </div>
+
+    <!-- Display Comments Dynamically -->
+    {% for comment in comments %}
+    <div class="review-card">
+        <h5>{{ comment.name }} 
+            {% if comment.value %}
+                <span class="rating"><i class="bi bi-hand-thumbs-up-fill text-primary "></i></span>
+            {% else %}
+                <span class="rating"><i class="bi bi-hand-thumbs-down-fill text-danger "></i></span>
+            {% endif %}
+        </h5>
+        <p>( <i>{{ comment.course.title }}</i> )</p>
+        <p>{{ comment.comment }}</p>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted">No reviews yet.</p>
+    {% endfor %}
+
+    <!-- Write Review Button -->
+    <div class="text-center mt-3">
+        <button class="write-review">⭐ Students review</button>
+    </div>
+</div>
+
+{% endblock 'tech_main' %}

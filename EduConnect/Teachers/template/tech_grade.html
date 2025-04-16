@@ -1,0 +1,73 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_grade.css' %}">
+
+<div class="container">
+    <h1 class="page-title">Events</h1>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search by Form ID or Title...">
+        <button id="searchButton">Search</button>
+        <button id="backButton" style="display: none;">Back to Full List</button>
+    </div>
+
+    <div class="grade-table tech-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Form ID</th>
+                    <th>Title</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody id="gradeBody">
+                {% for form in forms %}
+                <tr>
+                    <td>{{ form.id }}</td>
+                    <td>{{ form.title }}</td>
+                    <td>{{ form.course.title }}</td> <!-- Adjust based on your Course model -->
+                    <td>{% if form.is_active %} Active {% else %} Inactive {% endif %}</td>
+                    <td>{{ form.created_at|date:"F d, Y" }}</td>
+                    <td>{{ form.event_date|date:"F d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No forms found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    document.getElementById("searchButton").addEventListener("click", function() {
+        let searchValue = document.getElementById("searchInput").value.toLowerCase();
+        let rows = document.querySelectorAll("#gradeBody tr");
+        
+        rows.forEach(row => {
+            let formId = row.cells[0]?.textContent.toLowerCase();
+            let title = row.cells[1]?.textContent.toLowerCase();
+            
+            if (formId.includes(searchValue) || title.includes(searchValue)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+        
+        document.getElementById("backButton").style.display = "inline-block";
+    });
+    
+    document.getElementById("backButton").addEventListener("click", function() {
+        let rows = document.querySelectorAll("#gradeBody tr");
+        rows.forEach(row => row.style.display = "");
+        document.getElementById("searchInput").value = "";
+        this.style.display = "none";
+    });
+    </script>
+    
+
+{% endblock 'tech_main' %}

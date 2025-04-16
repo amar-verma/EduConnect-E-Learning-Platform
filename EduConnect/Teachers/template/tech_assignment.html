@@ -1,0 +1,324 @@
+{% extends 'tech_index.html' %} 
+{% load static %} 
+{% block 'tech_main' %}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Assignment Submissions</h2>
+    
+    <!-- Filter Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Filter Submissions</h5>
+        </div>
+        <div class="card-body">
+            <form id="filter-form" method="get" class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="student_name">Student Name</label>
+                    <input type="text" class="form-control" id="student_name" name="student_name" 
+                           value="{{ filters.student_name }}" placeholder="Search by name">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="course_id">Course</label>
+                    <select class="form-control" id="course_id" name="course_id">
+                        <option value="">All Courses</option>
+                        {% for course in teacher_courses %}
+                            <option value="{{ course.id }}" {% if filters.course_id == course.id|stringformat:"s" %}selected{% endif %}>
+                                {{ course.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="">All Statuses</option>
+                        <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="completed" {% if filters.status == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="rework" {% if filters.status == 'rework' %}selected{% endif %}>Rework</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end mb-3">
+                    <button type="submit" class="btn btn-primary mr-2">Apply Filters</button>
+                    <a href="{% url 'tech_assignments' %}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Submissions List -->
+    <div class="submissions-container">
+        {% for submission in submissions %}
+        <div class="submission-card shadow rounded p-3 mt-3">
+            <div class="submission-header d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="h5">{{ submission.student.first_name }} {{ submission.student.last_name }}</span>
+                    <span class="text-muted ml-2">- {{ submission.assignment.question.course.title }}</span>
+                </div>
+                <span class="submission-status badge 
+                    {% if submission.status == 'pending' %}badge-warning
+                    {% elif submission.status == 'completed' %}badge-success
+                    {% else %}badge-danger{% endif %}">
+                    {{ submission.status|title }}
+                </span>
+            </div>
+            
+            <div class="submission-details mt-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Assignment:</strong> {{ submission.assignment.title }}</p>
+                        <p><strong>Submitted:</strong> {{ submission.submitted_at|date:"F j, Y, g:i a" }}</p>
+                        {% if submission.file %}
+                            <p><strong>File:</strong> <a href="{{ submission.file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-file-earmark"></i> View Submission
+                            </a></p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        {% if submission.message %}
+                            <div class="alert alert-info">
+                                <strong>Feedback:</strong> {{ submission.message }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="submission-actions mt-3">
+                {% if submission.status != 'completed' %}
+                <button class="btn btn-success mark-completed" data-id="{{ submission.id }}">
+                    Mark as Completed
+                </button>
+                {% endif %}
+                
+                {% if submission.status != 'rework' %}
+                <button class="btn btn-warning mark-rework" data-id="{{ submission.id }}">
+                    Request Rework
+                </button>
+                {% endif %}
+                
+                <!-- <button class="btn btn-info add-feedback" data-id="{{ submission.id }}" 
+                        data-current-message="{{ submission.message|default:'' }}">
+                    Add Feedback
+                </button> -->
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info text-center mt-4">
+            <i class="bi bi-info-circle-fill mr-2"></i> No assignment submissions found.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feedbackModalLabel">Provide Feedback</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="feedbackForm">
+                    <input type="hidden" id="submission_id" name="submission_id">
+                    <input type="hidden" id="status_action" name="status_action">
+                    
+                    <div class="form-group">
+                        <label for="feedback_message">Message to Student</label>
+                        <textarea class="form-control" id="feedback_message" name="feedback_message" rows="4" 
+                                  placeholder="Provide feedback or instructions for the student..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitFeedback">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mark as completed
+        document.querySelectorAll('.mark-completed').forEach(button => {
+            button.addEventListener('click', function() {
+                const submissionId = this.getAttribute('data-id');
+                openFeedbackModal(submissionId, 'completed');
+            });
+        });
+        
+        // Mark for rework
+        document.querySelectorAll('.mark-rework').forEach(button => {
+            button.addEventListener('click', function() {
+                const submissionId = this.getAttribute('data-id');
+                openFeedbackModal(submissionId, 'rework');
+            });
+        });
+        
+        // Add feedback only
+        document.querySelectorAll('.add-feedback').forEach(button => {
+            button.addEventListener('click', function() {
+                const submissionId = this.getAttribute('data-id');
+                const currentMessage = this.getAttribute('data-current-message');
+                openFeedbackModal(submissionId, null, currentMessage);
+            });
+        });
+        
+        // Function to open feedback modal
+        function openFeedbackModal(submissionId, status, currentMessage = '') {
+            document.getElementById('submission_id').value = submissionId;
+            document.getElementById('status_action').value = status || '';
+            document.getElementById('feedback_message').value = currentMessage;
+            
+            // Update modal title based on action
+            const modalTitle = document.getElementById('feedbackModalLabel');
+            if (status === 'completed') {
+                modalTitle.textContent = 'Mark Assignment as Completed';
+            } else if (status === 'rework') {
+                modalTitle.textContent = 'Request Assignment Rework';
+            } else {
+                modalTitle.textContent = 'Update Feedback';
+            }
+            
+            $('#feedbackModal').modal('show');
+        }
+        
+        // Submit feedback
+        document.getElementById('submitFeedback').addEventListener('click', function() {
+            const submissionId = document.getElementById('submission_id').value;
+            const statusAction = document.getElementById('status_action').value;
+            const message = document.getElementById('feedback_message').value;
+            
+            // Prepare data for submission
+            const data = {
+                submission_id: submissionId,
+                message: message
+            };
+            
+            // Add status if it's a status change action
+            if (statusAction) {
+                data.status = statusAction;
+            }
+            
+            // Send AJAX request
+            fetch('{% url "tech_assignments" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Close modal
+                    $('#feedbackModal').modal('hide');
+                    
+                    // Show success message
+                    alert('Submission updated successfully!');
+                    
+                    // Reload page to reflect changes
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating the submission.');
+            });
+        });
+        
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+
+<style>
+    .submission-card {
+        background-color: #fff;
+        transition: all 0.3s ease;
+    }
+    
+    .submission-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+    
+    .submission-status {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+    
+    .submission-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .submission-actions {
+            flex-direction: column;
+        }
+        
+        .submission-actions button {
+            margin-bottom: 5px;
+        }
+    }
+    
+    .card-header {
+        background: linear-gradient(45deg, #4e73df, #224abe);
+    }
+    
+    .alert-info {
+        background-color: #e8f4fd;
+        border-color: #b8daff;
+    }
+    
+    /* Status badge colors */
+    .badge-warning {
+        background-color: #f6c23e;
+        color: #212529;
+    }
+    
+    .badge-success {
+        background-color: #1cc88a;
+        color: #fff;
+    }
+    
+    .badge-danger {
+        background-color: #e74a3b;
+        color: #fff;
+    }
+    
+    /* Filter form styles */
+    #filter-form label {
+        font-weight: 600;
+        color: #4e73df;
+    }
+    
+    /* Empty state styling */
+    .alert-info {
+        background-color: #f8f9fc;
+        border-left: 4px solid #4e73df;
+    }
+</style>
+
+{% endblock %}

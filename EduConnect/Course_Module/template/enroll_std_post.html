@@ -1,0 +1,602 @@
+{% extends 'enroll_course.html' %}
+{% load static %}
+
+{% block 'content_main' %}
+<div class="discussion-container">
+    <div class="discussion-header">
+        <h2>Course Discussion</h2>
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="posts">Instructor Posts</button>
+            <button class="tab-btn" data-tab="messages">Message Instructor</button>
+        </div>
+    </div>
+
+    <!-- Messages from Django -->
+    {% if messages %}
+    <div class="alert-messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Posts Tab -->
+    <div class="tab-content active" id="posts-tab">
+        <div class="posts-container">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <img src="{{ post.teacher.profile_picture.url }}" height="40" width="40" alt="Teacher" class="EduConnect">
+                            <div class="author-info">
+                                <h4>{{ post.teacher.first_name }} {{ post.teacher.last_name }}</h4>
+                                <span class="post-date">{{ post.created_at|date:"F j, Y, g:i a" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        {{ post.content|linebreaks }}
+                    </div>
+                    
+                    <!-- Comments Section -->
+                    <div class="comments-section">
+                        <h5>Comments ({{ post.comments.count }})</h5>
+                        
+                        <div class="comments-list">
+                            {% for comment in post.comments.all %}
+                            <div class="comment">
+                                <div class="comment-header">
+                                    {% if comment.teacher %}
+                                    <span class="comment-author teacher">{{ comment.teacher.first_name }} {{ comment.teacher.last_name }} (Instructor)</span>
+                                    {% else %}
+                                    <span class="comment-author student">{{ comment.student.first_name }} {{ comment.student.last_name }}</span>
+                                    {% endif %}
+                                    <span class="comment-date">{{ comment.created_at|date:"M j, g:i a" }}</span>
+                                </div>
+                                <div class="comment-body">
+                                    {{ comment.content }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Add Comment Form -->
+                        <form method="post" class="comment-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <div class="comment-input-group">
+                                <input type="text" name="comment_content" placeholder="Write a comment..." required>
+                                <button type="submit" class="comment-btn">Post</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-posts">
+                    <p>No posts from your instructor yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Messages Tab -->
+    <div class="tab-content" id="messages-tab">
+        <div class="messages-container">
+            <div class="new-message-form">
+                <h3>Send a Message to Your Instructor</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    <textarea name="query_text" placeholder="Type your question or message here..." required></textarea>
+                    <button type="submit" class="send-message-btn">Send Message</button>
+                </form>
+            </div>
+            
+            <div class="previous-messages">
+                <h3>Previous Messages</h3>
+                {% if queries %}
+                    {% for query in queries %}
+                    <div class="message-card {% if query.status == 'resolved' %}resolved{% endif %}">
+                        <div class="message-header">
+                            <span class="message-date">{{ query.created_at|date:"F j, Y" }}</span>
+                            <span class="message-status {{ query.status }}">{{ query.status|title }}</span>
+                        </div>
+                        <div class="message-content">
+                            <div class="student-message">
+                                <h4>Your Message:</h4>
+                                <p>{{ query.query_text }}</p>
+                            </div>
+                            
+                            {% if query.response_text %}
+                            <div class="instructor-response">
+                                <h4>Instructor Response:</h4>
+                                <p>{{ query.response_text }}</p>
+                            </div>
+                            {% else %}
+                            <div class="awaiting-response">
+                                <p>Awaiting instructor response...</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-messages">
+                        <p>You haven't sent any messages to your instructor yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Main Container Styles */
+    .discussion-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .discussion-header {
+        padding: 20px;
+        background: linear-gradient(135deg, #4e73df, #224abe);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .discussion-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    
+    /* Tab Navigation */
+    .tab-navigation {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .tab-btn {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .tab-btn:hover {
+        background: rgba(255,255,255,0.3);
+    }
+    
+    .tab-btn.active {
+        background: white;
+        color: #4e73df;
+    }
+    
+    /* Tab Content */
+    .tab-content {
+        display: none;
+        padding: 20px;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    /* Alert Messages */
+    .alert-messages {
+        margin: 15px 20px 0;
+    }
+    
+    .alert {
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+    
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    /* Posts Styles */
+    .post-card {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+    
+    .post-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    
+    .author-info h4 {
+        margin: 0;
+        font-size: 1rem;
+        color: #333;
+    }
+    
+    .post-date {
+        font-size: 0.8rem;
+        color: #777;
+    }
+    
+    .post-content {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    /* Comments Styles */
+    .comments-section {
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+    }
+    
+    .comments-section h5 {
+        margin: 0 0 15px;
+        font-size: 0.95rem;
+        color: #555;
+    }
+    
+    .comments-list {
+        margin-bottom: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .comment {
+        background: #f0f2f5;
+        border-radius: 8px;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+    }
+    
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 0.85rem;
+    }
+    
+    .comment-author {
+        font-weight: 600;
+    }
+    
+    .comment-author.teacher {
+        color: #4e73df;
+    }
+    
+    .comment-author.student {
+        color: #333;
+    }
+    
+    .comment-date {
+        color: #777;
+        font-size: 0.75rem;
+    }
+    
+    .comment-body {
+        font-size: 0.9rem;
+        color: #333;
+    }
+    
+    .comment-form {
+        margin-top: 15px;
+    }
+    
+    .comment-input-group {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .comment-input-group input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .comment-btn {
+        background: #4e73df;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .comment-btn:hover {
+        background: #2e59d9;
+    }
+    
+    /* Messages Tab Styles */
+    .new-message-form {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .new-message-form h3 {
+        margin: 0 0 15px;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .new-message-form textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+        resize: vertical;
+    }
+    
+    .send-message-btn {
+        background: #4e73df;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        /* border-padding: 10px 20px; */
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        width: auto;
+        display: inline-block;
+    }
+    
+    .send-message-btn:hover {
+        background: #2e59d9;
+    }
+    
+    .previous-messages h3 {
+        margin: 0 0 15px;
+        font-size: 1.1rem;
+        color: #333;
+    }
+    
+    .message-card {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #4e73df;
+    }
+    
+    .message-card.resolved {
+        border-left-color: #1cc88a;
+    }
+    
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+    
+    .message-date {
+        font-size: 0.85rem;
+        color: #777;
+    }
+    
+    .message-status {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 12px;
+    }
+    
+    .message-status.pending {
+        background-color: #f6c23e;
+        color: #212529;
+    }
+    
+    .message-status.resolved {
+        background-color: #1cc88a;
+        color: white;
+    }
+    
+    .message-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .student-message h4, .instructor-response h4 {
+        margin: 0 0 8px;
+        font-size: 0.9rem;
+        color: #555;
+    }
+    
+    .student-message p, .instructor-response p {
+        margin: 0;
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .student-message p {
+        background: #e8f4fd;
+        color: #333;
+    }
+    
+    .instructor-response p {
+        background: #e6f3e6;
+        color: #333;
+    }
+    
+    .awaiting-response {
+        font-style: italic;
+        color: #777;
+        text-align: center;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 5px;
+    }
+    
+    .no-posts, .no-messages {
+        text-align: center;
+        padding: 40px 20px;
+        color: #777;
+        font-style: italic;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .discussion-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .tab-navigation {
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .post-header {
+            flex-direction: column;
+        }
+        
+        .comment-header {
+            flex-direction: column;
+        }
+        
+        .comment-date {
+            margin-top: 5px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .discussion-container {
+            border-radius: 0;
+        }
+        
+        .tab-content {
+            padding: 15px;
+        }
+        
+        .post-card, .message-card, .new-message-form {
+            padding: 15px;
+        }
+        
+        .comment {
+            padding: 8px 12px;
+        }
+        
+        .comment-input-group {
+            flex-direction: column;
+        }
+        
+        .comment-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Auto-hide alerts after 5 seconds
+        const alerts = document.querySelectorAll('.alert');
+        if (alerts.length > 0) {
+            setTimeout(() => {
+                alerts.forEach(alert => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => {
+                        alert.style.display = 'none';
+                    }, 500);
+                });
+            }, 5000);
+        }
+        
+        // Smooth scrolling for new comments
+        const commentForms = document.querySelectorAll('.comment-form');
+        commentForms.forEach(form => {
+            form.addEventListener('submit', function() {
+                // Store the post ID to scroll back to after page reload
+                localStorage.setItem('lastCommentedPost', this.querySelector('input[name="post_id"]').value);
+            });
+        });
+        
+        // Scroll to last commented post if available
+        const lastCommentedPost = localStorage.getItem('lastCommentedPost');
+        if (lastCommentedPost) {
+            const postElement = document.querySelector(`input[name="post_id"][value="${lastCommentedPost}"]`);
+            if (postElement) {
+                postElement.closest('.post-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            localStorage.removeItem('lastCommentedPost');
+        }
+    });
+</script>
+{% endblock %}

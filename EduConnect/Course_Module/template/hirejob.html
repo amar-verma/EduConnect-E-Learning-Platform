@@ -1,0 +1,284 @@
+{% extends 'index.html' %}
+
+{% load static %}
+{% block 'main_home' %}
+<link rel="stylesheet" href="{% static 'css/hirejob.css' %}">
+        {% if message %}
+        <div class="alert-container " >
+          <div id="autoDismissAlert " class="alert alert-success alert-dismissible fade show" style="margin: 0 !important; border-radius: 0px !important;" role="alert">
+            <strong >{{message}}</strong> 
+            <button type="button" class="btn-close " data-bs-dismiss="alert" aria-label="Close" ></button>
+          </div>
+        </div>
+        {% endif %}
+      
+
+<section class=" p-5" id="hire-job-hero-wrapper" style="background-image: url(&quot;https://www.betterplace.co.in/blog/wp-content/uploads/2020/08/10-Efficient-Ways-To-Ensure-A-Successful-Mass-Hiring-Drive-1.jpg&quot;); max-height: fit-content; ">
+        
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-lg-7 hire-job-hero-wrap text-white">
+          <h1 class=" text-shadow">Let's create the future of learning <strong>together!</strong></h1>
+          <p class="text-shadow">Empower learners, advance your career, and be part of the revolution in education with EduConnect.</p>
+          <hr>
+          <div class="contact-info mt-4 text-shadow">
+            To know more about Corporate training call us on: <a href="tel:9372056170">📞 93720xxxxx</a>
+          </div>
+          
+        </div>
+
+        <div class="col-lg-4 bg-dark  rounded">
+          <div>
+            <p class="mt-3 text-white">To Work With Us, Please fill The details</p>
+
+            <form method="post" name="form">
+                {% csrf_token %}
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <input class="form-control" id="full_name" placeholder="Full Name*" type="text" name="name" maxlength="255" required>
+                  </div>
+                </div>
+              
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <input class="form-control" id="email" placeholder="Email*" type="email" name="email" maxlength="255" required>
+                  </div>
+                </div>
+              
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <textarea class="form-control" id="company_name" placeholder="Mention Skills and educational details" name="company" required></textarea>
+                  </div>
+                </div>
+              
+                <div class="form-row">
+                  <div class=" col ">
+                    <select class="form-control" name="country_code" id="country_code" required>
+                      <option value="+91">+91 IN </option>
+                      <option value="+44">+44 UK </option>
+                      <option value="+1">+1 US </option>
+                      <option value="+1">+1 CA </option>
+                      <option value="+93">+93 AF </option>
+                      <option value=" "> --- </option>
+                      
+                      
+                      <!-- Add more countries as needed -->
+                    </select>
+                  </div>
+                  <div class="form-group col">
+                    <input class="form-control" id="mobile_number" placeholder="Mobile Number*" type="text" name="mobile" maxlength="20" required>
+                  </div>
+                </div>
+              
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <input class="btn btn-warning px-4" type="submit" value="Get In Touch">
+                  </div>
+                </div>
+              
+                <div class="form-row">
+                  <div class="form-group col-md-12 text-white">
+                    <input type="checkbox" id="terms" required checked>
+                    
+                      By providing your contact details, you agree to our 
+                      <a href="{% url 'guidelines' %}#terms-and-conditions" target="_blank" rel="noopener">Terms of Use</a> & 
+                      <a href="{% url 'guidelines' %}#privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>
+                    
+                  </div>
+                </div>
+              </form>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container text-dark">
+    <div class="row mt-2">
+        <div class="col-md-12 text-center mb-4">
+            <h1 class="display-4 edu-heading">Empower the Next Generation with EduConnect</h1>
+            <p class="lead">Shape the Future of Learning</p>
+            <p>Share your knowledge and expertise with a global audience of eager learners who are ready to excel in their careers.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Earn Recognition and Rewards</h3>
+            <p>Establish yourself as a thought leader in your field while earning income and accolades for your contributions to education.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Reach a Global Audience</h3>
+            <p>With EduConnect, your course can reach thousands of students worldwide, helping you expand your influence and impact.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Simplified Course Creation</h3>
+            <p>Our intuitive platform makes it easy to design, upload, and manage your course content. Focus on teaching—we’ll handle the rest!</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Flexible Teaching Options</h3>
+            <p>Teach at your own pace, on your own schedule. Whether it's live sessions, recorded lectures, or hybrid models, you’re in control.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Collaborate with Industry Experts</h3>
+            <p>Join a community of educators and professionals to exchange ideas, collaborate on projects, and grow your network.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Make a Difference</h3>
+            <p>Inspire learners to achieve their dreams, bridge skill gaps, and create a lasting impact on their personal and professional growth.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center mt-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Start Building Your Course Today!</h3>
+            <p>Empower learners, advance your career, and be part of the revolution in education with EduConnect. Let’s create the future of learning together!</p>
+            
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container text-center py-5 bg-dark" style="border-radius: 20px;">
+
+
+    <h3 class="mt-2 text-white">"Skills That Enable Effortless Communication with Our Team"</h3>
+    <div class="skills-container">
+        <div class="skill-box">Data science</div>
+        <div class="skill-box">Cloud technologies</div>
+        <div class="skill-box">AI and ML</div>
+        <div class="skill-box">Programming</div>
+        <div class="skill-box">Sales analytics</div>
+        <div class="skill-box">It professionals</div>
+        <div class="skill-box">Web development</div>
+        <div class="skill-box">Databases</div>
+        <div class="skill-box">Testing</div>
+        <div class="skill-box">Cyber security</div>
+        <div class="skill-box">It engineer</div>
+        <div class="skill-box">Hacker</div>
+    </div>
+</div>
+
+
+<div class="container text-dark">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            <h1 class="display-4 edu-heading mt-2">Join the EduConnect Revolution as a Professor</h1>
+            <p class="lead">Why Teach on EduConnect?</p>
+            <p>EduConnect is the leading e-learning platform available anytime, anywhere. We empower professors to inspire learners worldwide while enhancing their professional reputation.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Create Courses for Free</h3>
+            <p>Start with 10 free courses, complete with features like live webinars, assignments, tests and quizzes, and progress tracking and reports.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Stand Out as a Top Professor</h3>
+            <p>Earn recognition on our Top Professors Dashboard, showcasing the best educators on EduConnect. This feature highlights your expertise and attracts more learners to your courses.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Teach Anytime, Anywhere</h3>
+            <p>With EduConnect, you can reach students globally at your convenience. Our platform is designed for flexibility and ease of use, making teaching effortless.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Engage with Innovative Tools</h3>
+            <p>Use cutting-edge features like progress analytics, interactive tests, and live sessions to enhance the learning journey for your students.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Join a Global Community</h3>
+            <p>Be part of a dynamic network of educators, collaborate with peers, and grow your professional connections.</p>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Enhance Your Impact</h3>
+            <p>Help students achieve their goals by providing high-quality learning experiences. Your courses can shape careers, bridge skill gaps, and build futures.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center mt-4">
+            <h3 class="edu-subheading"><i class="bi bi-chat-right-quote"></i> Why Choose EduConnect?</h3>
+            <ul class="list-unstyled">
+                <li>Recognized as the top e-learning application for its innovation and accessibility.</li>
+                <li>Trusted by thousands of students and educators worldwide.</li>
+                <li>Backed by robust tools to help you succeed as an educator.</li>
+            </ul>
+        
+        </div>
+    </div>
+</div>
+
+
+<div class="container text-dark">
+    <h2 class="text-center mt-5 mb-4 edu-heading">Programs in Collaboration with world's top Universities & MNC's</h2>
+
+    <div class="row logo-container">
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/MIT.png" alt="IIT Roorkee" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/ihubIITRoorkee.png" alt="Nasscom Foundation" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/nasscom.png" alt="Microsoft" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/Vnit.png" alt="IU" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/MNIT.png" alt="SSBM" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/IITGuwahati.png" alt="Vnit Nagpur" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/Microsoft.png" alt="MNIT Jaipur" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/IU.png" alt="IIM Ranchi" class="img-fluid">
+        </div>
+        <div class="col-md-4 col-sm-6 mb-4">
+            <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/hire-jobs/UniofLiverpool.png" alt="Microsoft Ignite" class="img-fluid">
+        </div>
+    </div>
+</div>
+
+
+{% if feed %}
+<div class="container text-dark">
+    <h2 class="text-center mb-4 edu-heading">Hear from Our Hiring Partners</h2>
+
+    <div class="testimonial-container text-white">
+        {% for f in feed %}
+        <div class="testimonial-card">
+            <img src="{{f.photo.url}}" alt="Anbareen">
+            <h4 class="edu-subheading">{{f.name}}</h4>
+            <p>{{f.title}}</p>
+            <p>{{f.description}}</p>
+            
+        </div>
+        {% endfor %}
+
+        
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button type="button" class="btn btn-primary">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endif %}
+
+<script src="{% static 'js/hirejob.js' %}"></script>
+{% endblock %}

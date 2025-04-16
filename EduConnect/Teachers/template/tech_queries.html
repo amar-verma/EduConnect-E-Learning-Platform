@@ -1,0 +1,38 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_queries1.css' %}">
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary">📩 Student Support Queries</h2>
+
+    {% for query in student_queries %}
+    <div class="ticket shadow rounded p-3 mt-3">
+        <div class="ticket-header d-flex justify-content-between align-items-center">
+            <span><strong>{{ query.student.first_name }} {{ query.student.last_name }}</strong> - <i>{{ query.course.title }}</i></span>
+            <span class="ticket-status {% if query.status == 'pending' %}pending{% else %}resolved{% endif %}">
+                {{ query.status|title }}
+            </span>
+        </div>
+        <div class="ticket-body mt-2">
+            <p><strong>Issue:</strong> {{ query.query_text }}</p>
+            
+            {% if query.response_text %}
+                <div class="alert alert-success mt-2">
+                    <strong>Response:</strong> {{ query.response_text }}
+                </div>
+            {% else %}
+                <div class="comment-box mt-3">
+                    <form method="post" action="{% url 'answer_query' query.id %}">
+                        {% csrf_token %}
+                        <textarea name="response_text" placeholder="Enter your response..." class="form-control" required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Send</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-muted mt-4">No student queries yet.</p>
+    {% endfor %}
+</div>
+
+{% endblock 'tech_main' %}

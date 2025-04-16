@@ -1,0 +1,638 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_setting.css' %}">
+
+<div class="container settings-container">
+    <div class="row">
+        <!-- Left Sidebar -->
+        <div class="col-md-3 pt-2">
+        <div class="settings-menu w-100">
+            <h5>Settings</h5><hr>
+            <ul>
+            <li><a href="#" class="settings-link active" data-target="profile-settings">Profile Settings</a></li>
+            <li><a href="#" class="settings-link" data-target="notification-settings">Notification Settings</a></li>
+            <li><a href="#" class="settings-link" data-target="subscription-settings">Subscription & Billing</a></li>
+            <li><a href="#" class="settings-link" data-target="account-security">Account Security</a></li>
+            <li><a href="#" class="settings-link" data-target="help-support">Help & Support</a></li>
+            <li><a href="#" class="settings-link" data-target="legal-compliance">Legal & Compliance</a></li>
+            </ul>
+        </div>
+        </div>
+
+        <!-- Right Content Panel -->
+        <div class="col-md-8 pt-3">
+            <div id="settings-content">
+                {% if messages %}
+
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    {% endfor %}    
+                </div>
+                {% endif %}
+                <!-- Divs for each content section -->
+                <div class="settings-div show-div" id="profile-settings">
+
+                    <div class="container">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                    
+                            <div class="section">
+                                <label for="profile_picture">Profile Picture</label>
+                                <input type="file" name="profile_picture" accept="image/*">
+                                {% if teacher.profile_picture %}
+                                <img src="{{ teacher.profile_picture.url }}" alt="Profile Picture" width="100">
+                                {% endif %}
+                            </div>
+                    
+                            <div class="section">
+                                <label for="first_name">First Name</label>
+                                <input type="text" name="first_name" value="{{ teacher.first_name }}" required disabled>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" name="last_name" value="{{ teacher.last_name }}" required disabled>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="email">Email</label>
+                                <input type="email" value="{{ teacher.user.email }}" disabled>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="phone_number">Phone Number</label>
+                                <input type="text" name="phone_number" value="{{ teacher.phone_number }}" required>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="bio">Bio</label>
+                                <textarea name="bio" required>{{ teacher.bio }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="qualifications">Qualifications</label>
+                                <textarea name="qualifications" required>{{ profile.qualifications }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="experience">Years of Experience</label>
+                                <input type="number" name="experience" value="{{ profile.experience_years }}" required>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="specializations">Specializations</label>
+                                <textarea name="specializations" required>{{ profile.specializations }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="interest">Interests</label>
+                                <textarea name="interest">{{ profile.interest }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="languages_spoken">Languages Spoken</label>
+                                <textarea name="languages_spoken">{{ profile.languages_spoken }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label>Availability</label>
+                                <div>
+                                    {% for day, day_label in profile.AVAILABLE_DAYS %}
+                                    <input type="checkbox" name="availability" value="{{ day }}" {% if day in profile.availability %}checked{% endif %}> 
+                                    <label for="{{ day }}">{{ day_label }}</label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="section">
+                                <label for="qualifications">Address</label>
+                                <textarea name="address" disabled>{{ teacher.address }} {{ teacher.city }} {{ teacher.state }} {{ teacher.country }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label for="linkedin">LinkedIn Profile</label>
+                                <input type="url" name="linkedin" value="{{ profile.social_links_linkedin }}">
+                            </div>
+                    
+                            <div class="section">
+                                <label for="github">GitHub Profile</label>
+                                <input type="url" name="github" value="{{ profile.social_links_github }}">
+                            </div>
+                            <div class="section">
+                                <label for="github">Other Link</label>
+                                <input type="url" name="social_link" value="{{ teacher.social_links }}">
+                            </div>
+                    
+                            <div class="section">
+                                <label for="philosophy">Teaching Philosophy</label>
+                                <textarea name="philosophy">{{ profile.philosophy }}</textarea>
+                            </div>
+                    
+                            <div class="section">
+                                <label>Awards</label>
+                                <div id="awards_list">
+                                    {% for award in awards %}
+                                    <div class="award-item">
+                                        <input type="hidden" name="award_id" value="{{ award.id }}">  <!-- Track Existing Award -->
+                                        <input type="text" name="award_title" value="{{ award.title }}" required>
+                                        <a href="{{ award.file.url }}" target="_blank">View File</a>
+                            
+                                        <!-- File Upload (Ensure Only a New File is Uploaded) -->
+                                        <input type="file" name="award_file_{{ award.id }}" accept="application/pdf,image/*">
+                            
+                                        <!-- Remove Button -->
+                                        <button type="button" class="remove-award-btn rounded btn btn-secondary mb-2" onclick="removeAward(this, '{{ award.id }}')">Remove</button>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            
+                                <button type="button" onclick="addAwardField()" class="btn btn-light">+ Add Another Award</button>
+                            </div>
+                            <input type="hidden" id="deleted_awards" name="deleted_awards">
+                    
+                            <button type="submit" class="button">Update Profile</button>
+                        </form>
+                    </div>
+                    <script>
+                        function addAwardField() {
+                            let awardDiv = document.createElement("div");
+                            awardDiv.classList.add("award-item");
+                    
+                            let titleInput = document.createElement("input");
+                            titleInput.setAttribute("type", "text");
+                            titleInput.setAttribute("name", "award_title");
+                            titleInput.setAttribute("placeholder", "Award Title");
+                            titleInput.required = true;
+                    
+                            let fileInput = document.createElement("input");
+                            fileInput.setAttribute("type", "file");
+                            fileInput.setAttribute("name", "award_file");
+                            fileInput.setAttribute("accept", "application/pdf,image/*");
+                    
+                            let removeBtn = document.createElement("button");
+                            removeBtn.innerText = "Remove";
+                            removeBtn.setAttribute("type", "button");
+                            removeBtn.setAttribute("class", "rounded btn btn-secondary mb-2");
+                            removeBtn.onclick = function () {
+                                awardDiv.remove();
+                            };
+                    
+                            awardDiv.appendChild(titleInput);
+                            awardDiv.appendChild(fileInput);
+                            awardDiv.appendChild(removeBtn);
+                    
+                            document.getElementById("awards_list").appendChild(awardDiv);
+                        }
+                    
+                        function removeAward(btn, awardId) {
+                            let deletedAwards = document.getElementById("deleted_awards");
+                            deletedAwards.value += awardId + ","; // Track deleted awards
+                            btn.parentElement.remove(); // Remove from UI
+                        }
+                    </script>
+                    
+                </div>
+                <div class="settings-div" id="notification-settings">
+                    <div class="container">
+                        <h2>Notification Settings</h2>
+                    
+                        <form id="notification-form" method="POST">
+                            {% csrf_token %}
+                    
+                            <!-- Email Notifications -->
+                            <div class="checkbox-section">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="email-notifications" name="email_notifications"
+                                           {% if settings.email_notifications %}checked{% endif %}>
+                                    <label for="email-notifications">Enable email notifications</label>
+                                </div>
+                                <div class="hint">Receive updates and announcements via email.</div>
+                            </div>
+                    
+                            <!-- Deletion Notifications -->
+                            
+                    
+                            <!-- Mobile Notifications -->
+                            
+                    
+                            <!-- Authentication Notifications -->
+                            <div class="checkbox-section">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="auth-notifications" name="auth_notifications"
+                                           {% if settings.auth_notifications %}checked{% endif %}>
+                                    <label for="auth-notifications">Enable authentication notifications</label>
+                                </div>
+                                <div class="hint">Login using email authentication through our app.</div>
+                            </div>
+                    
+                            <!-- Course Notifications -->
+                           
+                    
+                            <!-- Save Button -->
+                            <button type="submit" class="button">Save Notification Preferences</button>
+                        </form>
+                    
+                        <div class="footer mb-1">
+                            You can update your notification preferences at any time. Learn more about our 
+                            <a href="{% url 'guidelines' %}#privacy-policy">privacy policy</a>.
+                        </div>
+                    </div>
+                    <script>
+                        document.getElementById("notification-form").addEventListener("submit", function(event) {
+                            event.preventDefault();
+                    
+                            let formData = new FormData(this);
+                    
+                            fetch("{% url 'update_teacher_notifications' %}", {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                            
+                            })
+                            .catch(error => console.error("Error:", error));
+                        });
+                    </script>
+                    
+                    
+                </div>
+                
+                <div class="settings-div" id="subscription-settings">
+                    <div class="container">
+                        <h2>Subscription & Billing</h2>
+                        <p>amount raised by EduConnect to you.</p>
+                    
+                        <!-- Payment List -->
+                        <div class="section">
+                            <h3>Pending Payments</h3>
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Raised Date</th>
+                                        <th>Update Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for payment in payments %}
+                                    <tr id="payment-{{ payment.id }}">
+                                        <td>{{ payment.title }}</td>
+                                        <td>₹{{ payment.amount }}</td>
+                                        <td class="status">{{ payment.status|capfirst }}</td>
+                                        <td>{{ payment.created_date | date:"Y-m-d" }}</td>
+                                        <td class="update-date">{% if payment.update_date %}{{ payment.update_date | date:"Y-m-d" }}{% else %}-{% endif %}</td>
+                                        <td>
+                                            {% if payment.status == "pending" %}
+                                            <button class="btn btn-success pay-btn text-dark" data-id="{{ payment.id }}">Pay</button>
+                                            {% else %}
+                                            <span class="badge badge-success text-dark">Paid</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">No pending payments</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                        <!-- Total Amount Due -->
+                        <div class="section">
+                            <h3>Total Amount Due: ₹<span id="total-amount">{{ total_amount_due }}</span></h3>
+                        </div>
+                    </div>
+                    
+                    <script>
+                        document.querySelectorAll(".pay-btn").forEach(button => {
+                            button.addEventListener("click", function() {
+                                let paymentId = this.dataset.id;
+                                let row = document.getElementById(`payment-${paymentId}`);
+                                let description = row.querySelector(".description").value;
+                    
+                                fetch(`/teacher/payments/${paymentId}/pay/`, {
+                                    method: "POST",
+                                    headers: { "X-CSRFToken": "{{ csrf_token }}" },
+                                    body: JSON.stringify({ "description": description })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        row.querySelector(".status").textContent = "Paid";
+                                        row.querySelector(".update-date").textContent = data.update_date;
+                                        row.querySelector(".pay-btn").remove();
+                                        
+                                        let totalAmountElement = document.getElementById("total-amount");
+                                        let newTotal = parseFloat(totalAmountElement.textContent) - parseFloat(row.cells[1].textContent.substring(1));
+                                        totalAmountElement.textContent = newTotal.toFixed(2);
+                                    } else {
+                                        alert("Payment failed: " + data.error);
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    
+                </div>
+                
+                
+                <div class="settings-div" id="account-security">
+                    <div class="container">
+                        <h2>Account Security Settings</h2>
+                
+                        <!-- Hide Critical Data -->
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="hide-critical-data" checked disabled>
+                                <label for="hide-critical-data">Hide Critical Data</label>
+                            </div>
+                            <div class="hint">Enable this to hide sensitive data like phone number, and address from others.</div>
+                        </div>
+                        
+                        <form method="post" enctype="multipart/form-data" action="{% url 'update_teacher_profile' %}">
+                            {% csrf_token %}
+
+                        <!-- Change Username -->
+                        <div class="section">
+                            <label for="username">Change Username</label>
+                            <input type="text" id="username" placeholder="Enter new username" name="username"  value="{{required.user.teacher.user.username}}" disabled>
+                            <div class="hint">Update your username. Once saved, your previous username will no longer be available to others.</div>
+                        </div>
+                
+                        
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <input type="hidden" name="public_visibility" value="false">
+                                <input type="checkbox" id="public-visibility" name="public_visibility" value="true" {% if profile.public_visibility %} checked {% endif %}>
+                                <label for="public-visibility">Make My Profile Public</label>
+                                <div class="hint">Toggle this setting to make your profile visible or hidden from public searches.</div>
+                            </div>
+                        </div>
+                
+
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <!-- <input type="hidden" name="two_factor_auth" value="false"> -->
+                                <label for="enable-2fa">Enable Two-Factor Authentication (2FA)</label>
+                                <div class="hint">Enhance your account's security by requiring a second verification step when logging in.</div>
+                            </div>
+                        </div>
+                
+                        <!-- Password Management -->
+                        <div class="section">
+                            <label for="change-password">Change Password</label>
+                            <input type="password" id="old-change-password" placeholder="Password" value="************">
+                            <div class="hint">password can't be change but can be reset from forget password.</div>
+                        </div>
+                
+                        <!-- Account Deactivation -->
+                
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <input type="hidden" name="deactivate_account" value="false" disabled>
+                                <input type="checkbox" id="deactivate-account" name="deactivate_account" value="true" {% if teacher.status == 'Inactive' %} checked {% endif %} disabled>
+                                <label for="deactivate-account">Deactivate My Account</label>
+                                <div class="hint">Temporarily deactivate your account. no one can enroll in your course ater this.</div>
+                            </div>
+                        </div>
+                        <!-- Save Button -->
+                        <div>
+                            <button class="button" type="submit">Save Security Settings</button>
+                        </div>
+                        </form>
+                        <!-- Footer -->
+                        <div class="footer">
+                            Need help? Visit our <a href="{% url 'guidelines' %}#support-center">support center</a> for more information on account security.
+                        </div>
+
+
+                    </div>
+                </div>
+                
+                <div class="settings-div" id="help-support">
+                    <div class="feedback-container mt-0">
+                        <div class="header">
+                          <h2>Professor Feedback Form</h2>
+                          <p class="text-muted">We value your feedback to improve our platform and services.</p>
+                        </div>
+                      
+                        <form method="post" enctype="multipart/form-data" action="{% url 'tech_submit_feedback' %}">
+                            {% csrf_token %}
+                            
+                            <!-- Feedback Title/Category -->
+                            <div class="mb-4">
+                              <label for="feedbackTitle" class="form-label">Feedback Category</label>
+                              <select class="form-select" id="feedbackTitle" name="feedbackTitle" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Course Content Quality">Course Content Quality</option>
+                                <option value="Instructor Performance">Instructor Performance</option>
+                                <option value="Platform Usability">Platform Usability</option>
+                                <option value="Live Session Experience">Live Session Experience</option>
+                                <option value="Assignment/Task Relevance">Assignment/Task Relevance</option>
+                                <option value="Certification Process">Certification Process</option>
+                                <option value="Support/Customer Service">Support/Customer Service</option>
+                                <option value="Payment Issues">Payment Issues</option>
+                                <option value="Other">Other (Specify Below)</option>
+                              </select>
+                            </div>
+                          
+                            <!-- Custom Title for "Other" -->
+                            <div class="mb-4" id="customTitleContainer" style="display: none;">
+                              <label for="customTitle" class="form-label">Custom Feedback Title</label>
+                              <input type="text" class="form-control" id="customTitle" name="customTitle" placeholder="Enter custom title">
+                            </div>
+                          
+                            <!-- Feedback Input -->
+                            <div class="mb-4">
+                              <label for="feedbackInput" class="form-label">Your Feedback</label>
+                              <textarea class="form-control" id="feedbackInput" name="feedbackInput" rows="4" placeholder="Write your detailed feedback here..." required></textarea>
+                            </div>
+                          
+                            <!-- Rating Section -->
+                            <div class="mb-4">
+                              <label class="form-label">Rating</label>
+                              <div class="rating-section">
+                                <span class="rating-star" data-value="1" >★</span>
+                                <span class="rating-star" data-value="2" >★</span>
+                                <span class="rating-star" data-value="3" >★</span>
+                                <span class="rating-star" data-value="4" >★</span>
+                                <span class="rating-star" data-value="5" >★</span>
+                              </div>
+                              <input type="hidden" id="ratingInput" name="rating" required>
+                            </div>
+                          
+                            <!-- Suggestions Box -->
+                            <div class="mb-4">
+                              <label for="suggestions" class="form-label">Suggestions (Optional)</label>
+                              <textarea class="form-control" id="suggestions" name="suggestions" rows="3" placeholder="Have any improvement ideas? Let us know!"></textarea>
+                            </div>
+                          
+                            <!-- Upload Section -->
+                            <div class="mb-4">
+                              <label for="upload" class="form-label">Upload Attachment (Optional)</label>
+                              <input type="file" class="form-control" id="upload" name="upload" accept="image/*,application/pdf">
+                            </div>
+                          
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                              <button type="submit" class="btn submit-btn" onclick="return confirm('Are you sure you want to submit your feedback?')">Submit Feedback</button>
+                            </div>
+                          </form>
+                      </div>
+                      
+                      <!-- Bootstrap JS -->
+                      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+                      <script>
+                        // Show custom title input if "Other" is selected
+                        document.getElementById('feedbackTitle').addEventListener('change', function () {
+                          const customTitleContainer = document.getElementById('customTitleContainer');
+                          if (this.value === 'other') {
+                            customTitleContainer.style.display = 'block';
+                          } else {
+                            customTitleContainer.style.display = 'none';
+                          }
+                        });
+                      
+                        // Rating system
+                        const ratingStars = document.querySelectorAll('.rating-star');
+const ratingInput = document.getElementById('ratingInput');
+
+ratingStars.forEach((star, index) => {
+    star.addEventListener('click', () => {
+        const selectedRating = star.getAttribute('data-value');
+        ratingInput.value = selectedRating; // Set value to hidden input field
+
+        ratingStars.forEach((s, i) => {
+            if (i <= index) {
+                s.classList.add('active');
+            } else {
+                s.classList.remove('active');
+            }
+        });
+    });
+});
+                      </script>
+                </div>
+                <div class="settings-div" id="legal-compliance">
+                    <div class="container">
+                        <h2>Legal & Compliance</h2>
+                
+                        <!-- Terms and Conditions Section -->
+                        <div class="section">
+                            <label>Terms and Conditions</label>
+                            <p>Review our <a href="{% url 'guidelines' %}#terms-and-conditions">Terms and Conditions</a> to understand the rules and policies governing your use of our platform.</p>
+                            
+                        </div>
+                
+                        <!-- Privacy Policy Section -->
+                        <div class="section">
+                            <label>Privacy Policy</label>
+                            <p>Learn how we handle your data by reading our <a href="{% url 'guidelines' %}#privacy-policy">Privacy Policy</a>.</p>
+                            
+                        </div>
+                
+                        <!-- Data Sharing Preferences -->
+                        <div class="checkbox-section">
+                            <input type="checkbox" id="data-sharing" checked disabled>
+                            <label for="data-sharing">Allow Data Sharing</label>
+                            <div class="hint">By enabling this option, you consent to share your data with our trusted third-party partners for better personalization and services.</div>
+                        </div>
+                
+                        <!-- Compliance Options -->
+                        <div class="section">
+                            <label>Compliance Options</label>
+                            <p>Enable compliance settings to meet legal requirements in specific regions.</p>
+                            <input type="checkbox" id="gdpr-compliance" checked disabled>
+                            <label for="gdpr-compliance">Enable GDPR Compliance</label>
+                            <div class="hint">Ensure compliance with the General Data Protection Regulation (GDPR).</div>
+                
+                            <input type="checkbox" id="ccpa-compliance" checked disabled>
+                            <label for="ccpa-compliance">Enable CCPA Compliance</label>
+                            <div class="hint">Meet the California Consumer Privacy Act (CCPA) requirements.</div>
+                        </div>
+                
+                        <!-- Request Data or Account Deletion -->
+                        <div class="section">
+                            <label class="">Data & Account Management</label><br>
+                            <button id="download-btn" data-teacher-id="{{ teacher.teacher_id }}" class="button">
+                                Request Data Download
+                            </button>
+                            <div class="hint">Request a copy of your data stored on our platform.</div>
+                            <button class="button" style="margin-top: 10px; background-color: #dc3545;" disabled>Request Account Deletion</button>
+                            <div class="hint">Permanently delete your account and associated data, but can't be operation by you.. contact: educonnect@gmail.com </div>
+                        </div>
+                        <script>
+                            document.getElementById("download-btn").addEventListener("click", function() {
+                                let teacherId = this.getAttribute("data-teacher-id");
+                                window.location.href = `/teacher/download-teacher/${teacherId}/`;
+                            });
+                        </script>
+                        <!-- Compliance Certificates -->
+                        
+                
+                        <!-- Footer -->
+                        <div class="footer">
+                            For legal inquiries, contact our <a href="{% url 'guidelines' %}#educonnect-support-team">Educonnect Support Team</a> or email us at <a href="mailto:educonnect@example.com">educonnect@example.com</a>.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add more settings-div sections as needed -->
+            </div>
+            
+            <script>
+                // Select all links and divs
+                const links = document.querySelectorAll('.settings-link');
+                const divs = document.querySelectorAll('#settings-content .settings-div');
+            
+                // Hide all divs except the one with 'show-div' class on page load
+                divs.forEach(div => {
+                    if (div.classList.contains('show-div')) {
+                        div.style.display = 'block'; // Show the div with 'show-div'
+                    } else {
+                        div.style.display = 'none'; // Hide other divs
+                    }
+                });
+            
+                // Add click event listener to each link
+                links.forEach(link => {
+                    link.addEventListener('click', event => {
+                        event.preventDefault(); // Prevent default anchor behavior
+            
+                        // Get the target ID from the data attribute
+                        const targetId = link.getAttribute('data-target');
+            
+                        // Remove active class from all links
+                        links.forEach(link => link.classList.remove('active'));
+            
+                        // Add active class to the clicked link
+                        link.classList.add('active');
+            
+                        // Hide all divs and show the targeted one
+                        divs.forEach(div => {
+                            if (div.id === targetId) {
+                                div.style.display = 'block';
+                            } else {
+                                div.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+            </script>
+            
+            
+            
+            
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock 'tech_main' %}

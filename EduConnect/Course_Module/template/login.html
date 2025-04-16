@@ -1,0 +1,119 @@
+{% load static %}
+{% include 'educLoder.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=developer_guide"
+      />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/circle-btn.css' %}">
+</head>
+<body>
+
+  <div class="circle-btn-container">
+    <a href="{% url 'home' %}" class="text-decoration-none text-white "><button class="circle-btn ms-3 mt-3  shadow">
+      <i class="bi bi-house-door-fill"></i>
+    </button></a>
+  </div>
+
+    <div class="background"></div>
+
+    <div class="containers form-containers container-1">
+        <div class="row m-0">
+          
+          <!-- Login Form Section -->
+          <div class="col-md-4 rounded form-section mx-auto bg-white mt-5 p-4 shadow">
+            {% if messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {% for message in messages %}
+              {{ message }}
+              {% endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
+            <h3 class="text-center">Login</h3>
+            <hr class="mt-1">
+            <form action="{% url 'verify_student_login' %}" method="POST" class="needs-validation" novalidate>
+              <!-- Username -->
+              {% csrf_token %}
+              <div class="form-group mb-3">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  name="username"
+                  placeholder="Enter your username"
+                  required
+                />
+                <div class="invalid-feedback">Please provide your username.</div>
+              </div>
+      
+              <!-- Password -->
+              <div class="form-group mb-3">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <div class="invalid-feedback">Please provide your password.</div>
+              </div>
+      
+              <!-- Verification Section -->
+              <div class="form-group verification mb-3">
+                <label>Verification</label>
+                <div class="verification-container d-flex align-items-center">
+                  <img src="{% static 'img/std_auth/' %}{{ auth_image }}" alt="Verification Icon"  class="me-2 profile picture rounded" />
+                  <input type="checkbox" name="verify" id="verify" value="on"  />
+                  <label for="verify" class="ms-2 mb-0">Is this you?</label>
+                </div>
+                <!-- <div class="invalid-feedback">Please confirm your verification.</div> -->
+              </div>
+      
+              <!-- Forgot Password -->
+              <div class="form-group mb-3 text-end">
+                <a href="{% url 'std_forget_password' %}" class="text-primary">Forgot Password?</a>
+              </div>
+      
+              <!-- Submit Button -->
+              <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary">
+                  Login &rarr;
+                </button>
+              </div>
+              <div class="form-group mb-1 text-center">
+                <a href="{% url 'std_register' %}" class="text-primary">Create an account</a>
+              </div>
+            </form>
+          </div>
+
+          
+
+        </div>
+      </div>
+
+      
+
+
+      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

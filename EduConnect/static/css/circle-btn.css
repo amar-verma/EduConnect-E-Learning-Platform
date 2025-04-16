@@ -1,0 +1,48 @@
+.circle-btn-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 3px;
+    margin-top: 3px;
+
+}
+
+/* Circular Button Style */
+.circle-btn {
+    width: 40px;
+    /* Adjust size as needed */
+    height: 40px;
+    border-radius: 50%;
+    background-color: #bfd2e7;
+    /* Bootstrap primary color */
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.8;
+    /* Reduce opacity */
+    transition: opacity 0.3s, background-color 0.3s;
+
+}
+
+/* Icon styling */
+.circle-btn i {
+    font-size: 1.2rem;
+    /* Adjust icon size as needed */
+    color: white;
+    /* Icon color */
+}
+
+/* Hover effect */
+.circle-btn:hover {
+    opacity: 1;
+    background-color: #818a94;
+    /* Darker shade on hover */
+}
+
+@media (max-width: 768px) {
+    .circle-btn-container {
+        display: none;
+    }
+}

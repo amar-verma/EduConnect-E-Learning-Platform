@@ -1,0 +1,310 @@
+{% extends 'tech_index.html' %}
+{% load static %}
+
+{% block 'tech_main' %}
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<div class="container mt-4">
+    <form method="POST" enctype="multipart/form-data" id="courseForm" action="">
+        {% csrf_token %}
+        
+        <!-- Course Details -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Update Course Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" value="{{ course.title }}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select name="category" class="form-control" required>
+                                <option value="{{ course.category }}" selected>{{ course.category }}</option>
+                                <option value="Programming Language">Programming Language</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Game Development">Game Development</option>
+                                <option value="Mobile Development">Mobile Development</option>
+                                <option value="Database Design">Database Design</option>
+                                <option value="Software Testing">Software Testing</option>
+                                <option value="Software Engineering">Software Engineering</option>
+                                <option value="Software Development Tools">Software Development Tools</option>
+                                <option value="No-Code Development">No-Code Development</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="3" required>{{ course.description }}</textarea>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Description (Additional)</label>
+                    <textarea name="description2" class="form-control" rows="3" required>{{ course.description2 }}</textarea>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Duration (hours)</label>
+                            <input type="number" name="duration" value="{{ course.duration }}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Old Price</label>
+                            <input type="number" name="old_price" value="{{ course.old_price }}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>New Price</label>
+                            <input type="number" name="price" value="{{ course.price }}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Max Enrollments</label>
+                            <input type="number" name="max_enrollments" value="{{ course.max_enrollments }}" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Course Image</label>
+                    {% if course.course_img %}
+                    <img src="{{ course.course_img.url }}" alt="Current image" class="img-thumbnail mb-2" style="max-width: 200px;">
+                    {% endif %}
+                    <input type="file" name="course_img" class="form-control">
+                </div>
+
+                <!-- Learning Objectives -->
+                <div class="mt-4">
+                    <h4>Learning Objectives</h4>
+                    <div id="learningContainer">
+                        {% for obj in learning_objectives %}
+                        <div class="input-group mb-2">
+                            <input type="text" name="learning[]" value="{{ obj.learn }}" class="form-control">
+                            <button type="button" class="btn btn-danger remove-field">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-success" id="addLearning">Add Learning Objective</button>
+                </div>
+
+                <!-- Skills -->
+                <div class="mt-4">
+                    <h4>Skills</h4>
+                    <div id="skillsContainer">
+                        {% for skill in course.content_skills.all %}
+                        <div class="input-group mb-2">
+                            <input type="text" name="skills[]" value="{{ skill.skills }}" class="form-control">
+                            <button type="button" class="btn btn-danger remove-field">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-success" id="addSkill">Add Skill</button>
+                </div>
+
+                <!-- Features -->
+                <div class="mt-4">
+                    <h4>Features</h4>
+                    <div id="featuresContainer">
+                        {% for feature in course.content_features.all %}
+                        <div class="input-group mb-2">
+                            <input type="text" name="features[]" value="{{ feature.features }}" class="form-control">
+                            <button type="button" class="btn btn-danger remove-field">Remove</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-success" id="addFeature">Add Feature</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between">
+                <h3>Course Content</h3>
+                <button type="button" class="btn btn-primary" id="addContentSection">Add New Section</button>
+            </div>
+            <div class="card-body" id="contentSections">
+                {% for content in course.content_items.all %}
+                <div class="content-section mb-4" data-content-id="{{ content.id }}">
+                    <input type="hidden" name="content_id[]" value="{{ content.id }}">
+                    <div class="d-flex justify-content-between">
+                        <h4>Section {{ forloop.counter }}</h4>
+                        <button type="button" class="btn btn-danger remove-content-section">Remove Section</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="content_title[]" value="{{ content.title }}" class="form-control" required>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Description</label>
+                        <textarea id="editor{{ forloop.counter }}" name="content_desc[]">{{ content.desc }}</textarea>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Order</label>
+                        <input type="number" name="content_order[]" value="{{ content.order }}" class="form-control" required>
+                    </div>
+                    <!-- assignment -->
+                    <div class="assignments-container mt-3">
+                        <h5>Assignments</h5>
+                        <div class="assignment-items">
+                            {% for assignment in content.content_assignment.all %}
+                            <div class="input-group mb-2">
+                                <input type="text" name="assignment_title_{{ forloop.parentloop.counter0 }}[]" value="{{ assignment.title }}" class="form-control">
+                                <button type="button" class="btn btn-danger remove-assignment">Remove</button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-info add-assignment">Add Assignment</button>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg">Update Course</button>
+    </form>
+</div>
+<script>
+    let editors = [];
+    let contentCounter = "{{ course.content_items.count }}";
+    
+    // Initialize CKEditor instances for existing content
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize existing editors
+        document.querySelectorAll('[id^="editor"]').forEach(element => {
+            initializeCKEditor(element);
+        });
+    
+        // Form submission
+        document.getElementById('courseForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            editors.forEach(editor => {
+                editor.sourceElement.value = editor.getData();
+            });
+            this.submit();
+        });
+    
+        // Add Content Section
+        document.getElementById('addContentSection').addEventListener('click', function() {
+            contentCounter++;
+            const newSection = `
+                <div class="content-section mb-4">
+                    <input type="hidden" name="content_id[]" value="">
+                    <div class="d-flex justify-content-between">
+                        <h4>New Section ${contentCounter}</h4>
+                        <button type="button" class="btn btn-danger remove-content-section">Remove Section</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="content_title[]" class="form-control" required>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Description</label>
+                        <textarea id="editor${contentCounter}" name="content_desc[]"></textarea>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Order</label>
+                        <input type="number" name="content_order[]" class="form-control" required>
+                    </div>
+                    <div class="assignments-container mt-3">
+                        <h5>Assignments</h5>
+                        <div class="assignment-items">
+                            <div class="input-group mb-2">
+                                <input type="text" name="assignment_title_${contentCounter}[]" class="form-control" placeholder="Assignment title">
+                                <button type="button" class="btn btn-danger remove-assignment">Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-info add-assignment">Add Assignment</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('contentSections').insertAdjacentHTML('beforeend', newSection);
+            initializeCKEditor(document.querySelector(`#editor${contentCounter}`));
+        });
+    
+        ['Learning', 'Skill', 'Feature'].forEach(type => {
+            document.getElementById(`add${type}`).addEventListener('click', function() {
+                const container = document.getElementById(`${type.toLowerCase()}sContainer`);
+                const fieldName = type === 'Learning' ? 'learning[]' : `${type.toLowerCase()}s[]`;
+                const newField = `
+                    <div class="input-group mb-2">
+                        <input type="text" name="${fieldName}" class="form-control" placeholder="New ${type.toLowerCase()}">
+                        <button type="button" class="btn btn-danger remove-field">Remove</button>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', newField);
+            });
+        });
+
+        document.getElementById('addLearning').addEventListener('click', function() {
+    const container = document.getElementById('learningContainer');
+    const newField = `
+        <div class="input-group mb-2">
+            <input type="text" name="learning[]" class="form-control" placeholder="New learning objective">
+            <button type="button" class="btn btn-danger remove-field">Remove</button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', newField);
+});
+
+    });
+    
+    // Event delegation for dynamic elements
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-field')) {
+            e.target.closest('.input-group').remove();
+        }
+        if (e.target.classList.contains('add-assignment')) {
+            const container = e.target.previousElementSibling;
+            const section = e.target.closest('.content-section');
+            const sectionIndex = Array.from(section.parentElement.children).indexOf(section);
+            
+            const newAssignment = `
+                <div class="input-group mb-2">
+                    <input type="text" name="assignment_title_${sectionIndex}[]" class="form-control" placeholder="New assignment">
+                    <button type="button" class="btn btn-danger remove-assignment">Remove</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', newAssignment);
+        }
+        if (e.target.classList.contains('remove-assignment')) {
+            e.target.closest('.input-group').remove();
+        }
+        if (e.target.classList.contains('remove-content-section')) {
+            const section = e.target.closest('.content-section');
+            const editor = editors.find(ed => ed.sourceElement === section.querySelector('textarea'));
+            if (editor) {
+                editor.destroy();
+                editors = editors.filter(ed => ed !== editor);
+            }
+            section.remove();
+        }
+    });
+    
+    function initializeCKEditor(element) {
+        return ClassicEditor
+            .create(element)
+            .then(editor => {
+                editors.push(editor);
+                return editor;
+            })
+            .catch(error => console.error('CKEditor initialization error:', error));
+    }
+    </script>
+    
+{% endblock %}

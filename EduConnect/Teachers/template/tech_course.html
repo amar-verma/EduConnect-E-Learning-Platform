@@ -1,0 +1,654 @@
+{% extends 'tech_index.html' %}
+{% load static %}
+{% block 'tech_main' %}
+
+<div class="container mt-4">
+    <!-- Course Selection Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Course Management</h4>
+        </div>
+        <div class="card-body">
+            <select id="courseSelect" class="form-select mb-3">
+                <option value="">Select Course</option>
+                <option value="new">+ Create New Course</option>
+                {% for course in courses %}
+                    <option value="{{ course.id }}">{{ course.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- New Course Form -->
+    <div id="newCourseForm" class="card mb-4" style="display:none;">
+        <div class="card-header">
+            <h4>Create New Course</h4>
+        </div>
+        <div class="card-body">
+            <form id="courseForm" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" name="title" placeholder="Course Title" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" class="form-control" name="duration" placeholder="Duration (e.g., 3 months)" required>
+                    </div>
+                </div>
+    
+                <div class="mb-3">
+                    <textarea class="form-control" name="description" placeholder="Main Description" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <textarea class="form-control" name="description2" placeholder="Other Description"></textarea>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <input type="file" class="form-control" name="course_img" accept="image/*" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <select class="form-control" name="category" required>
+                            <option value="">Select Category</option>
+                            {% for value, label in categories %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <input type="number" class="form-control" name="price" placeholder="Price" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="number" class="form-control" name="old_price" placeholder="Old Price (Optional)">
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <input type="text" class="form-control" name="tags" placeholder="Tags (comma separated)" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <input type="number" class="form-control" name="max_enrollment" placeholder="Max Enrollment" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="is_display" id="isDisplay">
+                            <label class="form-check-label" for="isDisplay">Display Course</label>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Dynamic Fields Sections -->
+                <div id="featuresContainer" class="dynamic-section mb-4">
+                    <h5>Features</h5>
+                    <div class="feature-items">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="features[]" required>
+                            <button type="button" class="btn btn-danger remove-item">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary add-item" data-container="featuresContainer">+ Add Feature</button>
+                </div>
+    
+                <div id="skillsContainer" class="dynamic-section mb-4">
+                    <h5>Skills</h5>
+                    <div class="skill-items">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="skills[]" required>
+                            <button type="button" class="btn btn-danger remove-item">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary add-item" data-container="skillsContainer">+ Add Skill</button>
+                </div>
+    
+                <div id="learningContainer" class="dynamic-section mb-4">
+                    <h5>Learning Outcomes</h5>
+                    <div class="learning-items">
+                        <div class="input-group mb-2">
+                            <input type="text" class="form-control" name="learning[]" required>
+                            <button type="button" class="btn btn-danger remove-item">×</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary add-item" data-container="learningContainer">+ Add Learning Outcome</button>
+                </div>
+    
+                <button type="submit" class="btn btn-primary">Create Course</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Content Management Section -->
+    <div id="contentSection" class="card" style="display:none;">
+        <div class="card-header">
+            <h4>Content Management</h4>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <button class="btn btn-primary" id="newContentBtn">Add New Content</button>
+                <button class="btn btn-secondary" id="existingContentBtn">View Existing Content</button>
+            </div>
+            <!-- Content Listing Section -->
+                <div id="contentListSection" class="mt-4" style="display:none;">
+                    <div class="list-group">
+                        <!-- Content items will be dynamically added here -->
+                    </div>
+                </div>
+
+                <!-- Content View/Edit Modal -->
+                <div class="modal fade" id="contentModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Content</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="text" class="form-control mb-3" id="modalContentTitle" placeholder="Content Title" required>
+                                <input type="number" class="form-control mb-3" id="modalContentOrder" placeholder="Content Order" >
+                                <div id="modalEditor"></div>
+                                <div id="modalAssignments" class="mt-3">
+                                    <h5>Assignments</h5>
+                                    <div id="modalAssignmentsList"></div>
+                                    <button type="button" class="btn btn-secondary mt-2" id="modalAddAssignment">+ Add Assignment</button>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" id="deleteContent">Delete Content</button>
+                                <button type="button" class="btn btn-primary" id="updateContent">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            <!-- Content Form -->
+            <div id="contentForm" style="display:none;">
+                <input type="text" class="form-control mb-3" id="contentTitle" placeholder="Content Title" required>
+                <input type="number" class="form-control mb-3" id="contentOrder" placeholder="Content Order" required>
+                <div id="editor"></div>
+                <div id="assignmentsSection" class="mt-3">
+                    <h5>Assignments</h5>
+                    <div id="assignmentsList"></div>
+                    <button type="button" class="btn btn-secondary mt-2" id="addAssignment">+ Add Assignment</button>
+                </div>
+                <button class="btn btn-primary mt-3" id="saveContent">Save Content</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script>
+let editor;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize CKEditor
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .then(newEditor => {
+            editor = newEditor;
+        })
+        .catch(error => console.error(error));
+
+    // Course Selection Handler
+    document.getElementById('courseSelect').addEventListener('change', function() {
+        const selectedValue = this.value;
+        if (selectedValue === 'new') {
+            showNewCourseForm();
+        } else if (selectedValue) {
+            loadCourseContent(selectedValue);
+        }
+    });
+
+    // New Course Form Handler
+    document.getElementById('courseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitNewCourse(this);
+    });
+});
+
+function showNewCourseForm() {
+    document.getElementById('newCourseForm').style.display = 'block';
+    document.getElementById('contentSection').style.display = 'none';
+}
+
+function submitNewCourse(form) {
+    // const formData = new FormData(form);
+    
+    fetch('/teacher/create-course/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Course created successfully!');
+            location.reload();
+        } else {
+            alert('Error creating course: ' + data.error);
+        }
+    });
+}
+function submitNewCourse(formData) {
+    fetch('/teacher/api/create-course/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Course created successfully!');
+            location.reload();
+        } else {
+            alert('Error creating course: ' + data.error);
+        }
+    });
+}
+
+
+function loadCourseContent(courseId) {
+    document.getElementById('contentSection').style.display = 'block';
+    document.getElementById('newCourseForm').style.display = 'none';
+    
+    // Load existing content for the course
+    fetch(`/teacher/api/course-content/${courseId}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Handle content display
+        });
+}
+
+// Utility function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+<script>
+    let modalEditor;
+let currentContentId = null;
+let currentCourseId = null;
+
+// Add these event listeners to your DOMContentLoaded function
+document.addEventListener('DOMContentLoaded', function() {
+    // Previous initialization code remains...
+
+    // Initialize modal editor
+    ClassicEditor
+        .create(document.querySelector('#modalEditor'))
+        .then(newEditor => {
+            modalEditor = newEditor;
+        })
+        .catch(error => console.error(error));
+
+    // Button handlers
+    document.getElementById('newContentBtn').addEventListener('click', showNewContentForm);
+    document.getElementById('existingContentBtn').addEventListener('click', showContentList);
+    document.getElementById('addAssignment').addEventListener('click', () => addAssignment('assignmentsList'));
+    document.getElementById('modalAddAssignment').addEventListener('click', () => addAssignment('modalAssignmentsList'));
+    document.getElementById('saveContent').addEventListener('click', saveNewContent);
+    document.getElementById('updateContent').addEventListener('click', updateExistingContent);
+    document.getElementById('deleteContent').addEventListener('click', deleteCurrentContent);
+});
+
+function loadCourseContent(courseId) {
+    currentCourseId = courseId;
+    document.getElementById('contentSection').style.display = 'block';
+    document.getElementById('newCourseForm').style.display = 'none';
+    
+    fetch(`/teacher/api/course-content/${courseId}/`)
+        .then(response => response.json())
+        .then(data => {
+            const listSection = document.getElementById('contentListSection');
+            const listGroup = listSection.querySelector('.list-group');
+            listGroup.innerHTML = '';
+
+            data.forEach(content => {
+                const item = document.createElement('a');
+                item.className = 'list-group-item list-group-item-action';
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6>Content: ${content.title}</h6>
+                        <span class="badge bg-primary">${content.assignments.length} assignments</span>
+                    </div>
+                `;
+                item.onclick = () => showContentDetails(content);
+                listGroup.appendChild(item);
+            });
+        });
+}
+
+function showNewContentForm() {
+    document.getElementById('contentForm').style.display = 'block';
+    document.getElementById('contentListSection').style.display = 'none';
+    editor.setData('');
+    document.getElementById('contentOrder').value = '';
+    document.getElementById('assignmentsList').innerHTML = '';
+}
+
+function showContentList() {
+    document.getElementById('contentForm').style.display = 'none';
+    document.getElementById('contentListSection').style.display = 'block';
+}
+
+function addAssignment(containerId) {
+    const container = document.getElementById(containerId);
+    const assignmentDiv = document.createElement('div');
+    assignmentDiv.className = 'assignment-item input-group mb-2';
+    assignmentDiv.innerHTML = `
+        <textarea class="form-control" placeholder="Assignment description"></textarea>
+        <button class="btn btn-danger" onclick="this.parentElement.remove()">×</button>
+    `;
+    container.appendChild(assignmentDiv);
+}
+
+function showContentDetails(content) {
+    currentContentId = content.id;
+    const modal = new bootstrap.Modal(document.getElementById('contentModal'));
+    
+    document.getElementById('modalContentTitle').value = content.title;
+    document.getElementById('modalContentOrder').value = content.order;
+    modalEditor.setData(content.description);
+    
+    const assignmentsList = document.getElementById('modalAssignmentsList');
+    assignmentsList.innerHTML = '';
+    content.assignments.forEach(assignment => {
+        const assignmentDiv = document.createElement('div');
+        assignmentDiv.className = 'assignment-item input-group mb-2';
+        assignmentDiv.innerHTML = `
+            <textarea class="form-control">${assignment.title}</textarea>
+            <button class="btn btn-danger" onclick="this.parentElement.remove()">×</button>
+        `;
+        assignmentsList.appendChild(assignmentDiv);
+    });
+    
+    modal.show();
+}
+
+function saveNewContent() {
+    const formData = new FormData();
+    formData.append('course_id', currentCourseId);
+    formData.append('title', document.getElementById('contentTitle').value);
+    formData.append('order', document.getElementById('contentOrder').value);
+    formData.append('content', editor.getData());
+    
+    const assignments = Array.from(document.querySelectorAll('#assignmentsList .assignment-item textarea'))
+        .map(textarea => textarea.value);
+    assignments.forEach(assignment => formData.append('assignments[]', assignment));
+
+    fetch('/teacher/api/content/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Content saved successfully!');
+            loadCourseContent(currentCourseId);
+            showContentList();
+        } else {
+            alert('Error saving content: ' + data.error);
+        }
+    });
+}
+
+function updateExistingContent() {
+    const formData = new FormData();
+    formData.append('title', document.getElementById('modalContentTitle').value);
+    formData.append('order', document.getElementById('modalContentOrder').value);
+    formData.append('content', modalEditor.getData());
+    
+    const assignments = Array.from(document.querySelectorAll('#modalAssignmentsList .assignment-item textarea'))
+        .map(textarea => textarea.value);
+    assignments.forEach(assignment => formData.append('assignments[]', assignment));
+
+    fetch(`/teacher/api/content/${currentContentId}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Content updated successfully!');
+            bootstrap.Modal.getInstance(document.getElementById('contentModal')).hide();
+            loadCourseContent(currentCourseId);
+        } else {
+            alert('Error updating content: ' + data.error);
+        }
+    });
+}
+
+function deleteCurrentContent() {
+    if (confirm('Are you sure you want to delete this content?')) {
+        fetch(`/teacher/api/content/${currentContentId}/delete/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Content deleted successfully!');
+                bootstrap.Modal.getInstance(document.getElementById('contentModal')).hide();
+                loadCourseContent(currentCourseId);
+            } else {
+                alert('Error deleting content: ' + data.error);
+            }
+        });
+    }
+}
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Add handlers for dynamic fields
+    document.querySelectorAll('.add-item').forEach(button => {
+        button.addEventListener('click', function() {
+            const container = this.closest('.dynamic-section').querySelector('div[class$="-items"]');
+            const newItem = container.children[0].cloneNode(true);
+            newItem.querySelector('input').value = '';
+            container.appendChild(newItem);
+        });
+    });
+
+    document.getElementById('courseSelect').addEventListener('change', function() {
+        if (this.value && this.value !== 'new') {
+            loadCourseDetails(this.value);
+        }
+    });
+    
+
+    // Remove item handler
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-item')) {
+            const container = e.target.closest('div[class$="-items"]');
+            if (container.children.length > 1) {
+                e.target.closest('.input-group').remove();
+            }
+        }
+    });
+
+    function createNewCourse(form) {
+    const formData = new FormData(form);
+    
+    // Add dynamic fields
+    const features = Array.from(document.querySelectorAll('input[name="features[]"]')).map(input => input.value);
+    const skills = Array.from(document.querySelectorAll('input[name="skills[]"]')).map(input => input.value);
+    const learning = Array.from(document.querySelectorAll('input[name="learning[]"]')).map(input => input.value);
+    
+    formData.append('features', JSON.stringify(features));
+    formData.append('skills', JSON.stringify(skills));
+    formData.append('learning', JSON.stringify(learning));
+
+    fetch('/teacher/api/create-course/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Course created successfully!');
+            location.reload();
+        } else {
+            alert('Error creating course: ' + data.error);
+        }
+    });
+}
+
+// For updating existing course
+function updateCourse(form, courseId) {
+    const formData = new FormData(form);
+    
+    // Add dynamic fields
+    const features = Array.from(document.querySelectorAll('input[name="features[]"]')).map(input => input.value);
+    const skills = Array.from(document.querySelectorAll('input[name="skills[]"]')).map(input => input.value);
+    const learning = Array.from(document.querySelectorAll('input[name="learning[]"]')).map(input => input.value);
+    
+    formData.append('features', JSON.stringify(features));
+    formData.append('skills', JSON.stringify(skills));
+    formData.append('learning', JSON.stringify(learning));
+
+    fetch(`/teacher/edit-course/${courseId}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Course updated successfully!');
+            location.reload();
+        } else {
+            alert('Error updating course: ' + data.error);
+        }
+    });
+}
+
+
+
+
+    // Form submission handler
+    document.getElementById('courseForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const courseId = this.dataset.courseId;
+    
+    if (courseId) {
+        updateCourse(this, courseId);
+    } else {
+        createNewCourse(this);
+    }
+});
+
+
+
+});
+
+
+function loadCourseDetails(courseId) {
+    fetch(`/teacher/edit-course/${courseId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('newCourseForm').style.display = 'block';
+            fillCourseForm(data);
+        });
+}
+
+function fillCourseForm(courseData) {
+    const form = document.getElementById('courseForm');
+    
+    // Fill basic fields
+    form.querySelector('[name="title"]').value = courseData.title;
+    form.querySelector('[name="description"]').value = courseData.description;
+    form.querySelector('[name="description2"]').value = courseData.description2 || '';
+    form.querySelector('[name="duration"]').value = courseData.duration;
+    form.querySelector('[name="price"]').value = courseData.price;
+    form.querySelector('[name="old_price"]').value = courseData.old_price || '';
+    form.querySelector('[name="max_enrollment"]').value = courseData.max_enrollment;
+    form.querySelector('[name="category"]').value = courseData.category;
+    form.querySelector('[name="tags"]').value = courseData.tags;
+    form.querySelector('[name="is_display"]').checked = courseData.is_display;
+
+    if (courseData.course_img) {
+        const imgPreview = document.createElement('div');
+        imgPreview.className = 'mb-2';
+        imgPreview.innerHTML = `<img src="${courseData.course_img}" alt="Current course image" style="max-width: 200px;">`;
+        const imgInput = form.querySelector('[name="course_img"]');
+        imgInput.parentNode.insertBefore(imgPreview, imgInput);
+        imgInput.required = false; // Make image upload optional for editing
+    }
+
+    // Fill dynamic fields
+    fillDynamicFields('features', courseData.features);
+    fillDynamicFields('skills', courseData.skills);
+    fillDynamicFields('learning', courseData.learning);
+
+    // Update form for editing mode
+    form.dataset.courseId = courseData.id;
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.textContent = 'Update Course';
+}
+
+function fillDynamicFields(fieldName, values) {
+    const container = document.querySelector(`#${fieldName}Container .${fieldName}-items`);
+    container.innerHTML = ''; // Clear existing items
+    
+    values.forEach(value => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'input-group mb-2';
+        itemDiv.innerHTML = `
+            <input type="text" class="form-control" name="${fieldName}[]" value="${value}">
+            <button type="button" class="btn btn-danger remove-item">×</button>
+        `;
+        container.appendChild(itemDiv);
+    });
+}
+
+function updateExistingCourse(courseId, formData) {
+    fetch(`/teacher/edit-course/${courseId}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Course updated successfully!');
+            location.reload();
+        } else {
+            alert('Error updating course: ' + data.error);
+        }
+    });
+}
+
+</script>
+{% endblock %}

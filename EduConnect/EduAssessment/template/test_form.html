@@ -1,0 +1,442 @@
+{% load static %}{% include 'Test_index.html' %}
+{% block 'Test_main' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+<style>
+            .navbar-custom {
+            background-color: white;
+            border-bottom: 2px solid #ddd;
+            padding: 10px 20px;
+        }
+        .navbar-brand img {
+            height: 30px;
+            margin-right: 8px;
+        }
+        .nav-tabs {
+            border-bottom: none;
+        }
+        .nav-link {
+            color: black;
+            font-weight: 500;
+        }
+        .nav-link.active {
+            color: #1a73e8;
+            border-bottom: 3px solid #1a73e8;
+        }
+        .nav-icons {
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+                /* General Input Styling */
+input[type="text"], 
+input[type="number"], 
+select {
+    width: 100%;
+    padding: 8px;
+    border: transparent;
+    border-left: blue 3px solid;
+    border-radius: 8px;
+    border-bottom: 1px solid blue;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+    background-color: #fff;
+    margin-bottom: 2px;
+}
+
+/* Hover Effect */
+input[type="text"]:hover, 
+input[type="number"]:hover, 
+select:hover {
+    border-color: #6200ea;
+}
+
+/* Focus Effect */
+input[type="text"]:focus, 
+input[type="number"]:focus, 
+select:focus {
+    border-color: #6200ea;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(98, 0, 234, 0.3);
+}
+
+/* Select Dropdown */
+select {
+    cursor: pointer;
+    appearance: none;
+    padding-right: 30px;
+    
+}
+
+/* Number Input Styling */
+input[type="number"] {
+    max-width: 100px;
+    text-align: center;
+}
+
+/* Remove Arrows from Number Input (Chrome, Edge, Safari) */
+input[type="number"]::-webkit-inner-spin-button, 
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Required Checkbox */
+.form-check-input {
+    transform: scale(1.3);
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+/* Checkbox Checked Style */
+.form-check-input:checked {
+    background-color: #6200ea;
+    border-color: #6200ea;
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
+}
+
+</style>
+<style>
+    /* Toast Container */
+    #toastContainer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    /* Toast Message Style */
+    .toast-message {
+        padding: 15px;
+        border-radius: 5px;
+        color: white;
+        margin-bottom: 10px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 250px;
+        max-width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 0.5s forwards;
+    }
+
+    /* Success Message */
+    .toast-success {
+        background-color: #28a745;
+    }
+
+    /* Error Message */
+    .toast-error {
+        background-color: #dc3545;
+    }
+
+    /* Close Button */
+    .toast-close {
+        cursor: pointer;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+
+    /* Fade In Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Fade Out Animation */
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+</style>
+
+<nav class="navbar navbar-custom d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+        <span class="fw-bold w-auto"><input type="text" style="border: none;" value="{{form.title}}"></span>
+    </div>
+    <div class="d-flex">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active">Questions</a>
+            </li>
+            
+        </ul>
+    </div>
+<form id="question-form" method="POST" action="{% url 'save_questions' form_id %}">
+        {% csrf_token %}
+    <input type="hidden" name="form_id" value="{{ form.id }}" >
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-light border" type="submit" id="send-btn" >Save</button>
+    </div>
+
+</nav>
+<div id="toastContainer"></div>
+
+<!-- Hidden Django Messages (Simulated) -->
+<div id="django-messages" data-messages='[{"text": "Form submitted successfully!", "type": "success"}, {"text": "Error updating record!", "type": "error"}]'></div>
+
+
+
+<div class="container mt-4">
+    <h2 class="text-center">EduConnect Form Creator</h2>
+    <buttonS class="add-question-btn mt-3 btn btn-light border" onclick="addQuestion()">+ Add Question</buttonS>
+    <div id="questions-container"></div>
+</div>
+</form>
+<!-- Hidden Div to Store Messages -->
+<div id="django-messages" 
+    data-messages='[
+        {% for message in messages %}
+            {"text": "{{ message|escapejs }}", "type": "{{ message.tags }}"}
+        {% endfor %}
+    ]'>
+</div>
+
+
+<script>
+    let questionCount = 0;
+
+function addQuestion() {
+    questionCount++;
+    const container = document.getElementById("questions-container");
+    
+    const questionDiv = document.createElement("div");
+    questionDiv.className = "question-container bg-white p-3 rounded";
+    questionDiv.setAttribute("id", `question-${questionCount}`);
+    
+    questionDiv.innerHTML = `
+        <div class='row'>
+            <div class='col-md-12 p-2 px-4 rounded shadow border'>
+                <div class="row mb-2">
+                    <div class="col-md-8">
+                        <input type="text" name="question_text[]" class="form-control question-text" placeholder="Untitled Question" id="question-text-${questionCount}" required>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select question-type" name="question_type[]" onchange="changeQuestionType(${questionCount})" id="question-type-${questionCount}">
+                            <option value="text">Text</option>
+                            <option value="mcq">Multiple Choice</option>
+                            <option value="checkbox">Checkbox</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2 text-end">
+                    <div class="col-md-12 d-flex justify-content-end align-items-center">
+                        <label class="form-label me-1">Marks: </label>
+                        <input type="number" name="marks[]" class="form-control w-auto question-marks" id="marks-${questionCount}" min="1" placeholder="1" required>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12" id="options-container-${questionCount}"></div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <input type="checkbox" class="form-check-input" checked disabled> Required
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <button class="delete-btn" onclick="deleteQuestion(${questionCount})">🗑 Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.appendChild(questionDiv);
+    changeQuestionType(questionCount);
+}
+
+function changeQuestionType(questionId) {
+    const type = document.getElementById(`question-type-${questionId}`).value;
+    const optionsContainer = document.getElementById(`options-container-${questionId}`);
+    optionsContainer.innerHTML = "";
+
+    if (type === "text") {
+        optionsContainer.innerHTML = `<input type="text" class="form-control answer-text" placeholder="Your answer here">`;
+    } else {
+        optionsContainer.innerHTML = `
+            <div class="mb-1">
+                <input type="${type === "mcq" ? "radio" : "checkbox"}" name="question-${questionId}" class="option-answer">
+                <input type="text" class="form-control d-inline w-75 option-text" placeholder="Option 1" required>
+            </div>
+            <div class="mb-1">
+                <input type="${type === "mcq" ? "radio" : "checkbox"}" name="question-${questionId}" class="option-answer">
+                <input type="text" class="form-control d-inline w-75 option-text" placeholder="Option 2" required>
+            </div>
+            <button class="btn btn-sm btn-outline-primary mt-2" onclick="addOption(${questionId})">+ Add Option</button>
+        `;
+    }
+}
+
+function addOption(questionId) {
+    const optionsContainer = document.getElementById(`options-container-${questionId}`);
+    const type = document.getElementById(`question-type-${questionId}`).value;
+    const optionCount = optionsContainer.querySelectorAll(".option-text").length + 1;
+
+    const optionDiv = document.createElement("div");
+    optionDiv.className = "mb-1";
+    optionDiv.innerHTML = `
+        <input type="${type === "mcq" ? "radio" : "checkbox"}" name="question-${questionId}" class="option-answer">
+        <input type="text" class="form-control d-inline w-75 option-text" placeholder="Option ${optionCount}" required>
+    `;
+
+    optionsContainer.insertBefore(optionDiv, optionsContainer.lastElementChild);
+}
+
+function deleteQuestion(questionId) {
+    document.getElementById(`question-${questionId}`).remove();
+}
+
+
+</script>
+
+
+<script>
+    document.getElementById("question-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent default form submission
+    
+        if (!validateForm()) {
+            return; // Stop execution if form is invalid
+        }
+    
+        let form = this;
+        let formData = new FormData(form);
+        let questions = document.querySelectorAll(".question-container");
+    
+        questions.forEach((question, index) => {
+            let questionText = question.querySelector(".question-text").value;
+            let questionType = question.querySelector(".question-type").value;
+            let marks = question.querySelector(".question-marks").value;
+    
+            formData.append("question_text[]", questionText);
+            formData.append("question_type[]", questionType);
+            formData.append("marks[]", marks);
+    
+            let options = [];
+            question.querySelectorAll(".option-text").forEach(opt => {
+                options.push(opt.value);
+            });
+    
+            formData.append("options[]", JSON.stringify(options));
+    
+            let answerKeys = [];
+            question.querySelectorAll(".option-answer:checked").forEach(ans => {
+                let answerText = ans.nextElementSibling.value;
+                answerKeys.push(answerText);
+            });
+    
+            formData.append("answer_key[]", JSON.stringify(answerKeys));
+        });
+    
+        // Submit form via Fetch API only if validation passed
+        fetch(form.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast("✅ Form submitted successfully!", "success");
+            } else {
+                showToast("❌ Error saving form! Please try again.", "error");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            showToast("⚠️ Something went wrong!", "error");
+        });
+    });
+    
+    // Improved Validation Function
+    function validateForm() {
+        let isValid = true;
+    
+        document.querySelectorAll(".question-container").forEach((q, index) => {
+            let questionText = q.querySelector(".question-text").value.trim();
+            let marks = q.querySelector(".question-marks").value.trim();
+            let questionType = q.querySelector(".question-type").value;
+            let options = [];
+            let hasAnswer = false;
+    
+            if (questionText === "" || marks === "" || marks <= 0) {
+                showToast(`⚠️ Question ${index + 1} is incomplete!`, "warning");
+                isValid = false;
+                return;
+            }
+    
+            if (questionType !== "text") {
+                q.querySelectorAll(".option-text").forEach((opt, idx) => {
+                    let optionText = opt.value.trim();
+                    let isCorrect = q.querySelectorAll(".option-answer")[idx].checked;
+    
+                    if (optionText === "") {
+                        showToast(`⚠️ Option ${idx + 1} in Question ${index + 1} is empty!`, "warning");
+                        isValid = false;
+                        return;
+                    }
+    
+                    options.push({ text: optionText, correct: isCorrect });
+                    if (isCorrect) hasAnswer = true;
+                });
+    
+                if (!hasAnswer) {
+                    showToast(`⚠️ Please select at least one correct answer for Question ${index + 1}!`, "warning");
+                    isValid = false;
+                    return;
+                }
+            }
+        });
+    
+        return isValid;
+    }
+    
+    // Toast Notification Function
+    function showToast(message, type = "success") {
+        const toast = document.createElement("div");
+        toast.className = `toast-message toast-${type}`;
+        toast.innerHTML = `<span>${message}</span> <span class="toast-close">&times;</span>`;
+        toast.style.color = 'black'; 
+        toast.style.backgroundColor = 'white';
+    
+        document.getElementById("toastContainer").appendChild(toast);
+    
+        toast.querySelector(".toast-close").addEventListener("click", () => closeToast(toast));
+        setTimeout(() => closeToast(toast), 3000);
+    }
+    
+    function closeToast(toast) {
+        toast.style.animation = "fadeOut 0.5s forwards";
+        setTimeout(() => toast.remove(), 500);
+    }
+    </script>
+    
+
+
+{% endblock 'Test_main' %}

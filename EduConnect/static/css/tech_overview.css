@@ -1,0 +1,13 @@
+.card {
+    background-color: white;
+    border-left: 4px solid #3b7ddd;
+    transition: transform 0.3s;
+    
+}
+.card:hover {
+    transform: scale(1.01);
+}
+.dashboard-container {
+    padding: 20px;
+    background-color: #f8f9fa;
+}

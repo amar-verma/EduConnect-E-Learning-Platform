@@ -1,0 +1,181 @@
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    flex: 1 1 50%;
+    /* Give each group 50% width initially */
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-group {
+        flex-basis: 100%;
+        /* Make each group full width on smaller screens */
+    }
+}
+
+/* Country select styling (optional) */
+.select-country-wrap {
+    flex: 1 1 50%;
+    /* Adjust width as needed */
+}
+
+.mobile-wrap-with-country {
+    flex: 1 1 50%;
+    /* Adjust width as needed */
+}
+
+.custom-button {
+    background-color: #ff6600;
+    border: none;
+}
+
+.custom-button:hover {
+    background-color: #e65c00;
+}
+
+.icon {
+    color: #ff6600;
+    margin-right: 10px;
+}
+
+/* Adjust styles as needed for better visual appeal and accessibility */
+
+/* section 3 */
+.chart-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.chart-title {
+    color: #ffc107;
+    margin-bottom: 20px;
+}
+
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.skill-box {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    flex: 1 0 calc(25% - 30px);
+    max-width: calc(25% - 30px);
+}
+
+@media (max-width: 768px) {
+    .skill-box {
+        flex: 1 0 calc(50% - 30px);
+        max-width: calc(50% - 30px);
+    }
+}
+
+@media (max-width: 576px) {
+    .skill-box {
+        flex: 1 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* section 4 */
+.logo-container {
+    margin-top: 50px;
+    /* Add some space at the top */
+    text-align: center;
+}
+
+.logo-container img {
+    margin: 0 15px;
+    /* Add some space between logos */
+    max-height: 80px;
+    /* Adjust as needed */
+}
+
+/* section 5 */
+.partner-logos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.partner-logo {
+    margin: 10px;
+}
+
+.partner-logo img {
+    max-width: 120px;
+}
+
+/* section 6 */
+
+.testimonial-container {
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.testimonial-card {
+    background-color: #222;
+    border-radius: 10px;
+    padding: 20px;
+    width: calc(50% - 20px);
+    /* Add some margin between cards */
+    margin-bottom: 20px;
+}
+
+.testimonial-card img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.testimonial-card h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.testimonial-card p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.testimonial-card .social-icons {
+    margin-top: 10px;
+}
+
+.testimonial-card .social-icons a {
+    margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .testimonial-card {
+        width: 100%;
+    }
+}
+
+.hire-job-hero-wrap {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}

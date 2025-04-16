@@ -1,0 +1,44 @@
+.feedback-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .header h2 {
+    color: #007bff;
+  } */
+
+.form-label {
+    font-weight: bold;
+}
+
+.rating-section span {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.rating-section span:hover,
+.rating-section span.active {
+    color: #ffc107;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+}

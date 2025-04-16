@@ -1,0 +1,81 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'tech_earning.css' %}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-5">
+    <div class="row mt-4">
+        <div class="col-md-4 mb-2">
+            <div class="card p-3 text-center">
+                <h5>Total Earnings</h5>
+                <h3>$<span id="total-earnings">{{ total_earnings }}</span></h3>
+                <small class="text-success">▲ +{{ earnings_growth|floatformat:2 }}% from last month</small>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card p-3 text-center">
+                <h5>Monthly Earnings</h5>
+                <h3>$<span id="monthly-earnings">{{ monthly_earnings }}</span></h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-2">
+            <div class="card p-3 text-center">
+                <h5>Total Expenses</h5>
+                <h3>$<span id="expenses">{{ total_expenses }}</span></h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course-wise Earnings Table -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Earnings ($)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in course_earnings %}
+                    <tr>
+                        <td>{{ course.course__title }}</td>
+                        <td>${{ course.total_earned }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <canvas id="incomeExpenseChart"></canvas>
+        </div>
+    </div>
+
+    <!-- JSON Data for JavaScript -->
+    <script id="incomeExpenseData" type="application/json">
+        {{ income_vs_expenses|safe }}
+    </script>
+
+    <script>
+        // Fetch Income vs Expenses Data
+        var incomeExpenseData = JSON.parse(document.getElementById("incomeExpenseData").textContent);
+
+        var ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: incomeExpenseData.labels,
+                datasets: [{
+                    data: incomeExpenseData.data,
+                    backgroundColor: ['#4caf50', '#f44336']
+                }]
+            },
+            options: { responsive: true }
+        });
+    </script>
+</div>
+{% endblock 'tech_main' %}

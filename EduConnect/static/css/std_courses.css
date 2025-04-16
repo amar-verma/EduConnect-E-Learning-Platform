@@ -1,0 +1,194 @@
+.cards-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Card 1: Simple and Modern */
+.card-style-1 {
+    flex: 1;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    border-left: 5px solid #4caf50;
+}
+
+.card-style-1 h3 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.card-style-1 .number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.card-style-1 .description {
+    font-size: 1rem;
+    color: #777;
+}
+
+/* Card 2: Gradient Style */
+.card-style-2 {
+    flex: 1;
+    background: linear-gradient(to bottom right, #6fb1fc, #487cf7);
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-style-2 h3 {
+    font-size: 1.5rem;
+}
+
+.card-style-2 .number {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.card-style-2 .description {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Card 3: Icon-based Style */
+.card-style-3 {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card-style-3 .icon-container {
+    font-size: 3rem;
+    color: #487cf7;
+    background-color: #eaf4ff;
+    border-radius: 50%;
+    padding: 10px;
+    text-align: center;
+}
+
+.card-style-3 .content h3 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.card-style-3 .content .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+
+
+
+
+
+
+.course-card {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-width: 700px;
+    width: 90%;
+    background-color: #fff;
+}
+
+.course-info {
+    background-color: #2a2a2a;
+    color: #fff;
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.course-info h3 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.course-info p {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: #f5a5a5;
+}
+
+.course-info a {
+    color: #61dafb;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: auto;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+.course-info a:hover {
+    color: #40b1e0;
+}
+
+.chapter-info {
+    /* background-color: #e7edf3; */
+    flex: 2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chapter-info h4 {
+    font-size: 1.2rem;
+    margin: 0 0 10px;
+}
+
+.progress {
+    margin: 10px 0;
+    position: relative;
+    height: 8px;
+    background-color: #eeeeee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 70%;
+    /* Adjust based on completion */
+    background: linear-gradient(90deg, #61dafb, #40b1e0);
+}
+
+.continue-btn {
+    padding: 10px 20px;
+    background-color: #99fb61;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+}
+
+.continue-btn:hover {
+    background-color: #40b1e0;
+}
+
+
+.hint {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+}

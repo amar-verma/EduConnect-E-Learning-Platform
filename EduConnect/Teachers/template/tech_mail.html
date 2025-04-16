@@ -1,0 +1,32 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_mail.css' %}">
+
+<div class="container">
+    <h1>Emails & Announcements</h1>
+    <div class="email-form">
+        <label for="recipients">To (Recipients)</label>
+        <input type="text" id="recipients" placeholder="Enter recipients...">
+        <label for="emailMessage">Write your message...</label>
+        <textarea id="emailMessage" placeholder="Write your message..."></textarea>
+        <label for="fileInput">Choose File</label>
+        <input type="file" id="fileInput">
+        <button id="sendEmailButton" class="button-main">Send Email</button>
+    </div>
+    <div class="email-table tech-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Recipients</th>
+                    <th>Message</th>
+                    <th>File</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="emailBody">
+                <!-- Emails will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock 'tech_main' %}

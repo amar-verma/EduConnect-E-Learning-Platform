@@ -1,0 +1,185 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_forums1.css' %}">
+
+<div class="container mt-4">
+    <h2>Discussion Forums</h2>
+
+    <!-- Create Post Section -->
+    <div class="post-box post shadow">
+        <select id="course-select" class="form-control">
+            <option value="" selected disabled>Select the course</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.title }}</option>
+            {% endfor %}
+        </select>
+        <textarea id="post-content" placeholder="Write a post..." class="form-control mt-2"></textarea>
+        <button class="submit-btn mt-2" onclick="createPost()">Post</button>
+    </div>
+
+    <!-- Display Posts -->
+{% for post in posts %}
+<div class="post shadow mt-3" id="post-{{ post.id }}">
+    <div class="post-header justify-content-between">
+        <div>
+            <img src="{{ post.teacher.profile_picture.url }}" alt="Profile" class="profile-pic">
+        <span><strong>{{ post.teacher.first_name }}</strong> - {{ post.course.title }}</span>
+        </div>
+        <div>
+            <button class="delete-btns bg-transparent border-0 text-danger" data-post-id="{{ post.id }}">
+                🗑️
+            </button>
+        </div>
+    </div>
+    
+    <p>{{ post.content }}</p>
+
+    <!-- Comment Section -->
+    <div class="comment-section">
+        <div id="comments-{{ post.id }}">
+            {% for comment in post.comments.all %}
+            <div class="comment">
+                <img src="{% if comment.teacher %} {{ comment.teacher.profile_picture.url }} {% else %} {{ comment.student.profile_picture.url }} {% endif %}" alt="Profile" class="profile-pic">
+                <div>
+                    <strong>
+                        {% if comment.teacher %}
+                            {{ comment.teacher.first_name }} (Teacher)
+                        {% else %}
+                            {{ comment.student.first_name }} (Student)
+                        {% endif %}
+                    </strong>
+                    <p>{{ comment.content }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="comment mt-2">
+            <img src="{{teacher.profile_picture.url}}" alt="Profile" class="profile-pic">
+            <textarea id="comment-{{ post.id }}" placeholder="Write a comment..." class="form-control" name="content"></textarea>
+            <button class="submit-btn" onclick="addComment(this)" data-post-id="{{ post.id }}">Send</button>
+        </div>
+    </div>
+</div>
+{% empty %}
+<p class="text-center text-muted mt-4">No discussions yet.</p>
+{% endfor %}
+
+</div>
+
+<script>
+function createPost() {
+    let course_id = document.getElementById('course-select').value;
+    let content = document.getElementById('post-content').value;
+    
+    fetch("{% url 'create_post' %}", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}", "Content-Type": "application/x-www-form-urlencoded" },
+        body: `course_id=${course_id}&content=${content}`
+    })
+    .then(response => response.json())
+    .then(data => { 
+        // alert(data.message); 
+        location.reload();
+    });
+}
+
+function addComment(button) {
+    let postId = button.getAttribute("data-post-id");
+    let commentBox = button.previousElementSibling; 
+    let content = commentBox.value.trim();
+
+    if (content === "") {
+        // alert("Comment cannot be empty!");
+        return;
+    }
+
+    fetch(`/teacher/add_comment/${postId}/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ content: content }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            location.reload();
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+function setupDeleteButtons() {
+    document.querySelectorAll(".delete-btns").forEach((button) => {
+        button.removeEventListener("click", deletePostHandler); 
+        button.addEventListener("click", deletePostHandler);
+    });
+}
+
+
+function deletePostHandler(event) {
+    let postId = this.getAttribute("data-post-id");
+    deletePost(postId);
+}
+
+
+function deletePost(postId) {
+    if (!confirm("Are you sure you want to delete this post?")) {
+        return;
+    }
+
+    fetch(`/teacher/delete_post/${postId}/`, {
+        method: "DELETE",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById(`post-${postId}`).remove();
+        } else {
+            alert("Error: " + data.error);
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+
+function refreshPosts() {
+    fetch("/teacher/get_posts/") 
+        .then(response => response.text())
+        .then(html => {
+            document.querySelector(".container").innerHTML = html;
+            setupDeleteButtons();
+        })
+        .catch(error => console.error("Error:", error));
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    setupDeleteButtons();
+});
+
+</script>
+
+{% endblock 'tech_main' %}

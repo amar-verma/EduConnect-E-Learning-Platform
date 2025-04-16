@@ -1,0 +1,151 @@
+{% load static %}{% include 'ide_index.html' %}
+
+{% block 'ide_main' %}
+{% if message %}
+    <div class="alert alert-light alert-dismissible fade show mb-0" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close mb-0" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+<link rel="stylesheet" href="{% static 'css/ide_home.css' %}">
+<link rel="stylesheet" href="{% static 'css/ide_style.css' %}">
+<link rel="stylesheet" href="{% static 'css/ide_index.css' %}">
+<form action="{% url 'submit_code' %}" method="POST" id="codeForm">
+    {% csrf_token %}
+    <div class="control-panel d-flex justify-content-between">
+        <div><a href="{% url 'ide_index' %}"><i class="bi bi-house-add ps-3 " style="font-size: medium;"></i></a></div>
+    <div>
+        Select Language:
+      <select
+        id="language"
+        name="language"
+        class="language rounded"
+        onchange="changeLanguage()" class="rounded" >
+        <option value="c"{% if language == "c" %}selected{% endif %}>C</option>
+        <option value="cpp"{% if language == "cpp" %}selected{% endif %}>C++</option>
+        <option value="php"{% if language == "php" %}selected{% endif %}>PHP</option>
+        <option value="python"{% if language == "python" %}selected{% endif %}>Python</option>
+        <option value="node"{% if language == "node" %}selected{% endif %}>Node JS</option>
+        <option value="java"{% if language == "java" %}selected{% endif %}>Java</option>
+      </select>
+      </div>
+    </div>
+    <div class="row m-0 p-0">
+      <div class="col-md-6 ">
+        
+          <div class="editor" name="editor"  id="editor" style="height: 500px; ">{% if code %}{{ code }}{% endif %}</div>
+          <input type="hidden" id="code" name="code" />
+          <div class="btn-con justify-content-between mt-1 mb-1 px-2">
+              <!-- Start Button -->
+              <button type="submit" name="action" value="run" class="btn-custom btn-start py-1 px-3" onclick="submitCode()">Run</button>
+              
+              <!-- Submit & Save Buttons -->
+              
+              <a class="btn-custom btn-save py-1 px-3" data-bs-toggle="modal" data-bs-target="#saveModal">Save</a>
+              <div class="modal fade" id="saveModal" tabindex="-1" aria-labelledby="saveModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="saveModalLabel">Save Your Snippet</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="snippetTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="snippetTitle" placeholder="Enter title" name="save_title" value="{% if title %}{{title}}{% endif %}">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" name="action" value="save" class="btn btn-secondary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+          </div>
+          
+          
+      </div>
+      
+      
+      <div class="col-md-6">
+          <!-- Input & Expected Output Section -->
+          <div class="row input-section">
+              <div class="input-container">
+                  <label>Input:</label>
+                  <textarea name="stdin" placeholder="Provide input if needed">{{ stdin }}</textarea>
+              </div>
+      
+              <div class="expected-output-container">
+                  <label>Expected Output:</label>
+                  <textarea name="expected_output" placeholder="Expected output (optional)">{{ expected_output }}</textarea>
+              </div>
+          </div>
+      
+          <!-- Output Section -->
+          <div class="row output-section p-0 mt-0">
+              <div class="outputs m-0 p-0">
+                  {% if output %}
+                  <div class="output-container">
+                      <h3>Output:</h3>
+                      <pre>{{ output }}</pre>
+                  </div>
+                  {% endif %}
+      
+                  {% if error %}
+                  <div class="error-container">
+                      <h3>Error</h3>
+                      <pre>{{ error|safe }}</pre>
+                  </div>
+                  {% endif %}
+      
+                  <!-- Execution Details -->
+                  <div class="execution-details mt-0">
+                      <h3>Execution Details:</h3>
+                      <ul>
+                          <li><strong>Status:</strong> {{ status }}</li>
+                          <li><strong>Execution Time:</strong> {{ execution_time }} seconds</li>
+                          <li><strong>Memory Used:</strong> {{ memory_used }} KB</li>
+                          <li><strong>Created At:</strong> {{ created_at }}</li>
+                          <li><strong>Finished At:</strong> {{ finished_at }}</li>
+                          <li><strong>Exit Code:</strong> {{ exit_code }}</li>
+                          <li><strong>Exit Signal:</strong> {{ exit_signal }}</li>
+                          <li><strong>Message:</strong> {{ message }}</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+
+    </div>
+    
+
+    
+
+    
+
+    
+    
+  </form>
+
+
+
+
+  
+  <script>
+    document.getElementById("codeForm").addEventListener("submit", function() {
+    //   var editorContent = document.getElementById("editor").innerText;  // Preserve line breaks with innerText
+      const editor = ace.edit("editor");
+      const code = editor.getValue();
+      document.getElementById("code").value = code;
+    //   document.getElementById("code").value = editorContent;
+    });
+  </script>
+  <script src="{% static 'js/ide_script.js' %}"></script>
+  <script src="{% static 'js/lib/ace.js' %}"></script>
+  <script src="{% static 'js/js/lib/theme-monokai.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+{% endblock 'ide_main' %}

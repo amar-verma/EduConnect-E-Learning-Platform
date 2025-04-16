@@ -1,0 +1,145 @@
+body {
+    background-color: #e2eaf3;
+
+}
+
+.txt-edu {
+    color: rgb(13, 216, 13);
+}
+
+
+.sidebar {
+    background-color: #1c2d3f;
+    background-image: linear-gradient(to top, rgb(90, 87, 87), black);
+    color: #fff;
+    min-height: 100vh;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.sidebar a {
+    color: #adb5bd;
+    text-decoration: none;
+    min-height: 30px;
+    border-radius: 10px;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+    color: #fff;
+
+}
+
+.student-dash-half {
+    min-height: 100vh
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.chart {
+    height: 200px;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.std-main-dashboard {
+    margin-left: 220px;
+    /* Matches the sidebar's width e6eef7 */
+}
+
+.responsive-nav-student {
+    display: none;
+}
+
+.side-nav-student {
+    display: block;
+}
+
+/* Navigation Accordion Styles */
+.nav-accordion-collapse {
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Navigation Links */
+.nav-accordion-body a {
+    font-size: 16px;
+    /* Font size */
+    font-weight: 500;
+    /* Slightly bold text */
+    color: #333;
+    /* Default text color */
+    text-decoration: none;
+    /* Remove underline */
+    padding: 10px 15px;
+    /* Inner padding for clickable area */
+    border-radius: 4px;
+    /* Rounded links */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    /* Smooth hover effect */
+}
+
+
+.nav-accordion-body a:hover {
+    background-color: #f4f4f4;
+    /* Hover background */
+    color: #007bff;
+    /* Hover text color */
+}
+
+.hint {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 150px;
+        /* Reduce sidebar width for smaller screens */
+    }
+
+    .std-main-dashboard {
+        margin-left: 150px;
+        /* Adjust margin for smaller sidebar */
+    }
+
+    .responsive-nav-student {
+        display: block;
+    }
+
+    .side-nav-student {
+        display: none !important;
+    }
+
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+    }
+
+    .std-main-dashboard {
+        margin-left: 0;
+    }
+
+    .responsive-nav-student {
+        display: block;
+    }
+
+    .side-nav-student {
+        display: none !important;
+    }
+}

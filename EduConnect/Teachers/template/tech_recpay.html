@@ -1,0 +1,65 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_recpay.css' %}">
+
+<div class="container mt-4">
+    <h2 class="text-center text-primary">Received Payments</h2>
+    
+    <div class="mt-4">
+        <h4 class="text-secondary">All Payments</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Course</th>
+                        <th>Amount</th>
+                        <th>Duration</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>John Doe</td>
+                        <td>Web Development</td>
+                        <td>$100</td>
+                        <td>3 Months</td>
+                        <td>2025-02-10</td>
+                        <td><span class="status-completed">Completed</span></td>
+                        <td><i class="fas fa-download download-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Jane Smith</td>
+                        <td>Data Science</td>
+                        <td>$150</td>
+                        <td>6 Months</td>
+                        <td>2025-02-08</td>
+                        <td><span class="status-completed">Completed</span></td>
+                        <td><i class="fas fa-download download-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Mike Johnson</td>
+                        <td>Graphic Design</td>
+                        <td>$80</td>
+                        <td>2 Months</td>
+                        <td>2025-02-15</td>
+                        <td><span class="status-pending">Pending</span></td>
+                        <td><i class="fas fa-download download-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Emily Davis</td>
+                        <td>Machine Learning</td>
+                        <td>$200</td>
+                        <td>5 Months</td>
+                        <td>2025-02-20</td>
+                        <td><span class="status-pending">Pending</span></td>
+                        <td><i class="fas fa-download download-icon"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock 'tech_main' %}

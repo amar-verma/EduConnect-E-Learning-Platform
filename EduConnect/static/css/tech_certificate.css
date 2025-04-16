@@ -1,0 +1,107 @@
+.tech-table{
+    max-height: 20rem;
+    overflow-y: auto;
+    border-radius: 15px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Table Styles */
+.certificate-table {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #3498db;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.status-completed {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.status-in-progress {
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.certificate-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.certificate-link:hover {
+    text-decoration: underline;
+}
+
+/* Certificate Preview Section */
+.certificate-preview {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: none; /* Hidden by default */
+}
+
+.certificate-preview h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.preview-content {
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .page-title {
+        font-size: 2rem;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .certificate-preview h2 {
+        font-size: 1.5rem;
+    }
+}

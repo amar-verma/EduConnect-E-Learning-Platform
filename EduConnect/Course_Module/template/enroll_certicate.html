@@ -1,0 +1,237 @@
+{% extends 'enroll_course.html' %}
+
+{% load static %}
+ {% block 'content_main' %}
+
+<style>
+
+    .certificate-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center !important;
+    width: 100%;
+    padding: 20px;
+    /* width: auto; */
+    margin: 0 auto;
+}
+
+.certificate {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    background: white;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.border {
+    border: 3px solid #c17f59;
+    border-radius: 10px;
+    padding: 40px;
+    background: linear-gradient(45deg, #fff, #f9f9f9);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+}
+
+.logo img {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+.title {
+    font-size: clamp(28px, 5vw, 40px);
+    color: #234b8f;
+    margin: 0;
+    font-family: 'Times New Roman', serif;
+}
+
+.subtitle {
+    font-size: clamp(18px, 3vw, 22px);
+    color: #c17f59;
+    font-weight: bold;
+    margin: 0;
+}
+
+.present-text {
+    font-size: clamp(16px, 2.5vw, 18px);
+    color: #666;
+    margin: 10px 0;
+}
+
+.recipient {
+    font-size: clamp(24px, 4vw, 30px);
+    font-family: 'Brush Script MT', cursive;
+    color: #234b8f;
+    margin: 15px 0;
+    border-bottom: 2px solid #c17f59;
+    padding-bottom: 5px;
+    min-width: 200px;
+    display: inline-block;
+}
+
+.course-details,
+.description,
+.enrollment {
+    font-size: clamp(14px, 2vw, 16px);
+    color: #444;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 10px auto;
+}
+
+.signature-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 100%;
+    margin-top: 40px;
+    align-items: center;
+}
+
+.signature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.signature hr {
+    width: 150px;
+    height: 2px;
+    background: #000;
+    border: none;
+    margin: 10px 0;
+}
+
+.seal img {
+    width: clamp(60px, 10vw, 80px);
+    height: auto;
+}
+
+.download-btn {
+    margin-top: 30px;
+    padding: 12px 24px;
+    background: #234b8f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: clamp(14px, 2vw, 16px);
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+.download-btn:hover {
+    background: #1a3a6d;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .border {
+        padding: 20px;
+    }
+    
+    .signature-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .seal {
+        order: -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .certificate {
+        padding: 15px;
+    }
+    
+    .enrollment {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+</style>
+
+
+
+<div class="certificate-container" >
+    <div class="certificate">
+        <div class="border">
+            <div class="content2">
+                <!-- EduConnect Logo -->
+                <div class="logo">
+                    <img src="{% static 'img/logo.png' %}" alt="EduConnect Logo">
+                </div>
+
+                <h1 class="title">CERTIFICATE</h1>
+                <h2 class="subtitle">OF ACHIEVEMENT</h2>
+
+                <p class="present-text">This Certificate is Proudly Presented To</p>
+                <h3 class="recipient" id="recipientName">{{student_name}}</h3>
+
+                <!-- Course Details -->
+                <p class="course-details">
+                    For successfully completing the course <strong>{{course_title}} </strong>
+                    under the guidance of <strong>{{professor_name}}</strong>.
+                </p>
+
+                <p class="description">
+                    You have demonstrated excellence by successfully completing all course requirements, 
+                    assignments, and assessments with distinction.
+                </p>
+
+                <!-- Enrollment Information -->
+                <p class="enrollment">
+                    <strong>Enrollment ID:</strong> {{ enroll_id }}-{{course_id_no}} &nbsp; | &nbsp; 
+                    <strong>Completion Date:</strong> {{certificate_date|date:"Y-m-d"}}
+                </p>
+
+                <!-- Signature Section -->
+                <div class="signature-section" style="margin: auto;">
+                    <div class="signature">
+
+                        <p>{{professor_name}}</p>
+                        <hr>
+                        <span>Course Instructor</span>
+                    </div>
+                    <div class="seal">
+                        <img src="{% static 'img/stamp.png' %}" alt="EduConnect Seal" height="150px" width="auto">
+                    </div>
+                    <div class="signature">
+
+                        <p>EduConnect Director</p>
+                        <hr>
+                        <span>Official Authorization</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="downloadBtn" class="download-btn">Download Certificate</button>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+html2canvas(document.querySelector('.certificate')).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'certificate.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+});
+});
+
+</script>
+
+ {% endblock 'content_main' %}

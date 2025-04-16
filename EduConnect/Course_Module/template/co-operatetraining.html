@@ -1,0 +1,233 @@
+{% extends 'index.html' %}
+
+{% load static %}
+{% block 'main_home' %}
+
+<link rel="stylesheet" href="{% static 'css/co-operatetraining.css' %}">
+<section class="section corporate-banner text-white text-center p-5">
+  <div class="container p-3">
+    <div class="row align-items-center justify-content-center">
+      <div class="col-lg-8">
+        <p class="display-4 mb-4"><b>Transform Your Skills</b></p>
+        <p class="lead mb-4">Learn emerging skills quickly with custom curriculum designed as per your needs.</p>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class=" text-dark py-5" style="background-color: #cccccc;">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-3">
+        <p><b>Top companies use EduConnect</b> <br> 
+          <b>for their enterprise learning.</b></p>
+      </div>
+      <div class="col-lg-9">
+        <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/corporate/corporate-desktop-sec-one.png" alt="Company Logos" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section >
+  <div class="container py-5">
+      <div class="row align-items-center">
+        <!-- Left Section -->
+        <div class="col-md-6">
+          <h3>Why top companies prefer EduConnect</h3>
+          <ul class="list-unstyled mt-4">
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Engaging and Result-Oriented Learning</li>
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Tailored Curriculum Designed by Experts</li>
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Hands-on exercises and industry use cases</li>
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Practical Hands-On Learning </li>
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Expert Feedback and Guidance</li>
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Comprehensive Performance Tracking</li>
+            <li class="mb-3"><i class="icon-check bi bi-check-circle"></i> Work-Ready from Day One</li>
+          </ul>
+        </div>
+        <style>
+          /* Main Video Container */
+
+        </style>
+  
+        <!-- Right Section -->
+        <div class="col-md-6 ">
+          <div class="testimonial-box position-relative text-center">
+            <div class="video-container">
+              <img src="https://intellipaat.com/course-image/2020/02/6_yoga.jpg" alt="Testimonial">
+              <button class="play-button" onclick="openVideo('https://youtu.be/oGElHof2N4I')">&#9654;</button>
+            </div>
+            
+            <!-- Popup Video Modal -->
+            <div id="videoPopup" class="popup-container">
+              <div class="popup-content">
+                <span class="close-button" onclick="closeVideo()">&times;</span>
+                <iframe id="popupVideo" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+              </div>
+            </div>
+            
+            <div class="mt-3">
+              <p class="mb-1">"The Big Data Hadoop course was very good. Faculty, course arrangement, and scenario-based problem solving really helped us."</p>
+              <strong>- Mr. Yoga, VP at Sony</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+
+
+<section class="bg-dark text-light py-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-3 col-md-6 mb-2 text-center">
+        <img style="border: 1px solid white; border-radius: 5px;" src="{% static 'img/pic_edu_1.jpeg' %}" alt="On Premises" class="img-fluid">
+        <p>EduConnect University</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-2 text-center">
+        <img style="border: 1px solid white; border-radius: 5px;" src="{% static 'img/pic_edu_2.jpeg' %}" alt="On Premises" class="img-fluid">
+        <p>EduConnect Library</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-2 text-center">
+        <img style="border: 1px solid white; border-radius: 5px;" src="{% static 'img/pic_edu_3.jpeg' %}" alt="On Premises" class="img-fluid">
+        <p>EduConnect Campus</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-2 text-center">
+        <img style="border: 1px solid white; border-radius: 5px;" src="{% static 'img/pic_edu_4.jpeg' %}" alt="On Premises" class="img-fluid">
+        <p>EduConnect Team</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="programme_library" class="programme-library section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Programming_Language' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Big Data" class="programme-library-img"> 
+            <h5 class="programme-library-title">Programming Language</h5>
+           
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Data_Science' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Big Data" class="programme-library-img"> 
+            <h5 class="programme-library-title">Data Science</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Web_Development' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Big Data" class="programme-library-img"> 
+            <h5 class="programme-library-title">Web Development</h5>
+           
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Game_Development' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Big Data" class="programme-library-img"> 
+            <h5 class="programme-library-title">Game Development</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Mobile_Development' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Business Intelligence" class="programme-library-img">
+            <h5 class="programme-library-title">Mobile Development</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Database_Design' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Data Science" class="programme-library-img">
+            <h5 class="programme-library-title">Database Design</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Software_Testing' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Cloud Computing" class="programme-library-img">
+            <h5 class="programme-library-title">Software Testing</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Software_Engineering' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Cloud Computing" class="programme-library-img">
+            <h5 class="programme-library-title">Software Engineering</h5>
+            
+          </div>
+        </a>
+      </div>
+      
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Software_Development_Tools' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Cloud Computing" class="programme-library-img">
+            <h5 class="programme-library-title">Software Development Tools</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'No_Code_Development' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Cloud Computing" class="programme-library-img">
+            <h5 class="programme-library-title">No-Code Development</h5>
+            
+          </div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 mb-3">
+        <a href="{% url 'homeCard' 'Other' %}" class="text-decoration-none">
+          <div class="programme-library-item bg-white">
+            <img src="https://intellipaat.com/course-image/2020/02/bigdata.png" alt="Cloud Computing" class="programme-library-img">
+            <h5 class="programme-library-title">Other</h5>
+            
+          </div>
+        </a>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+
+
+<section class="clients-section bg-dark p-5">
+  <div class="container">
+    <h2 class="text-center text-white">Clients</h2>
+    <div class="row clients-logos p-2">
+      <div class="col-12"> 
+        <img src="https://intellipaat.com/wp-content/themes/intellipaat/images/corporate/corporate_page-clients_desktop.png" alt="Client Logos" class="clients-logo-img"> 
+      </div>
+    </div>
+    <p class="text-center text-white mt-2">200+ companies trust EduConnect in upskilling their employees</p>
+  </div>
+</section>
+
+
+<script src="{% static 'js/co-operatetraining.js' %}"></script>
+
+
+{% endblock %}

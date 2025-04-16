@@ -1,0 +1,325 @@
+{% extends 'tech_index.html' %}
+{% load static %}
+
+{% block 'tech_main' %}
+<!-- <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/super-build/ckeditor.js"></script> -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<div class="container mt-4">
+    {% if messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% endfor %}    
+    </div>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data" id="courseForm" action="{% url 'create_course_z' %}">
+        {% csrf_token %}
+        
+        <!-- Course Details Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Course Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select name="category" class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="Programming Language">Programming Language</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Game Development">Game Development</option>
+                                <option value="Mobile Development">Mobile Development</option>
+                                <option value="Database Design">Database Design</option>
+                                <option value="Software Testing">Software Testing</option>
+                                <option value="Software Engineering">Software Engineering</option>
+                                <option value="Software Development Tools">Software Development Tools</option>
+                                <option value="No-Code Development">No-Code Development</option>
+                                <option value="Other">Other</option>
+                                <!-- Add other categories -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group mt-3">
+                    <label>Description (additional)</label>
+                    <textarea name="description2" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Duration (hours)</label>
+                            <input type="number" name="duration" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Old Price</label>
+                            <input type="number" name="old_price" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>New Price</label>
+                            <input type="number" name="price" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Max Enrollment</label>
+                            <input type="number" name="max_enroll" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label>Course Image</label>
+                    <input type="file" name="course_img" class="form-control">
+                </div>
+
+                <!-- Dynamic Learning Objectives -->
+                <div class="mt-4">
+                    <h4>Learning Objectives</h4>
+                    <div id="learningContainer">
+                        <div class="input-group mb-2">
+                            <input type="text" name="learning[]" class="form-control" placeholder="Learning objective">
+                            <button type="button" class="btn btn-danger remove-field">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" id="addLearning">Add Learning Objective</button>
+                </div>
+
+                <!-- Dynamic Skills -->
+                <div class="mt-4">
+                    <h4>Skills</h4>
+                    <div id="skillsContainer">
+                        <div class="input-group mb-2">
+                            <input type="text" name="skills[]" class="form-control" placeholder="Skill">
+                            <button type="button" class="btn btn-danger remove-field">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" id="addSkill">Add Skill</button>
+                </div>
+
+                <!-- Dynamic Features -->
+                <div class="mt-4">
+                    <h4>Features</h4>
+                    <div id="featuresContainer">
+                        <div class="input-group mb-2">
+                            <input type="text" name="features[]" class="form-control" placeholder="Feature">
+                            <button type="button" class="btn btn-danger remove-field">Remove</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" id="addFeature">Add Feature</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Course Content</h3>
+                <button type="button" class="btn btn-primary" id="addContentSection">Add Content Section</button>
+            </div>
+            <div class="card-body" id="contentSections">
+                <div class="content-section mb-4">
+                    <h4>Content Section 1</h4>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="content_title[]" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group mt-2">
+                        <label>Description</label>
+                        <textarea id="editor" name="content_desc[]"></textarea>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Order</label>
+                        <input type="number" name="content_order[]" class="form-control" required>
+                    </div>
+
+                    <!-- Assignments for this content -->
+                    <div class="assignments-container mt-3">
+                        <h5>Assignments</h5>
+                        <div class="assignment-items">
+                            <div class="input-group mb-2">
+                                <input type="text" name="assignment_title[]" class="form-control" placeholder="Assignment title">
+                                <button type="button" class="btn btn-danger remove-assignment">Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-info add-assignment">Add Assignment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg">Create Course</button>
+    </form>
+</div>
+<script>
+let editors = [];
+document.getElementById('courseForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default to update CKEditor values first
+    
+    try {
+        // Update CKEditor content
+        editors.forEach(editor => {
+            const textarea = editor.sourceElement;
+            textarea.value = editor.getData();
+        });
+
+        // Add a short delay before submitting the form
+        setTimeout(() => this.submit(), 50);
+        
+    } catch (error) {
+        console.error('Error during form submission:', error);
+    }
+});
+
+
+
+function initializeCKEditor(element) {
+    return ClassicEditor
+        .create(element)
+        .then(editor => {
+            editors.push(editor);
+            return editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const initialEditor = document.querySelector('#editor');
+    if (initialEditor) {
+        initializeCKEditor(initialEditor);
+    }
+
+    // Add Learning Objective
+    document.getElementById('addLearning').addEventListener('click', function() {
+        const container = document.getElementById('learningContainer');
+        const newField = `
+            <div class="input-group mb-2">
+                <input type="text" name="learning[]" class="form-control" placeholder="Learning objective">
+                <button type="button" class="btn btn-danger remove-field">Remove</button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', newField);
+    });
+
+    // Add Skill
+    document.getElementById('addSkill').addEventListener('click', function() {
+        const container = document.getElementById('skillsContainer');
+        const newField = `
+            <div class="input-group mb-2">
+                <input type="text" name="skills[]" class="form-control" placeholder="Skill">
+                <button type="button" class="btn btn-danger remove-field">Remove</button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', newField);
+    });
+
+    // Add Feature
+    document.getElementById('addFeature').addEventListener('click', function() {
+        const container = document.getElementById('featuresContainer');
+        const newField = `
+            <div class="input-group mb-2">
+                <input type="text" name="features[]" class="form-control" placeholder="Feature">
+                <button type="button" class="btn btn-danger remove-field">Remove</button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', newField);
+    });
+
+    // Add Content Section
+    let contentCounter = 1;
+    document.getElementById('addContentSection').addEventListener('click', function() {
+    contentCounter++;
+    const newSection = `
+        <div class="content-section mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>Content Section ${contentCounter}</h4>
+                <button type="button" class="btn btn-danger remove-content-section">Remove Section</button>
+            </div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="content_title[]" class="form-control" required>
+            </div>
+            <div class="form-group mt-2">
+                <label>Description</label>
+                <textarea id="editor${contentCounter}" name="content_desc[]" ></textarea>
+            </div>
+            <div class="form-group mt-2">
+                <label>Order</label>
+                <input type="number" name="content_order[]" class="form-control" required>
+            </div>
+            <div class="assignments-container mt-3">
+                <h5>Assignments</h5>
+                <div class="assignment-items">
+                    <div class="input-group mb-2">
+                        <input type="text" name="assignment_title[]" class="form-control" placeholder="Assignment title">
+                        <button type="button" class="btn btn-danger remove-assignment">Remove</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-info add-assignment">Add Assignment</button>
+            </div>
+        </div>
+    `;
+    document.getElementById('contentSections').insertAdjacentHTML('beforeend', newSection);
+    // Initialize CKEditor for the new textarea
+    const newTextarea = document.querySelector(`#editor${contentCounter}`);
+    initializeCKEditor(newTextarea);
+});
+
+    // Event delegation for dynamic elements
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-field')) {
+            e.target.parentElement.remove();
+        }
+        if (e.target.classList.contains('add-assignment')) {
+            const assignmentContainer = e.target.previousElementSibling;
+            const newAssignment = `
+                <div class="input-group mb-2">
+                    <input type="text" name="assignment_title[]" class="form-control" placeholder="Assignment title">
+                    <button type="button" class="btn btn-danger remove-assignment">Remove</button>
+                </div>
+            `;
+            assignmentContainer.insertAdjacentHTML('beforeend', newAssignment);
+        }
+        if (e.target.classList.contains('remove-assignment')) {
+            e.target.parentElement.remove();
+        }
+
+        if (e.target.classList.contains('remove-content-section')) {
+    const section = e.target.closest('.content-section');
+    const textarea = section.querySelector('textarea');  // Changed selector
+    const editorInstance = editors.find(editor => editor.sourceElement === textarea);
+    if (editorInstance) {
+        const index = editors.indexOf(editorInstance);
+        editorInstance.destroy();
+        editors.splice(index, 1);
+    }
+    section.remove();
+}
+
+    });
+});
+</script>
+{% endblock 'tech_main' %}

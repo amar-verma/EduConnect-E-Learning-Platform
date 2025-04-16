@@ -1,0 +1,193 @@
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    text-align: left;
+    /* background-color: white; */
+    color: black;
+    font-size: 16px;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    background-image: url("../img/edu.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed;
+    /* Ensure it stays fixed and covers all */
+    top: 0;
+    left: 0;
+    z-index: -1;
+    filter: blur(4px);
+}
+
+/* Form container */
+.form-container {
+    position: relative;
+    z-index: 10;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: white;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.image-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-section h2 {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.form-section {
+    padding: 40px;
+}
+
+.form-section h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-register {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-register:hover {
+    background-color: #0056b3;
+}
+
+/* Style for the profile picture */
+.profile-pic-wrapper {
+    text-align: center;
+}
+
+#profile-pic {
+    width: 320px;
+    /* Fixed width */
+    height: 320px;
+    /* Fixed height */
+    object-fit: cover;
+    /* Ensures the image covers the area without distortion */
+    border: 2px solid #ccc;
+    /* Border around the image */
+    border-radius: 50%;
+    /* Makes the image a circle */
+    margin-bottom: 10px;
+    /* Space below the profile picture */
+}
+
+/* Style for the image selection thumbnails */
+.select-img img {
+    cursor: pointer;
+    width: 150px;
+    /* Fixed width for thumbnail */
+    height: 150px;
+    /* Fixed height for thumbnail */
+    object-fit: cover;
+    /* Ensures the image fits without stretching */
+    margin: 5px;
+    /* Space between the thumbnails */
+    border-radius: 5px;
+    /* Rounded corners for the thumbnails */
+    transition: transform 0.3s ease;
+    /* Smooth scaling effect */
+}
+
+.select-img img:hover {
+    transform: scale(1.1);
+    /* Slight zoom effect on hover */
+}
+
+/* Style for the button and text */
+#selected-pic-name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Style for the thumbnail images */
+
+
+.circle-btn-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 3px;
+    margin-top: 3px;
+    
+  }
+  
+  /* Circular Button Style */
+  .circle-btn {
+    width: 40px; /* Adjust size as needed */
+    height: 40px;
+    border-radius: 50%;
+    background-color: #bfd2e7; /* Bootstrap primary color */
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.8; /* Reduce opacity */
+    transition: opacity 0.3s, background-color 0.3s;
+    
+  }
+  
+  /* Icon styling */
+  .circle-btn i {
+    font-size: 1.2rem; /* Adjust icon size as needed */
+    color: white; /* Icon color */
+  }
+  
+  /* Hover effect */
+  .circle-btn:hover {
+    opacity: 1;
+    background-color: #818a94; /* Darker shade on hover */
+  }
+  
+  @media (max-width: 768px) {
+    .circle-btn-container{
+      display: none;
+    }
+  }
+  

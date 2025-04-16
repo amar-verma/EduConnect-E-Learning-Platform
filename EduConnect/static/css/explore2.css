@@ -1,0 +1,28 @@
+.filter-bar {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+  }
+  
+  .filter-bar h5 {
+    font-weight: bold;
+    margin-bottom: 0;
+  }
+  
+  .filter-bar .form-select {
+    border-radius: 20px;
+    font-size: 0.9rem;
+    padding: 6px 25px; /* Added padding to separate the arrow and text */
+    transition: all 0.3s ease;
+    background-position: right 10px center; /* Adjust the position of the arrow */
+    background-repeat: no-repeat;
+  }
+  
+  .filter-bar .form-select:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .filter-bar select{
+      width: auto;
+      padding-right: 3px;
+  }
+  

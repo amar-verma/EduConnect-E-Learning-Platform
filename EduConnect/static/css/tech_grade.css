@@ -1,0 +1,144 @@
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Search Bar */
+.search-bar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+#searchInput {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 200px; /* Ensure input doesn't get too small */
+}
+
+#searchButton, #backButton {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 100px; /* Ensure buttons don't get too small */
+}
+
+#searchButton:hover, #backButton:hover {
+    background-color: #2980b9;
+}
+
+/* Table Styles */
+.grade-table {
+    overflow-x: auto; /* Allow horizontal scrolling on small screens */
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #3498db;
+    color: white;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.status-pass {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.status-fail {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Download Button */
+#downloadButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#downloadButton:hover {
+    background-color: #2980b9;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .search-bar {
+        flex-direction: column;
+    }
+
+    #searchInput, #searchButton, #backButton {
+        width: 100%;
+        flex: none;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    table {
+        font-size: 0.9rem; /* Reduce font size for small screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    table {
+        font-size: 0.8rem; /* Further reduce font size for very small screens */
+    }
+
+    th, td {
+        padding: 6px;
+    }
+}
+
+.tech-table{
+    max-height: 20rem;
+    overflow-y: auto;
+    border-radius: 15px;
+}

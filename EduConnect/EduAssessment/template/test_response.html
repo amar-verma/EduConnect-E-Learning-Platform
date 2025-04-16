@@ -1,0 +1,50 @@
+{% load static %}{% include 'test_bar.html' %}
+{% block 'form_part' %}
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<style>
+    .response-card {
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .response-card:hover {
+            transform: scale(1.02);
+        }
+        .score-badge {
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+</style>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Student Responses - {{ form.title }}</h2>
+
+    {% if student_data %}
+    <div class="row">
+        {% for student_id, data in student_data.items %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card response-card p-3">
+                <h5 class="card-title">{{ data.name }}</h5>
+                <p class="text-muted">{{ data.email }}</p>
+                <p><strong>Submitted At:</strong> {{ data.submitted_at }}</p>
+                <p><strong>Total Questions:</strong> {{ data.total_questions }}</p>
+                <p><strong>Time Taken:</strong> {{ data.time_taken }} sec</p>
+                <p>
+                    <strong>Score:</strong>
+                    <span class="score-badge bg-success text-white">
+                        {{ data.total_score }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center text-danger">No responses yet.</p>
+    {% endif %}
+
+
+
+{% endblock 'form_part' %}

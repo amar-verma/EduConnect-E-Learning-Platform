@@ -1,0 +1,509 @@
+{% load static %}
+{% include 'educLoder.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=developer_guide"
+      />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/circle-btn.css' %}">
+</head>
+<body>
+
+  <div class="circle-btn-container">
+    <a href="{% url 'home' %}" class="text-decoration-none text-white "><button class="circle-btn ms-3 mt-3  shadow">
+      <i class="bi bi-house-door-fill"></i>
+    </button></a>
+  </div>
+
+
+    <div class="background"></div>
+
+    <!-- Form container -->
+    
+
+
+    <div class="container form-container shadow container-2" >
+        <form action="{% url 'std_register_next' %}" method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+        <div class="row">
+          <!-- Left Column: Profile Picture Section -->
+          
+          <div class="col-md-6 image-section text-center mt-4">
+            <h4>Profile Picture</h4>
+            <div class="profile-pic-wrapper">
+                <img
+                  src="{% static 'img/EduConnect.jpeg' %}"
+                  alt="Profile Picture"
+                  id="profile-pic"
+                  class="img-fluid rounded-circle"
+                  style="width: 150px; height: 150px; object-fit: cover; border: 2px solid #ccc; display: none;"
+                />
+                <input
+                  type="text"
+                  id="selected-image-src"
+                  class="form-control mt-2"
+                  readonly
+                  placeholder="Selected image source"
+                  name="selected-image-src"
+                  style="width: 200px; margin: 10px auto;"
+                  required hidden
+                />
+                
+                
+                <p class="mt-2" id="selected-pic-name">No file selected</p>
+              
+                <div class="select-img">
+                  <img
+                    src="{% static 'img/std_auth/box.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('box.jpg', 'Box')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/circle-square.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('circle-square.jpg', 'circle & square')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/circle.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('circle.jpg', 'circle')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/cube.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('cube.jpg', 'cube')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/cylinder.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('cylinder.jpg', 'cylinder')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/ellipse.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('ellipse.jpg', 'ellipse')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/girl-pic.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('girl-pic.jpg', 'girl pic')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/heart.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('heart.jpg', 'heart')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/heptagon.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('heptagon.jpg', 'heptagon')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/hexagon.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('hexagon.jpg', 'hexagon')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/pentagon.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('pentagon.jpg', 'pentagon')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/rhombus.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('rhombus.jpg', 'rhombus')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/shape.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('shape.jpg', 'shape')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/square-triangle.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('square-triangle.jpg', 'square & triangle')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/square.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('square.jpg', 'square')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/star.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('star.jpg', 'star')"
+                  />
+                  <img
+                    src="{% static 'img/std_auth/triangle.jpg' %}"
+                    alt="EduConnect"
+                    class="img-thumbnails"
+                    onclick="selectImage('triangle.jpg', 'triangle')"
+                  />
+                  <!-- Add more images as needed -->
+                </div>
+              
+                <div class="invalid-feedback">Please select a profile picture.</div>
+              </div>
+          </div>
+          
+          <!-- Right Column: Form Fields -->
+          <div class="col-md-6 form-section">
+            {% if messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              {% for message in messages %}
+                {{ message }} <br>
+              {% endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            <h3>Additional Details</h3>
+            <form action="{% url 'std_register_next' %}" method="POST" class="needs-validation" novalidate>
+              <!-- Phone Number Field -->
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <div class="d-flex">
+                  <input
+                    type="text"
+                    id="phone"
+                    class="form-control me-2"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+                <div class="invalid-feedback">Please enter a valid phone number.</div>
+              </div>
+      
+              <!-- OTP Field -->
+              <div class="form-group">
+                <label for="otp">OTP</label>
+                <input
+                  type="text"
+                  id="otp"
+                  class="form-control"
+                  name="otp"
+                  placeholder="Enter OTP"
+                  required
+                />
+                <div class="invalid-feedback">Please enter the OTP.</div>
+              </div>
+      
+              <!-- Address Field -->
+              <div class="form-group">
+                <label for="address">Address</label>
+                <input
+                  type="text"
+                  id="address"
+                  class="form-control"
+                  name="address"
+                  placeholder="Enter your address"
+                  required
+                />
+                <div class="invalid-feedback">Please provide your address.</div>
+              </div>
+      
+              <!-- Country Field -->
+              <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" class="form-control" name="country" required>
+                  <option value="" style="display: none;">Select Country</option>
+                  <!-- Options will be populated dynamically -->
+                </select>
+                <div class="invalid-feedback">Please provide your country.</div>
+              </div>
+      
+              <!-- State Field -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="state">State</label>
+                    <select id="state" class="form-control" name="state" required>
+                      <option value="" style="display: none;">Select State</option>
+                      <!-- Options will be populated dynamically -->
+                    </select>
+                    <div class="invalid-feedback">Please provide your state.</div>
+                  </div>
+                </div>
+      
+                <!-- City Field -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="city">City</label>
+                    <select id="city" class="form-control" name="city" required>
+                      <option value="" style="display: none;">Select City</option>
+                      <!-- Options will be populated dynamically -->
+                    </select>
+                    <div class="invalid-feedback">Please provide your city.</div>
+                  </div>
+                </div>
+              </div>
+      
+              <!-- Zip Code Field -->
+              <div class="form-group">
+                <label for="zip-code">Zip Code</label>
+                <input
+                  type="text"
+                  id="zip-code"
+                  class="form-control"
+                  name="zip_code"
+                  placeholder="Enter your zip code"
+                  required
+                />
+                <div class="invalid-feedback">Please provide your zip code.</div>
+              </div>
+      
+              <!-- Skills Field -->
+              <div class="form-group">
+                <label for="skills">Skills</label>
+                <input
+                  type="text"
+                  id="skills"
+                  class="form-control"
+                  name="skills"
+                  placeholder="Enter your skills (comma-separated)"
+                  required
+                />
+                <small class="text-muted">Example: JavaScript, Python, HTML</small>
+              </div>
+      
+              <!-- Bio Field -->
+              <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea
+                  id="bio"
+                  class="form-control"
+                  name="bio"
+                  placeholder="Write a brief bio about yourself"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+      
+              <!-- Link Field -->
+              <div class="form-group">
+                <label for="link">Link</label>
+                <input
+                  type="url"
+                  id="link"
+                  class="form-control"
+                  name="link"
+                  placeholder="Enter your website or portfolio link"
+                  
+                />
+              </div>
+      
+              <!-- Level of Study Field -->
+              <div class="form-group">
+                <label for="level">Level of Study</label>
+                <select id="level" class="form-control" name="level" required>
+                  <option value="" style="display: none;">Select</option>
+                  <option value="high-school">High School</option>
+                  <option value="undergraduate">Undergraduate</option>
+                  <option value="postgraduate">Postgraduate</option>
+                </select>
+                <div class="invalid-feedback">Please select your level of study.</div>
+              </div>
+      
+              <!-- Terms and Conditions Checkbox -->
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="terms-and-conditions"
+                  required
+                />
+                <label class="form-check-label" for="terms-and-conditions">
+                  I agree to the <a href="" target="_blank">Terms and Conditions</a> of EduConnect.
+                </label>
+                <div class="invalid-feedback">
+                  You must accept the terms and conditions before submitting.
+                </div>
+              </div>
+      
+              <!-- Submit Button -->
+              
+              <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            
+          </div>
+        </div>
+    </form>
+      </div>
+
+      <script src="{% static 'js/register.js' %}"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Example data for countries, states, and cities
+        const countries = [
+    { name: 'India', states: ['Maharashtra', 'Karnataka', 'Tamil Nadu', 'Delhi', 'Uttar Pradesh', 'West Bengal', 'Rajasthan'] },
+    { name: 'USA', states: ['California', 'Texas', 'Florida', 'New York', 'Illinois', 'Pennsylvania', 'Ohio'] },
+    { name: 'Canada', states: ['Ontario', 'Quebec', 'British Columbia', 'Alberta', 'Nova Scotia', 'Manitoba', 'Saskatchewan'] },
+    { name: 'United Kingdom', states: ['England', 'Scotland', 'Wales', 'Northern Ireland'] },
+    { name: 'Australia', states: ['New South Wales', 'Victoria', 'Queensland', 'Western Australia', 'South Australia', 'Tasmania', 'Australian Capital Territory'] },
+    { name: 'Germany', states: ['Bavaria', 'Berlin', 'North Rhine-Westphalia', 'Hesse', 'Saxony', 'Baden-Württemberg', 'Lower Saxony'] },
+    { name: 'France', states: ['Île-de-France', 'Provence-Alpes-Côte d\'Azur', 'Auvergne-Rhône-Alpes', 'Nouvelle-Aquitaine', 'Occitanie'] },
+    { name: 'Brazil', states: ['São Paulo', 'Rio de Janeiro', 'Minas Gerais', 'Bahia', 'Paraná', 'Santa Catarina'] },
+    { name: 'South Africa', states: ['Gauteng', 'Western Cape', 'KwaZulu-Natal', 'Eastern Cape', 'Limpopo'] },
+    { name: 'Other', states: ['Other'] }
+];
+
+const states = {
+    'India': ['Maharashtra', 'Karnataka', 'Tamil Nadu', 'Delhi', 'Uttar Pradesh', 'West Bengal', 'Rajasthan'],
+    'USA': ['California', 'Texas', 'Florida', 'New York', 'Illinois', 'Pennsylvania', 'Ohio'],
+    'Canada': ['Ontario', 'Quebec', 'British Columbia', 'Alberta', 'Nova Scotia', 'Manitoba', 'Saskatchewan'],
+    'United Kingdom': ['England', 'Scotland', 'Wales', 'Northern Ireland'],
+    'Australia': ['New South Wales', 'Victoria', 'Queensland', 'Western Australia', 'South Australia', 'Tasmania', 'Australian Capital Territory'],
+    'Germany': ['Bavaria', 'Berlin', 'North Rhine-Westphalia', 'Hesse', 'Saxony', 'Baden-Württemberg', 'Lower Saxony'],
+    'France': ['Île-de-France', 'Provence-Alpes-Côte d\'Azur', 'Auvergne-Rhône-Alpes', 'Nouvelle-Aquitaine', 'Occitanie'],
+    'Brazil': ['São Paulo', 'Rio de Janeiro', 'Minas Gerais', 'Bahia', 'Paraná', 'Santa Catarina'],
+    'South Africa': ['Gauteng', 'Western Cape', 'KwaZulu-Natal', 'Eastern Cape', 'Limpopo'],
+    'Other': ['-']
+};
+
+const cities = {
+    'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Nashik', 'Aurangabad'],
+    'Karnataka': ['Bengaluru', 'Mysuru', 'Mangalore', 'Hubli', 'Belagavi'],
+    'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Trichy', 'Salem'],
+    'Delhi': ['New Delhi', 'Old Delhi', 'Dwarka', 'Connaught Place'],
+    'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Agra', 'Varanasi', 'Noida'],
+    'West Bengal': ['Kolkata', 'Siliguri', 'Howrah', 'Durgapur'],
+    'Rajasthan': ['Jaipur', 'Udaipur', 'Jodhpur', 'Kota', 'Ajmer'],
+    'California': ['Los Angeles', 'San Francisco', 'San Diego', 'Sacramento', 'Oakland'],
+    'Texas': ['Houston', 'Dallas', 'Austin', 'San Antonio', 'Fort Worth'],
+    'Florida': ['Miami', 'Orlando', 'Tampa', 'Jacksonville', 'Tallahassee'],
+    'New York': ['New York City', 'Buffalo', 'Rochester', 'Albany', 'Syracuse'],
+    'Illinois': ['Chicago', 'Aurora', 'Naperville', 'Peoria', 'Rockford'],
+    'Pennsylvania': ['Philadelphia', 'Pittsburgh', 'Allentown', 'Erie', 'Reading'],
+    'Ohio': ['Columbus', 'Cleveland', 'Cincinnati', 'Toledo', 'Akron'],
+    'Ontario': ['Toronto', 'Ottawa', 'Mississauga', 'Hamilton', 'London'],
+    'Quebec': ['Montreal', 'Quebec City', 'Gatineau', 'Sherbrooke', 'Trois-Rivières'],
+    'British Columbia': ['Vancouver', 'Victoria', 'Surrey', 'Burnaby', 'Kelowna'],
+    'Alberta': ['Calgary', 'Edmonton', 'Red Deer', 'Lethbridge', 'Fort McMurray'],
+    'Nova Scotia': ['Halifax', 'Sydney', 'Truro', 'New Glasgow', 'Bridgewater'],
+    'Manitoba': ['Winnipeg', 'Brandon', 'Thompson', 'Portage la Prairie', 'Steinbach'],
+    'Saskatchewan': ['Saskatoon', 'Regina', 'Prince Albert', 'Moose Jaw', 'Swift Current'],
+    'England': ['London', 'Manchester', 'Birmingham', 'Leeds', 'Liverpool'],
+    'Scotland': ['Edinburgh', 'Glasgow', 'Aberdeen', 'Dundee', 'Inverness'],
+    'Wales': ['Cardiff', 'Swansea', 'Newport', 'Wrexham', 'Bangor'],
+    'Northern Ireland': ['Belfast', 'Derry', 'Lisburn', 'Newtownabbey', 'Armagh'],
+    'New South Wales': ['Sydney', 'Newcastle', 'Wollongong', 'Maitland', 'Tweed Heads'],
+    'Victoria': ['Melbourne', 'Geelong', 'Ballarat', 'Bendigo', 'Shepparton'],
+    'Queensland': ['Brisbane', 'Gold Coast', 'Cairns', 'Townsville', 'Rockhampton'],
+    'Western Australia': ['Perth', 'Mandurah', 'Bunbury', 'Albany', 'Geraldton'],
+    'South Australia': ['Adelaide', 'Mount Gambier', 'Murray Bridge', 'Whyalla', 'Port Augusta'],
+    'Tasmania': ['Hobart', 'Launceston', 'Devonport', 'Burnie', 'Bicheno'],
+    'Australian Capital Territory': ['Canberra'],
+    'Bavaria': ['Munich', 'Nuremberg', 'Augsburg', 'Regensburg', 'Ingolstadt'],
+    'Berlin': ['Berlin'],
+    'North Rhine-Westphalia': ['Cologne', 'Düsseldorf', 'Dortmund', 'Essen', 'Bielefeld'],
+    'Hesse': ['Frankfurt', 'Wiesbaden', 'Darmstadt', 'Kassel', 'Offenbach'],
+    'Saxony': ['Dresden', 'Leipzig', 'Chemnitz', 'Zschopau', 'Riesa'],
+    'Baden-Württemberg': ['Stuttgart', 'Mannheim', 'Karlsruhe', 'Heidelberg', 'Freiburg'],
+    'Lower Saxony': ['Hanover', 'Braunschweig', 'Oldenburg', 'Osnabrück', 'Wolfsburg'],
+    'Île-de-France': ['Paris', 'Versailles', 'Boulogne-Billancourt', 'Montreuil', 'Argenteuil'],
+    'Provence-Alpes-Côte d\'Azur': ['Marseille', 'Nice', 'Toulon', 'Aix-en-Provence', 'Avignon'],
+    'Auvergne-Rhône-Alpes': ['Lyon', 'Saint-Étienne', 'Grenoble', 'Clermont-Ferrand', 'Annecy'],
+    'Nouvelle-Aquitaine': ['Bordeaux', 'Limoges', 'Poitiers', 'Angoulême', 'Périgueux'],
+    'Occitanie': ['Toulouse', 'Montpellier', 'Nîmes', 'Perpignan', 'Toulon'],
+    'São Paulo': ['São Paulo', 'Campinas', 'Santos', 'Ribeirão Preto', 'Sorocaba'],
+    'Rio de Janeiro': ['Rio de Janeiro', 'Niterói', 'Duque de Caxias', 'Nova Iguaçu', 'Cabo Frio'],
+    'Minas Gerais': ['Belo Horizonte', 'Uberlândia', 'Contagem', 'Juiz de Fora', 'Montes Claros'],
+    'Bahia': ['Salvador', 'Feira de Santana', 'Vitória da Conquista', 'Camaçari', 'Juazeiro'],
+    'Paraná': ['Curitiba', 'Londrina', 'Maringá', 'Cascavel', 'Ponta Grossa'],
+    'Santa Catarina': ['Florianópolis', 'Joinville', 'Blumenau', 'Itajaí', 'São José'],
+    'Gauteng': ['Johannesburg', 'Pretoria', 'Ekurhuleni', 'Midrand', 'Soweto'],
+    'Western Cape': ['Cape Town', 'Stellenbosch', 'Paternoster', 'George', 'Knysna'],
+    'KwaZulu-Natal': ['Durban', 'Pietermaritzburg', 'Richards Bay', 'Newcastle', 'Umlazi'],
+    'Eastern Cape': ['Port Elizabeth', 'East London', 'Mthatha', 'Grahamstown', 'Bhisho'],
+    'Limpopo': ['Polokwane', 'Lephalale', 'Makhado', 'Musina', 'Thohoyandou'],
+    '-': ['-']
+};
+
+
+    
+        // Populate countries
+        const countrySelect = document.getElementById('country');
+        countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = country.name;
+            option.textContent = country.name;
+            countrySelect.appendChild(option);
+        });
+    
+        // Event listener for country change
+        countrySelect.addEventListener('change', function () {
+            const selectedCountry = this.value;
+            const stateSelect = document.getElementById('state');
+            const citySelect = document.getElementById('city');
+    
+            // Clear previous selections
+            stateSelect.innerHTML = '<option value="" style="display: none;">Select State</option>';
+            citySelect.innerHTML = '<option value="" style="display: none;">Select City</option>';
+    
+            // Populate states based on selected country
+            if (selectedCountry && states[selectedCountry]) {
+                states[selectedCountry].forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+            }
+        });
+    
+        // Event listener for state change
+        document.getElementById('state').addEventListener('change', function () {
+            const selectedState = this.value;
+            const citySelect = document.getElementById('city');
+    
+            // Clear previous city selections
+            citySelect.innerHTML = '<option value="" style="display: none;">Select City</option>';
+    
+            // Populate cities based on selected state
+            if (selectedState && cities[selectedState]) {
+                cities[selectedState].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+    });
+    </script>
+    
+</body>
+</html>

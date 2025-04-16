@@ -1,0 +1,329 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_overview.css' %}">
+<style>
+    .dashboard-container {
+    padding: 20px;
+}
+
+.card {
+    border-radius: 10px;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3b7ddd;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.comparison-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+
+.trend-positive {
+    color: #27ae60;
+}
+
+.trend-negative {
+    color: #e74c3c;
+}
+</style>
+<div class="container-fluid dashboard-container">
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+    {% endfor %}
+</div>
+{% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Total Courses</h5>
+                <h3 id="totalCourses">{{ total_courses }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Students Enrolled</h5>
+                <h3 id="totalEnrollments">{{ total_enrollments }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Average Rating</h5>
+                <h3 id="averageRating">{{ average_rating }} <span>&#9733;</span></h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Live Webinars</h5>
+                <h3 id="totalWebinars">{{ total_webinars }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Current Month Courses</h5>
+                <h3>{{ current_month.courses }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Events Created</h5>
+                <h3 id="totalEvents">{{ total_events }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Completed Students</h5>
+                <h3 id="completedStudents">{{ completed_students }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Monthly Growth</h5>
+                <h3>{{ current_month.enrollments }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card p-3 shadow-sm">
+                <h5>Performance Overview</h5>
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h5>Monthly Comparison</h5>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        Current Month Events: {{ current_month.events }}
+                    </li>
+                    <li class="list-group-item">
+                        Previous Month Courses: {{ prev_month.courses }}
+                    </li>
+                    <li class="list-group-item">
+                        Current Month Webinars: {{ current_month.webinars }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <div class="card p-3 shadow-sm">
+                    <h5>Previous Month Enrollments</h5>
+                    <h3>{{ prev_month.enrollments }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5>Enrollment Growth Over Time</h5>
+                <canvas id="enrollmentChart"></canvas>
+            </div>
+            <div class="col-md-12 mt-3">
+                <div class="card p-3 shadow-sm">
+                    <h5>Previous Month Webinars</h5>
+                    <h3>{{ prev_month.webinars }}</h3>
+                </div>
+            </div>
+            <div class="col-md-12 mt-3">
+                <div class="card p-3 shadow-sm">
+                    <h5>Previous Month Events</h5>
+                    <h3>{{ prev_month.events }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h5>Course Likes vs Dislikes</h5>
+                <canvas id="likesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Update statistics with dynamic data
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update basic stats
+        updateElement('totalCourses', "{{ total_courses }}");
+        updateElement('totalEnrollments', "{{ total_enrollments }}");
+        updateElement('averageRating', "{{ average_rating }}");
+        updateElement('totalWebinars', "{{ total_webinars }}");
+        updateElement('totalEvents', "{{ total_events }}");
+        updateElement('completedStudents', "{{ completed_students }}");
+
+        // Performance Chart
+        const performanceData = {
+            current: {
+                courses: "{{ current_month.courses }}",
+                enrollments: "{{ current_month.enrollments }}",
+                webinars: "{{ current_month.webinars }}",
+                events: "{{ current_month.events }}"
+            },
+            previous: {
+                courses: "{{ prev_month.courses }}",
+                enrollments: "{{ prev_month.enrollments }}",
+                webinars: "{{ prev_month.webinars }}",
+                events: "{{ prev_month.events }}"
+            }
+        };
+
+        // Initialize charts with the data
+        initializePerformanceChart(performanceData);
+        initializeEnrollmentChart("{{ course_engagement|safe }}");
+        initializeLikesChart("{{ course_engagement|safe }}");
+    });
+
+    function updateElement(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+    function initializePerformanceChart(data) {
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Courses', 'Enrollments', 'Webinars', 'Events'],
+                datasets: [{
+                    label: 'Current Month',
+                    data: [
+                        data.current.courses,
+                        data.current.enrollments,
+                        data.current.webinars,
+                        data.current.events
+                    ],
+                    backgroundColor: '#3b7ddd'
+                }, {
+                    label: 'Previous Month',
+                    data: [
+                        data.previous.courses,
+                        data.previous.enrollments,
+                        data.previous.webinars,
+                        data.previous.events
+                    ],
+                    backgroundColor: '#f39c12'
+                }]
+            }
+        });
+    }
+    initializeEnrollmentChart('{{ enrollment_data|safe }}');
+    initializeLikesChart('{{ engagement_data|safe }}');
+
+
+    function initializeEnrollmentChart(data) {
+    const ctx = document.getElementById('enrollmentChart').getContext('2d');
+    const enrollmentData = JSON.parse(data);
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: enrollmentData.map(item => item.id),
+            datasets: [{
+                label: 'Course Enrollments',
+                data: enrollmentData.map(item => item.enrollments),
+                backgroundColor: '#3b7ddd',
+                borderColor: '#2e5cb8',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+
+
+function initializeLikesChart(data) {
+    const ctx = document.getElementById('likesChart').getContext('2d');
+    const engagementData = JSON.parse(data);
+    
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: engagementData.map(item => item.title),
+            datasets: [{
+                data: engagementData.map(item => item.likes + item.dislikes),
+                backgroundColor: [
+                    '#3b7ddd',
+                    '#f39c12',
+                    '#e74c3c',
+                    '#2ecc71',
+                    '#9b59b6'
+                ]
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const item = engagementData[context.dataIndex];
+                            const total = item.likes + item.dislikes;
+                            return [
+                                `Total Interactions: ${total}`,
+                                `Likes: ${item.likes}`,
+                                `Dislikes: ${item.dislikes}`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+</script>
+
+
+{% endblock 'tech_main' %}

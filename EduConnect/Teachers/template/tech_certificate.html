@@ -1,0 +1,153 @@
+{% extends 'tech_index.html' %} {% load static %} {% block 'tech_main' %}
+<link rel="stylesheet" href="{% static 'css/tech_certificate.css' %}">
+
+<div class="container">
+    <h1 class="page-title">Issue Certificates</h1>
+
+
+    <div class="summary-container">
+        <p>Total Students: <span id="total-students">{{ total_students }}</span></p>
+        <p>Certificates Issued: <span id="certificates-issued">{{ issued_students }}</span></p>
+        <p>Pending Certificates: <span id="certificates-pending">{{ pending_students }}</span></p>
+    </div>
+    
+
+    <!-- Search Bar -->
+    <input type="text" id="search-box" placeholder="Search by Name or ID..." onkeyup="searchStudent()" class="form-control mb-3">
+    <div>
+        <label for="certificate-filter">Filter by Certificate Status:</label>
+        <select id="certificate-filter" class="form-control mb-3" onchange="filterCertificates()">
+            <option value="all">All</option>
+            <option value="issued">Issued</option>
+            <option value="not_issued">Not Issued</option>
+        </select>
+    </div>
+    <div class="certificate-table tech-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Course</th>
+                    <th>Enrollment Date</th>
+                    <th>Months</th>
+                    <th>Status</th>
+                    <th>Certificate</th>
+                    <th>Generated On</th>
+                </tr>
+            </thead>
+            <tbody id="certificateBody">
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.student_id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.course }}</td>
+                    <td>{{ student.enrolled_date }}</td>
+                    <td>{{ student.months }}</td>
+                    <td>{{ student.status }}</td>
+                    <td>
+                        {% if student.certificate_issued %}
+                            ✅ Issued
+                        {% else %}
+                            <button onclick="issueCertificate('{{ student.student_id }}', '{{ student.course_id}}')" class="rounded bg-transparent">
+                                Issue
+                            </button>
+                        {% endif %}
+                    </td>
+                    <td>{{ student.certificate_date|default:"N/A" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center">No enrolled students</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+function issueCertificate(studentId, courseId) {
+    if (!confirm("Are you sure you want to issue this certificate? Once issued, it cannot be changed.")) {
+        return;
+    }
+
+    fetch("/teacher/teacher/issue_certificate/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({ student_id: studentId, course_id: courseId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Certificate Issued Successfully!");
+            let button = document.querySelector(`button[onclick="issueCertificate('${studentId}', '${courseId}')"]`);
+            button.parentElement.innerHTML = "✅ Issued"; // Update table cell
+
+            // Update counts
+            let issuedCount = document.getElementById("certificates-issued");
+            let pendingCount = document.getElementById("certificates-pending");
+
+            issuedCount.innerText = parseInt(issuedCount.innerText) + 1;
+            pendingCount.innerText = parseInt(pendingCount.innerText) - 1;
+        } else {
+            alert("Error: " + data.error);
+        }
+    });
+}
+
+</script>
+
+<script>
+function searchStudent() {
+    let input = document.getElementById("search-box").value.toLowerCase();
+    let rows = document.querySelectorAll("#certificateBody tr");
+    
+    rows.forEach(row => {
+        let name = row.children[1].innerText.toLowerCase();
+        let id = row.children[0].innerText.toLowerCase();
+        
+        if (name.includes(input) || id.includes(input)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function filterCertificates() {
+    let filterValue = document.getElementById("certificate-filter").value;
+    let rows = document.querySelectorAll("#certificateBody tr");
+
+    rows.forEach(row => {
+        let certificateStatus = row.children[6].innerText.trim(); // "✅ Issued" or "Issue" button
+
+        if (filterValue === "issued" && certificateStatus !== "✅ Issued") {
+            row.style.display = "none";
+        } else if (filterValue === "not_issued" && certificateStatus === "✅ Issued") {
+            row.style.display = "none";
+        } else {
+            row.style.display = "";
+        }
+    });
+}
+
+</script>
+
+{% endblock 'tech_main' %}

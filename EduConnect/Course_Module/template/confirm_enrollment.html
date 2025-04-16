@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+      />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      />
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=developer_guide"
+      />
+    <link rel="icon" href="{% static 'img/clogo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body{
+            font-family: "Poppins", sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card p-4 shadow-lg">
+            <h2 class="text-center text-primary">Confirm Enrollment</h2>
+            <p class="text-center">Are you sure you want to enroll in <b>{{ course.title }}</b>?</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="text-center">
+                    <button type="button" id="rzp-button1" name="confirm" class="btn btn-success">Yes, Enroll</button>
+                    <a href="{% url 'course_detail' course.id %}" class="text-decoration-none text-dark"><button type="button" name="cancel" class="btn btn-danger">No, Cancel</button></a>
+                    
+                </div>
+            </form>
+            <button class="btn btn-light rounded mt-3" id="confirm-enrollment-btn">Direct Enrollment</button>
+        </div>
+    </div>
+</body>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- <script src="{% static 'js/razorpay.js' %}"></script> -->
+
+<script>
+    var options = {
+    "key": "rzp_test_Hh5tcDeBWtFzbE", 
+    "amount": "{{ sum }}",
+    "currency": "INR",
+    "name": "{{ student.first_name }}",
+    "description": "Test Transaction",
+    "image": "/static/img/clogo.png",
+    "order_id": "{{ payment.id }}",
+    "handler": function (response) {
+        handlePaymentResponse({
+            payment_id: response.razorpay_payment_id,
+            order_id: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            student_id: "{{ student.student_id }}",
+            course_id: "{{ course.id }}",
+            status: "success"
+        });
+    },
+    "prefill": {
+        "name": "{{ student.first_name }}",
+        "email": "{{ student.user.email }}",
+        "contact": "{{ student.phone_number }}"
+    },
+    "notes": {
+        "address": "EduConnect Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+
+var rzp1 = new Razorpay(options);
+
+rzp1.on('payment.failed', function (response) {
+    handlePaymentResponse({
+        payment_id: response.error.metadata.payment_id,
+        order_id: response.error.metadata.order_id,
+        student_id: "{{ student.id }}",
+        course_id: "{{ course.id }}",
+        status: "failed"
+    });
+});
+
+function handlePaymentResponse(data) {
+    $.ajax({
+        type: 'POST',
+        url: '/course/payment-status/',
+        data: data,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        success: function (response) {
+            window.location.href = "/course/payment-status/";
+        },
+        error: function () {
+            window.location.href = "/course/payment-status/";
+        }
+    });
+}
+
+document.getElementById('rzp-button1').onclick = function(e) {
+    rzp1.open();
+    e.preventDefault();
+};
+</script>
+
+<script>
+    document.getElementById('confirm-enrollment-btn').onclick = function () {
+        var form = document.createElement("form");
+        form.method = "POST";
+        form.action = "/course/payment-status/";  // Django view to handle enrollment
+
+        // CSRF Token
+        var csrfToken = document.createElement("input");
+        csrfToken.type = "hidden";
+        csrfToken.name = "csrfmiddlewaretoken";
+        csrfToken.value = "{{ csrf_token }}";
+        form.appendChild(csrfToken);
+
+        // Payment details
+        var paymentDetails = {
+            "payment_id": "TEST12345",  // Mock Payment ID
+            "order_id": "{{ payment.id }}",
+            "student_id": "{{ student.student_id }}",
+            "course_id": "{{ course.id }}",
+            "amount": "{{ sum }}",
+            "currency": "INR",
+            "name": "{{ student.first_name }}",
+            "email": "{{ student.user.email }}",
+            "contact": "{{ student.phone_number }}",
+            "status": "success"  // You can change to 'failed' for testing
+        };
+
+        // Append all data as hidden inputs
+        for (var key in paymentDetails) {
+            if (paymentDetails.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.type = "hidden";
+                hiddenField.name = key;
+                hiddenField.value = paymentDetails[key];
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();  // Submit the form synchronously
+    };
+</script>
+
+</html>

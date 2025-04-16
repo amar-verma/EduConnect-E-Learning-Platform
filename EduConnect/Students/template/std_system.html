@@ -1,0 +1,358 @@
+{% extends 'std_home.html' %} {% load static %} {% block 'main' %}
+<link rel="stylesheet" href="{% static 'css/std_system.css' %}" />
+
+<div class="container settings-container">
+    {% if messages %}
+    <div class="alert-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="row">
+        <!-- Left Sidebar -->
+        <div class="col-md-3">
+        <div class="settings-menu w-100">
+            <h5>Settings</h5><hr>
+            <ul>
+            <li><a href="#" class="settings-link active" data-target="profile-settings">Profile Settings</a></li>
+            <li><a href="#" class="settings-link" data-target="notification-settings">Notification Settings</a></li>
+            <li><a href="#" class="settings-link" data-target="subscription-settings">Subscription & Billing</a></li>
+            <li><a href="#" class="settings-link" data-target="account-security">Account Security</a></li>
+            <li><a href="#" class="settings-link" data-target="legal-compliance">Legal & Compliance</a></li>
+            </ul>
+        </div>
+        </div>
+
+        <!-- Right Content Panel -->
+        <div class="col-md-8">
+            <div id="settings-content">
+                <!-- Divs for each content section -->
+                <div class="settings-div show-div" id="profile-settings">
+                    <div class="container">
+                        <h2>Public Profile</h2>
+                        <p class="hint"> to edit profile details, visit my profile. In this section, you will find sensitive settings of profile.</p>
+                    
+                        <div class="section">
+                            <label for="location">Your Location </label>
+                            <input type="text" id="location" placeholder="Fetching location..." disabled>
+                            <span class="hint mt-0 pt-0">make sure your location is enable</span>
+                            <p id="locationDisplay" class="hint text-muted"></p>
+                        </div>
+                        <script>
+                            window.onload = function() {
+                                getLocation();
+                            };
+                        
+                            function getLocation() {
+                                if (navigator.geolocation) {
+                                    navigator.geolocation.getCurrentPosition(showPosition, showError);
+                                } else {
+                                    document.getElementById('locationDisplay').innerHTML = "Geolocation is not supported by this browser.";
+                                }
+                            }
+                            function showPosition(position) {
+                                var latitude = position.coords.latitude;
+                                var longitude = position.coords.longitude;
+                                document.getElementById('location').value = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                        
+                                
+                            }
+                            function showError(error) {
+                                switch (error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        document.getElementById('locationDisplay').innerHTML = "User denied the request for Geolocation.";
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        document.getElementById('locationDisplay').innerHTML = "Location information is unavailable.";
+                                        break;
+                                    case error.TIMEOUT:
+                                        document.getElementById('locationDisplay').innerHTML = "The request to get user location timed out.";
+                                        break;
+                                    case error.UNKNOWN_ERROR:
+                                        document.getElementById('locationDisplay').innerHTML = "An unknown error occurred.";
+                                        break;
+                                }
+                            }
+                        </script>
+                    
+                    <div class="section">
+                        <label>Display current local time and date</label>
+                        <input type="text" id="localDateTime" placeholder="Auto-calculated local time and date" disabled>
+                        <div class="hint">This will show the current date and time based on your local timezone.</div>
+                    </div>
+                    
+                    <script>
+                        window.onload = function() {
+                            displayLocalDateTime();
+                        };
+                    
+                        function displayLocalDateTime() {
+                            var localDateTime = new Date();
+                    
+                            var day = localDateTime.getDate().toString().padStart(2, '0'); 
+                            var month = (localDateTime.getMonth() + 1).toString().padStart(2, '0'); 
+                            var year = localDateTime.getFullYear();
+                    
+                            var hours = localDateTime.getHours().toString().padStart(2, '0');
+                            var minutes = localDateTime.getMinutes().toString().padStart(2, '0');
+                            var seconds = localDateTime.getSeconds().toString().padStart(2, '0'); 
+            
+                            var formattedDateTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+                    
+                            document.getElementById('localDateTime').value = formattedDateTime;
+                        }
+                    </script>
+                    
+                        <div class="checkbox-section ">
+                            <input type="checkbox" id="private-profile" checked disabled>
+                            <label >Make profile private and hide activity</label>
+                            <div class="hint">Your profile will hidden other than Instructor you have enrolls. keeping your  Sensitive information hidden including email, phone no, etc...</div>
+                        </div>
+
+                        <div class="footer">
+                            All fields on this page are optional and can be deleted at any time. By filling them out, you're giving us consent to share this data wherever your user profile appears. <a href="{% url 'guidelines' %}#privacy-statement">Privacy statement</a>.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-div" id="notification-settings">
+                    <div class="container">
+                        <h2>Notification Settings</h2>
+                    
+                        <form id="notification-form" method="POST">
+                            {% csrf_token %}
+                    
+                            <div class="checkbox-section">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="email-notifications" name="email_notifications"
+                                           {% if settings.email_notifications %}checked{% endif %}>
+                                    <label for="email-notifications">Enable email notifications for all of your activity </label>
+                                </div>
+                                <div class="hint">Receive updates and announcements via email.</div>
+                            </div>
+                    
+                    
+                            <!-- Authentication Notifications -->
+                            <div class="checkbox-section">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="auth-notifications" name="auth_notifications"
+                                        {% if settings.auth_notifications %}checked{% endif %}>
+                                    <label for="auth-notifications">Enable authentication notifications</label>
+                                </div>
+                                <div class="hint">Login using email authentication through our app.</div>
+                            </div>
+                    
+                            <!-- Course Notifications -->
+                            <div class="checkbox-section">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="course-notifications" name="course_notifications"
+                                           checked disabled>
+                                    <label for="course-notifications">Enable course notifications</label>
+                                </div>
+                                <div class="hint">even if notifications setting is off. course enrollment activity will be notify.</div>
+                            </div>
+                    
+                            <!-- Save Button -->
+                            <button type="submit" class="button">Save Notification Preferences</button>
+                        </form>
+                    
+                        <div class="footer mb-1">
+                            You can update your notification preferences at any time. Learn more about our 
+                            <a href="{% url 'guidelines' %}#privacy-policy">privacy policy</a>.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-div" id="subscription-settings">
+                    <div class="container">
+                        <h2>Subscription & Billing</h2>
+                
+                        <!-- Current Plan Section -->
+                        <div class="section">
+                            <label>Important Notice</label>
+                            <div>
+                                <p><strong>Enrollment Fee:</strong> Please note that the enrollment fee is the only charge you will need to pay.</p>
+                                <p><strong>Non-Refundable:</strong> Once the payment is made, it cannot be undone. Please be careful and review all course details before proceeding.</p>
+                                <p><strong>Review Course Information:</strong> Ensure you read the course description, reviews, and ratings before enrolling.</p>
+                            </div>
+                            <div class="hint">
+                                "If you believe the course you enrolled in is not providing the facilities mentioned in the description (which may indicate fraudulent activity), you can request a refund by submitting a support request or directly contacting us at educonnect@gmail.com."
+                            </div>
+                        </div>
+
+                        <a href="{% url 'download_payment_pdf' %}" type="button" class="btn btn-primary">Download Payment Details as PDF</a>
+                        <div class="hint">
+                            to get all the info related to your payment..
+                        </div>
+                
+                        
+                
+                        <!-- Footer -->
+                        <div class="footer">
+                            For any billing-related inquiries, visit our <a href="{% url 'guidelines' %}#billing-help-center">Billing Help Center</a> or contact us at <a href="mailto:billing@educonnect.com">billing@educonnect.com</a> .
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-div" id="account-security">
+                    <div class="container">
+                        <h2>Account Security Settings</h2>
+                
+                        <!-- Hide Critical Data -->
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="hide-critical-data" checked disabled>
+                                <label for="hide-critical-data">Hide Critical Data</label>
+                            </div>
+                            <div class="hint">Student Data is hidden to public other than Instructor you have enroll</div>
+                        </div>
+                
+                        <!-- Change Username -->
+                        <div class="section">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" placeholder="{{ request.user.student.user.username }}" disabled>
+                            <div class="hint">This Username Cann't be change once set.</div>
+                        </div>
+                
+                        <!-- Visibility Settings -->
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="public-visibility" disabled>
+                                <label for="public-visibility">Make My Profile Public</label>
+                            </div>
+                            <div class="hint">Due to standards and privacy policies, we are not allowed to make student profile public. It will only visible to Instructor that you enroll.  </div>
+                        </div>
+                
+                        <!-- Two-Factor Authentication -->
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <label for="enable-2fa">Enable Two-Factor Authentication (2FA)</label>
+                            </div>
+                            <div class="hint">Enable and disable in Notification settings. Enhance your account's security by requiring a second verification step when logging in.</div>
+                        </div>
+                
+                        <!-- Password Management -->
+                        <div class="section">
+                            <label for="change-password">Change Password</label>
+                            <input type="password" id="old-change-password" placeholder="********************" disabled>
+                            <div class="hint">password can't be change but can reset, go to login section and forget password</div>
+                            <div class="hint">To protect your account mak sure to enable two factor authentication</div>
+                        </div>
+                
+                        <!-- Account Deactivation -->
+                        <div class="checkbox-section">
+                            <div class="checkbox-wrapper">
+                                <a herf="" type="button" class="deactivate-account btn btn-danger">Deactivate My Account</a>
+                            </div>
+                            <div class="hint">this will Permanently delete your account (not available).</div>
+                        </div>
+                
+                        <!-- Footer -->
+                        <div class="footer">
+                            Need help? Visit our <a href="{% url 'guidelines' %}#support-center">support center</a> for more information on account security.
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="settings-div" id="legal-compliance">
+                    <div class="container">
+                        <h2>Legal & Compliance</h2>
+                
+                        <!-- Terms and Conditions Section -->
+                        <div class="section">
+                            <label>Terms and Conditions</label>
+                            <p>Review our <a href="{% url 'guidelines' %}#terms-and-conditions">Terms and Conditions</a> to understand the rules and policies governing your use of our platform.</p>
+                            
+                        </div>
+                
+                        <!-- Privacy Policy Section -->
+                        <div class="section">
+                            <label>Privacy Policy</label>
+                            <p>Learn how we handle your data by reading our <a href="{% url 'guidelines' %}#privacy-policy">Privacy Policy</a>.</p>
+                            
+                        </div>
+                
+                        <!-- Data Sharing Preferences -->
+                        <div class="checkbox-section">
+                            <input type="checkbox" id="data-sharing" checked disabled>
+                            <label for="data-sharing">Allow Data Sharing</label>
+                            <div class="hint">enabled for better performance, your consent to share your data with our trusted third-party partners for better personalization and services.</div>
+                        </div>
+                
+                        <!-- Compliance Options -->
+                        <div class="section">
+                            <label>Compliance Options</label>
+                            <p>Enable compliance settings to meet legal requirements in specific regions.</p>
+                            <input type="checkbox" id="gdpr-compliance" checked disabled>
+                            <label for="gdpr-compliance">Enable GDPR Compliance</label>
+                            <div class="hint">Ensure compliance with the General Data Protection Regulation (GDPR).</div>
+                
+                            <input type="checkbox" id="ccpa-compliance" checked disabled>
+                            <label for="ccpa-compliance">Enable CCPA Compliance</label>
+                            <div class="hint">Meet the California Consumer Privacy Act (CCPA) requirements.</div>
+                        </div>
+                
+                        <!-- Footer -->
+                        <div class="footer">
+                            For legal inquiries, contact our <a href="{% url 'guidelines' %}#educonnect-support-team">Educonnect Support Team</a> or email us at <a href="mailto:educonnect@example.com">educonnect@example.com</a>.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add more settings-div sections as needed -->
+            </div>
+            
+            <script>
+                // Select all links and divs
+                const links = document.querySelectorAll('.settings-link');
+                const divs = document.querySelectorAll('#settings-content .settings-div');
+            
+                // Hide all divs except the one with 'show-div' class on page load
+                divs.forEach(div => {
+                    if (div.classList.contains('show-div')) {
+                        div.style.display = 'block'; // Show the div with 'show-div'
+                    } else {
+                        div.style.display = 'none'; // Hide other divs
+                    }
+                });
+            
+                // Add click event listener to each link
+                links.forEach(link => {
+                    link.addEventListener('click', event => {
+                        event.preventDefault(); // Prevent default anchor behavior
+            
+                        // Get the target ID from the data attribute
+                        const targetId = link.getAttribute('data-target');
+            
+                        // Remove active class from all links
+                        links.forEach(link => link.classList.remove('active'));
+            
+                        // Add active class to the clicked link
+                        link.classList.add('active');
+            
+                        // Hide all divs and show the targeted one
+                        divs.forEach(div => {
+                            if (div.id === targetId) {
+                                div.style.display = 'block';
+                            } else {
+                                div.style.display = 'none';
+                            }
+                        });
+                    });
+                });
+            </script>
+            
+            
+            
+            
+
+        </div>
+    </div>
+</div>
+
+{% endblock 'main' %}

@@ -1,0 +1,24 @@
+.quote {
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    ; /* Add "..." at the end of visible text */
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    line-height: 1.4;
+    /* Adjust as per your design */
+    max-height: calc(1.4em * 2);
+    /* Limit to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+}

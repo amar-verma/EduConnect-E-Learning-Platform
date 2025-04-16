@@ -1,0 +1,113 @@
+*{
+    font-family: "Poppins", sans-serif;
+  }
+      .input-section {
+  /* border: 3px solid black; */
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.input-container,
+.expected-output-container {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.input-container label,
+.expected-output-container label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 3px;
+}
+
+textarea {
+  width: 100%;
+  height: 80px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Output Section */
+.output-section {
+  /* border: 3px solid black; */
+  padding: 10px;
+  background: #fff;
+  border-radius: 5px;
+  height: 250px; /* Matches the image reference */
+  overflow-y: auto; /* Enables scrolling if content is long */
+}
+
+.output-container pre {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Error Message Styling */
+.error-container {
+  background-color: #ffebeb;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.error-container h3 {
+  color: red;
+}
+
+/* Execution Details */
+.execution-details {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.execution-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.execution-details li {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.btn-con {
+  display: flex;
+  justify-content: space-between; /* Ensures buttons are placed at start and end */
+  align-items: center;
+
+}
+
+/* General Button Styling */
+.btn-custom {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+}
+
+.btn-start {
+  background: linear-gradient(45deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.btn-start:hover {
+  background: linear-gradient(45deg, #388E3C, #2E7D32);
+}
+.btn-save {
+  background: linear-gradient(45deg, #FF9800, #FB8C00);
+  color: white;
+}
+
+.btn-save:hover {
+  background: linear-gradient(45deg, #F57C00, #EF6C00);
+}

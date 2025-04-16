@@ -1,0 +1,157 @@
+/* common styling */
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    text-align: left;
+    background-color: white;
+    color: black;
+}
+
+.edu-font {
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.edu-heading {
+    font-size: 28px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+
+.edu-subheading {
+    font-size: 22px;
+    font-weight: 500;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+.edu-highlight {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6f42c1;
+}
+
+.edu-button {
+    display: inline-block;
+    font-family: "Poppins", sans-serif;
+    /* padding: 10px 20px; */
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #ff8800;
+    border: 1px solid #ccc;
+}
+
+.edu-button:hover {
+    background-color: #e67600;
+}
+
+.edu-btn-outline {
+    background-color: white;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.edu-btn-outline:hover {
+    background-color: #f5f5f5;
+}
+
+.edu-bg-green {
+    color: rgb(139, 231, 1);
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    line-height: 1.4;
+    /* Adjust as per your design */
+    max-height: calc(1.4em * 2);
+    /* Limit to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+}
+
+@media (max-width: 768px) {
+    .card-flow {
+        display: flex;
+        flex-wrap: nowrap;
+        /* Prevent wrapping on mobile */
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-flow {
+        display: flex;
+        flex-wrap: nowrap;
+        /* Prevent wrapping on mobile */
+        overflow-x: auto;
+    }
+
+    .card-flow .card-flow-wdth {
+        flex: 0 0 80%;
+        /* Make cards take 80% width on mobile */
+        min-width: 250px;
+        /* Minimum width for cards on mobile */
+    }
+}
+
+
+/* footer styling */
+
+.footer {
+    background-color: #222;
+    color: #ddd;
+    padding: 40px 20px;
+    font-size: 18px;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #ddd;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #ff9800;
+}
+
+.footer .footer-heading {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.footer .footer-bottom {
+    border-top: 1px solid #444;
+    margin-top: 20px;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer .footer-bottom span {
+    color: #888;
+}
+
+.footer .footer-bottom img {
+    height: 20px;
+    margin-left: 10px;
+}
